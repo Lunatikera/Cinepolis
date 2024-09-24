@@ -5,25 +5,23 @@
 package utilerias;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 /**
  *
  * @author carli
  */
-public class PanelConFondo extends JPanel  {
-    private BufferedImage backgroundImage;
+public class PanelConFondoHora extends JPanel{
+      private BufferedImage backgroundImage;
 
-    public PanelConFondo() {
+    public PanelConFondoHora() {
         try {
-            backgroundImage = ImageIO.read(getClass().getResourceAsStream("/imagenes/Rectangle28.png"));
+            // Load the background image
+            backgroundImage = ImageIO.read(getClass().getResourceAsStream("/imagenes/RectangleHora.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,3 +37,4 @@ public class PanelConFondo extends JPanel  {
         }
     }
 }
+
