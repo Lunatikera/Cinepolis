@@ -10,12 +10,12 @@ import javax.swing.border.EmptyBorder;
  *
  * @author carli
  */
-public class FrmDetallePelicula extends javax.swing.JFrame {
+public class FrmCompraBoleto extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmCatalogos
      */
-    public FrmDetallePelicula() {
+    public FrmCompraBoleto() {
         initComponents();
     }
 
@@ -41,7 +41,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -60,9 +60,15 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        menuButton18 = new utilerias.MenuButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        menuButton1 = new utilerias.MenuButton();
+        menuButton4 = new utilerias.MenuButton();
+        menuButton5 = new utilerias.MenuButton();
+        menuButton6 = new utilerias.MenuButton();
         jLabel2 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -144,9 +150,9 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Line 7.png"))); // NOI18N
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Top Gun Maverick");
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setText("Top Gun Maverick");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -157,9 +163,9 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addGap(113, 113, 113)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(275, 275, 275))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addGap(176, 176, 176))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +174,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel10)
+                        .addComponent(jLabel15)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -361,47 +367,100 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
 
         jPanel16.setBackground(new java.awt.Color(36, 44, 99));
 
-        menuButton18.setBackground(new java.awt.Color(36, 44, 99));
-        menuButton18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
-        menuButton18.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicketSelected.png"))); // NOI18N
-        menuButton18.addActionListener(new java.awt.event.ActionListener() {
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Lunes 12:00 PM");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Metodo de Pago:");
+
+        jComboBox1.setBackground(new java.awt.Color(33, 36, 59));
+        jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton18ActionPerformed(evt);
+                jComboBox1ActionPerformed(evt);
             }
         });
 
-        jScrollPane1.setBorder(null);
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("Numero de Boletos:");
 
-        jTextPane1.setEditable(false);
-        jTextPane1.setBackground(new java.awt.Color(36, 44, 99));
-        jTextPane1.setBorder(new EmptyBorder(0, 0, 0, 0));
-        jTextPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextPane1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextPane1.setText("Después de más de treinta años de servicio como uno de los mejores aviadores de la Marina, Pete \"Maverick\" Mitchell está donde pertenece, desafiando los límites como un valiente piloto de pruebas y esquivando el ascenso de rango que lo mantendría en tierra. Cuando se encuentra entrenando a un destacamento de graduados de Top Gun para una misión especializada como ninguna que un piloto en vida haya presenciado, Maverick se encuentra con el teniente Bradley Bradshaw, alias: \"Rooster\", el hijo del difunto amigo de Maverick y Oficial de Interceptación de Radar, el teniente Nick Bradshaw, conocido como \"Goose\". Enfrentándose a un futuro incierto y confrontando los fantasmas de su pasado, Maverick es arrastrado a una confrontación con sus propios miedos más profundos, culminando en una misión que exige el sacrificio máximo de aquellos que serán elegidos para volarla.");
-        jTextPane1.setAutoscrolls(false);
-        jScrollPane1.setViewportView(jTextPane1);
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("0");
+
+        menuButton1.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton1.setText("+");
+        menuButton1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        menuButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton1ActionPerformed(evt);
+            }
+        });
+
+        menuButton4.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton4.setText("-");
+        menuButton4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        menuButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton4ActionPerformed(evt);
+            }
+        });
+
+        menuButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelarBoleto.png"))); // NOI18N
+
+        menuButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprar.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(menuButton18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(171, 171, 171))
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addComponent(menuButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(menuButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(menuButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(menuButton18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menuButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(menuButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menuButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel2.setToolTipText("");
@@ -417,7 +476,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(92, 92, 92)
                         .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(551, Short.MAX_VALUE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(73, 73, 73)
                         .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -473,10 +532,6 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton14ActionPerformed
 
-    private void menuButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton18ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton18ActionPerformed
-
     private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton3ActionPerformed
@@ -488,6 +543,18 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     private void menuButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton2ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void menuButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuButton1ActionPerformed
+
+    private void menuButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -506,30 +573,37 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmDetallePelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmDetallePelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmDetallePelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmDetallePelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmDetallePelicula().setVisible(true);
+                new FrmCompraBoleto().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -550,15 +624,16 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private utilerias.MenuButton menuButton1;
     private utilerias.MenuButton menuButton11;
     private utilerias.MenuButton menuButton12;
     private utilerias.MenuButton menuButton13;
     private utilerias.MenuButton menuButton14;
-    private utilerias.MenuButton menuButton18;
     private utilerias.MenuButton menuButton2;
     private utilerias.MenuButton menuButton3;
+    private utilerias.MenuButton menuButton4;
+    private utilerias.MenuButton menuButton5;
+    private utilerias.MenuButton menuButton6;
     private utilerias.PanelConFondo panelConFondo1;
     private utilerias.PanelConFondo panelConFondo3;
     private utilerias.PanelConFondo panelConFondo6;
