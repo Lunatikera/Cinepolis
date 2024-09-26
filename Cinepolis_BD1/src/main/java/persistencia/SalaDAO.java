@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author carli
+ * @author Temo
  */
 public class SalaDAO implements ISalaDAO {
     private IConexionBD conexionBD;

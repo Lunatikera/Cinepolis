@@ -2,14 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package persistencia;
+package negocio;
 
-import dominio.PeliculaEntidad;
+import dtos.CiudadDTO;
+import java.util.List;
 
 /**
  *
  * @author Temo
  */
-public interface IPeliculaDAO extends ICrud<PeliculaEntidad> {
-    
+public interface ICiudadBO {
+
+    public List<CiudadDTO> listaCiudades() throws NegocioException;
+
 }
