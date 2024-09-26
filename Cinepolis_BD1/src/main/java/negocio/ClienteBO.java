@@ -9,7 +9,7 @@ import dtos.ClienteDTO;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import persistencia.ClienteDAO;
+import persistencia.IClienteDAO;
 import persistencia.PersistenciaException;
 import utilerias.Encriptacion;
 
@@ -19,9 +19,9 @@ import utilerias.Encriptacion;
  */
 public class ClienteBO implements IClienteBO {
     
-    private ClienteDAO clienteDAO;
+    private IClienteDAO clienteDAO;
     
-    public ClienteBO(ClienteDAO clienteDAO) {
+    public ClienteBO( IClienteDAO clienteDAO) {
         this.clienteDAO = clienteDAO;
     }
     

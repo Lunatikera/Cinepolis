@@ -103,7 +103,7 @@
             <Property name="rows" type="int" value="1"/>
           </Layout>
           <SubComponents>
-            <Component class="utilerias.MenuButton" name="menuButton11">
+            <Component class="utilerias.MenuButton" name="btnInicio">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagenes/Inicio.png"/>

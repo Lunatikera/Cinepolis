@@ -253,12 +253,11 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(582, 582, 582)
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -912,7 +911,6 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
     private utilerias.MenuButton menuButton15;
     private utilerias.MenuButton menuButton16;
     private utilerias.MenuButton menuButton17;
-    private utilerias.MenuButton menuButton18;
     private utilerias.MenuButton menuButton19;
     private utilerias.MenuButton menuButton2;
     private utilerias.MenuButton menuButton20;
@@ -933,10 +931,8 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
     private utilerias.PanelConFondoHora panelConFondoHora11;
     private utilerias.PanelConFondoHora panelConFondoHora2;
     private utilerias.PanelConFondoHora panelConFondoHora3;
-    private utilerias.PanelConFondoHora panelConFondoHora4;
     private utilerias.PanelConFondoHora panelConFondoHora5;
     private utilerias.PanelConFondoHora panelConFondoHora6;
-    private utilerias.PanelConFondoHora panelConFondoHora7;
     private utilerias.PanelConFondoHora panelConFondoHora8;
     private utilerias.PanelConFondoHora panelConFondoHora9;
     // End of variables declaration//GEN-END:variables

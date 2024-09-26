@@ -5,11 +5,14 @@
 package persistencia;
 
 import dominio.PeliculaEntidad;
+import java.util.List;
 
 /**
  *
  * @author Temo
  */
 public interface IPeliculaDAO extends ICrud<PeliculaEntidad> {
-    
+
+    public List<PeliculaEntidad> buscarPeliculaSucursal(int idSucursal, int limit, int offset) throws PersistenciaException;
+
 }

@@ -14,12 +14,19 @@ import negocio.CiudadBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IInicioSesionBO;
+import negocio.IPeliculaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
+import negocio.PeliculaBO;
+import negocio.SucursalBO;
 import persistencia.CiudadDAO;
 import persistencia.ConexionBD;
 import persistencia.ICiudadDAO;
 import persistencia.IConexionBD;
+import persistencia.IPeliculaDAO;
+import persistencia.ISucursalDAO;
+import persistencia.PeliculaDAO;
+import persistencia.SucursalDAO;
 import static utilerias.Geocalizacion.obtenerCoordenadas;
 
 /**
@@ -89,8 +96,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         panelEsquinasRedondas1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(461, 210, -1, 32));
         panelEsquinasRedondas1.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(461, 254, 290, 30));
 
-        ingresarBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ingresar.png"))); // NOI18N
         ingresarBtn.setBorderPainted(false);
+        ingresarBtn.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ingresar.png"))); // NOI18N
+        ingresarBtn.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ingresar.png"))); // NOI18N
         ingresarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ingresarBtnActionPerformed(evt);
@@ -98,8 +106,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         });
         panelEsquinasRedondas1.add(ingresarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 320, -1, 58));
 
-        registrarseBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registro.png"))); // NOI18N
         registrarseBtn.setBorderPainted(false);
+        registrarseBtn.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registro.png"))); // NOI18N
+        registrarseBtn.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registro.png"))); // NOI18N
         registrarseBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registrarseBtnActionPerformed(evt);
@@ -192,7 +201,18 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         try {
             clientoBO.actualizarCliente(cliente);
             SucursalDTO sucursalFavorable = sucursalBO.buscarSucursalMasCercana(cliente.getIdCliente());
-            FrmCatalogoSucursal catalogo= new FrmCatalogoSucursal();
+            
+            IConexionBD conexion=new ConexionBD();
+            
+            IPeliculaDAO peliculaDAO=new PeliculaDAO(conexion);
+            ICiudadDAO ciudadDAO= new CiudadDAO(conexion);
+            ISucursalDAO sucursalDAO= new SucursalDAO(conexion);
+            
+            IPeliculaBO peliculaBO= new PeliculaBO(peliculaDAO);
+            ICiudadBO ciudadBO= new CiudadBO(ciudadDAO);
+            ISucursalBO sucursalBO= new SucursalBO(sucursalDAO);
+            
+            FrmCatalogoSucursal catalogo= new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursalFavorable, cliente);
             catalogo.setVisible(true);
             this.dispose();
         } catch (NegocioException ex) {
@@ -207,7 +227,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private void registrarseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBtnActionPerformed
         IConexionBD conexion=new ConexionBD();
         ICiudadDAO ciudadDAO= new CiudadDAO(conexion);
-        ICiudadBO ciudadBO= new CiudadBO((CiudadDAO) ciudadDAO);
+        ICiudadBO ciudadBO= new CiudadBO(ciudadDAO);
         
         FrmRegistro registrarse= new FrmRegistro(clientoBO, ciudadBO);
         

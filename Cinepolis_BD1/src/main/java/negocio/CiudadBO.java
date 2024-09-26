@@ -8,7 +8,7 @@ import dominio.CiudadEntidad;
 import dtos.CiudadDTO;
 import java.util.ArrayList;
 import java.util.List;
-import persistencia.CiudadDAO;
+import persistencia.ICiudadDAO;
 import persistencia.PersistenciaException;
 
 /**
@@ -17,9 +17,9 @@ import persistencia.PersistenciaException;
  */
 public class CiudadBO implements ICiudadBO {
 
-    private CiudadDAO ciudadDAO;
+    private ICiudadDAO ciudadDAO;
 
-    public CiudadBO(CiudadDAO ciudadDAO) {
+    public CiudadBO(ICiudadDAO ciudadDAO) {
         this.ciudadDAO = ciudadDAO;
     }
 

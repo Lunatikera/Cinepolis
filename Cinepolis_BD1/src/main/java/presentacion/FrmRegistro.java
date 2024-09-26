@@ -118,14 +118,16 @@ public class FrmRegistro extends javax.swing.JFrame {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Line 7.png"))); // NOI18N
 
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        btnCancelar.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        btnCancelar.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
 
-        btnRegistrarse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registrarse.png"))); // NOI18N
+        btnRegistrarse.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registrarse.png"))); // NOI18N
+        btnRegistrarse.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registrarse.png"))); // NOI18N
         btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarseActionPerformed(evt);
@@ -136,9 +138,9 @@ public class FrmRegistro extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
 
+        jLabel11.setText("Confirmar Contraseña");
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Confirmar Contraseña");
 
         javax.swing.GroupLayout panelEsquinasRedondas1Layout = new javax.swing.GroupLayout(panelEsquinasRedondas1);
         panelEsquinasRedondas1.setLayout(panelEsquinasRedondas1Layout);
@@ -292,51 +294,58 @@ public class FrmRegistro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Error de contraseña", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        try{
-            
-        CiudadDTO ciudad = (CiudadDTO) ciudadesCB.getSelectedItem();
-        // Create a RegistroUsuarioDTO instance
-        ClienteDTO registro = new ClienteDTO();
-        registro.setNombre(nombreTxt.getText().trim());
-        registro.setApellidoPA(apellidoPaternoTxt.getText().trim());
-        registro.setApellidoMA(apellidoMaternoTxt.getText().trim());
-        registro.setCorreo(correoTxt.getText().trim());
-        registro.setContraseña(contraseña);
-        registro.setFechaNacimiento(FechaNacimientoPicker.getDate());
-        registro.setIdCiudad( ciudad.getId());
-        registro.setUbicacion(Geocalizacion.obtenerCoordenadas());
-        System.out.println(registro.toString());
-        // Assuming idCiudad is part of the selected city or another input field
-
-        // Proceed to register the user using the BO layer
         try {
-            clienteBO.agregaCliente(registro);
-            JOptionPane.showMessageDialog(this, "Registro exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(this, "Error en el registro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        }catch(Exception m){
+
+            CiudadDTO ciudad = (CiudadDTO) ciudadesCB.getSelectedItem();
+            // Create a RegistroUsuarioDTO instance
+            ClienteDTO registro = new ClienteDTO();
+            registro.setNombre(nombreTxt.getText().trim());
+            registro.setApellidoPA(apellidoPaternoTxt.getText().trim());
+            registro.setApellidoMA(apellidoMaternoTxt.getText().trim());
+            registro.setCorreo(correoTxt.getText().trim());
+            registro.setContraseña(contraseña);
+            registro.setFechaNacimiento(FechaNacimientoPicker.getDate());
+            registro.setIdCiudad(ciudad.getId());
+            registro.setUbicacion(Geocalizacion.obtenerCoordenadas());
+            System.out.println(registro.toString());
+            // Assuming idCiudad is part of the selected city or another input field
+
+            // Proceed to register the user using the BO layer
+            try {
+                clienteBO.agregaCliente(registro);
+                this.registroExitoso();
+            } catch (NegocioException e) {
+                JOptionPane.showMessageDialog(this, "Error en el registro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception m) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + m.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 
     }//GEN-LAST:event_btnRegistrarseActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // Assuming these have been injected into your class through the constructor or set methods
+    private void retornarInicioSesion() {
         IConexionBD conexion = new ConexionBD(); // Consider injecting this
         IClienteDAO clienteDAO = new ClienteDAO(conexion);
         ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
 
         // Create Business Objects
-        ISucursalBO sucursalBO = new SucursalBO((SucursalDAO) sucursalDAO);
-        IInicioSesionBO inicioSesionBO = new InicioSesionBO((ClienteDAO) clienteDAO);
-        IClienteBO clienteBO = new ClienteBO((ClienteDAO) clienteDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IInicioSesionBO inicioSesionBO = new InicioSesionBO(clienteDAO);
+        IClienteBO clienteBO = new ClienteBO(clienteDAO);
 
         // Initialize and display the login form
         FrmInicioSesion iniciarSesion = new FrmInicioSesion(inicioSesionBO, clienteBO, sucursalBO);
         iniciarSesion.setVisible(true);
         this.dispose();
+    }
+
+    private void registroExitoso() {
+        JOptionPane.showMessageDialog(this, "Registro exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        this.retornarInicioSesion();
+    }
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+
+        this.retornarInicioSesion();
     }//GEN-LAST:event_btnCancelarActionPerformed
     private void llenarComboBoxCiudades() {
         try {

@@ -8,7 +8,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 
 /**
  *
- * @author Chris
+ * @author carli
  */
 public class Encriptacion {
 
