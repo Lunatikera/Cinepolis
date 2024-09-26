@@ -8,10 +8,16 @@ import dtos.ClienteDTO;
 import dtos.InicioSesionDTO;
 import dtos.SucursalDTO;
 import javax.swing.JOptionPane;
+import negocio.CiudadBO;
+import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IInicioSesionBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
+import persistencia.CiudadDAO;
+import persistencia.ConexionBD;
+import persistencia.ICiudadDAO;
+import persistencia.IConexionBD;
 import static utilerias.Geocalizacion.obtenerCoordenadas;
 
 /**
@@ -92,6 +98,11 @@ public class FrmInicioSesion extends javax.swing.JFrame {
 
         registrarseBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registro.png"))); // NOI18N
         registrarseBtn.setBorderPainted(false);
+        registrarseBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registrarseBtnActionPerformed(evt);
+            }
+        });
         panelEsquinasRedondas1.add(registrarseBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 400, -1, 43));
 
         modoAdminBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -186,6 +197,17 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private void modoAdminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoAdminBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_modoAdminBtnActionPerformed
+
+    private void registrarseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBtnActionPerformed
+        IConexionBD conexion=new ConexionBD();
+        ICiudadDAO ciudadDAO= new CiudadDAO(conexion);
+        ICiudadBO ciudadBO= new CiudadBO((CiudadDAO) ciudadDAO);
+        
+        FrmRegistro registrarse= new FrmRegistro(clientoBO, ciudadBO);
+        
+        registrarse.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_registrarseBtnActionPerformed
 
  
 
