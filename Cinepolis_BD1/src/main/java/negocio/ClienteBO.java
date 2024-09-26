@@ -42,7 +42,7 @@ public class ClienteBO implements IClienteBO {
             );
             
             clienteEntidad.setEstaEliminado(false);
-            
+            System.out.println(clienteEntidad.toString());
             if (clienteDAO.existeClienteConCorreo(registro.getCorreo())) {
                 ClienteEntidad cuentaVieja = clienteDAO.buscarClientePorCorreo(registro.getCorreo());
                 if (cuentaVieja.getEstaEliminado()) {
@@ -66,13 +66,13 @@ public class ClienteBO implements IClienteBO {
     @Override
     public void actualizarCliente(ClienteDTO registro) throws NegocioException {
         try {
-            String contrasenaEncriptada = Encriptacion.encriptarPassword(registro.getContraseña());
+            
             ClienteEntidad cliente = new ClienteEntidad(registro.getIdCliente(),
                     registro.getNombre(),
                     registro.getApellidoPA(),
                     registro.getApellidoMA(),
                     registro.getCorreo(),
-                    contrasenaEncriptada,
+                    registro.getContraseña(),
                     registro.getFechaNacimiento(),
                     registro.getUbicacion(),
                     registro.getIdCiudad());

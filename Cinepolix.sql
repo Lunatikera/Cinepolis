@@ -193,4 +193,23 @@ INSERT INTO Peliculas (titulo, sinopsis, pais, link_Trailer, duracion, cartel, c
     ('Cars 3', 'Dirigida por Brian Fee, la tercera entrega de la franquicia de animación de Pixar sigue a Rayo McQueen, quien se enfrenta a una nueva generación de autos de carreras mientras lucha por demostrar que aún tiene lo necesario para ser el mejor en la pista.', 'Estados Unidos', 'https://www.youtube.com/watch?v=2LeOH9AGJQM', 102, 'carteles/Cars3.jpg', 'A');
 
 
-select*from peliculas	
+DELIMITER $$
+CREATE PROCEDURE BuscarSucursalMasCercana(
+    IN clienteID INT
+)
+BEGIN
+    SELECT s.sucursal_id, s.nombre, s.direccion, 
+           ST_DISTANCE(c.ubicacion, s.ubicacion) AS distancia
+    FROM Clientes c
+    CROSS JOIN Sucursales s
+    WHERE c.cliente_id = clienteID
+    ORDER BY distancia
+    LIMIT 1;
+END $$
+DELIMITER ;
+
+
+select * from clientes;
+
+	
+

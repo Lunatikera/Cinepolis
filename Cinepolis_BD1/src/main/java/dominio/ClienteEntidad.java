@@ -43,6 +43,7 @@ public class ClienteEntidad {
     }
 
     public ClienteEntidad(String nombre, String apellidoPA, String apellidoMA, String correo, String contraseña, LocalDate fechaNacimiento, String ubicacion, int idCiudad){
+         this.nombre = nombre;
         this.apellidoPA = apellidoPA;
         this.apellidoMA = apellidoMA;
         this.correo = correo;
@@ -133,20 +134,13 @@ public class ClienteEntidad {
         this.estaEliminado = estaEliminado;
     }
 
-
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Cliente{");
-        sb.append("id=").append(id);
-        sb.append(", idCiudad=").append(idCiudad);
-        sb.append(", nombre=").append(nombre);
-        sb.append(", correo=").append(correo);
-        sb.append(", fechaNacimiento=").append(fechaNacimiento);
-        sb.append(", ubicacion=").append(ubicacion);
-        sb.append('}');
-        return sb.toString();
+        return "ClienteEntidad{" + "id=" + id + ", nombre=" + nombre + ", apellidoPA=" + apellidoPA + ", apellidoMA=" + apellidoMA + ", correo=" + correo + ", contrase\u00f1a=" + contraseña + ", fechaNacimiento=" + fechaNacimiento + ", ubicacion=" + ubicacion + ", estaEliminado=" + estaEliminado + ", idCiudad=" + idCiudad + '}';
     }
+
+
+   
 
 }
 
