@@ -2,19 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dominio;
+package dtos;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 /**
  *
- * @author carli
+ * @author samoano
  */
-public class ClienteEntidad {
-
-
-    private int id;
+public class ClienteDTO {
+     private int idCliente;
     private String nombre;
     private String apellidoPA;
     private String apellidoMA;
@@ -22,15 +20,12 @@ public class ClienteEntidad {
     private String contraseña;
     private LocalDate fechaNacimiento;
     private String ubicacion;
-    private boolean estaEliminado;
     private int idCiudad;
 
-
-    public ClienteEntidad() {
+    public ClienteDTO() {
     }
 
-    public ClienteEntidad(int id, String nombre, String apellidoPA, String apellidoMA, String correo, String contraseña, LocalDate fechaNacimiento, String ubicacion, int idCiudad) {
-        this.id = id;
+    public ClienteDTO(String nombre, String apellidoPA, String apellidoMA, String correo, String contraseña, LocalDate fechaNacimiento, String ubicacion, int idCiudad) {
         this.nombre = nombre;
         this.apellidoPA = apellidoPA;
         this.apellidoMA = apellidoMA;
@@ -39,10 +34,11 @@ public class ClienteEntidad {
         this.fechaNacimiento = fechaNacimiento;
         this.ubicacion = ubicacion;
         this.idCiudad = idCiudad;
-      
     }
 
-    public ClienteEntidad(String nombre, String apellidoPA, String apellidoMA, String correo, String contraseña, LocalDate fechaNacimiento, String ubicacion, int idCiudad){
+    public ClienteDTO(int idCliente, String nombre, String apellidoPA, String apellidoMA, String correo, String contraseña, LocalDate fechaNacimiento, String ubicacion, int idCiudad) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
         this.apellidoPA = apellidoPA;
         this.apellidoMA = apellidoMA;
         this.correo = correo;
@@ -50,23 +46,26 @@ public class ClienteEntidad {
         this.fechaNacimiento = fechaNacimiento;
         this.ubicacion = ubicacion;
         this.idCiudad = idCiudad;
-        
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getIdCiudad() {
-        return idCiudad;
-    }
-
-    public void setIdCiudad(int idCiudad) {
+    public ClienteDTO(int idCliente, String nombre, String apellidoPA, String apellidoMA, String correo, LocalDate fechaNacimiento, String ubicacion, int idCiudad) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellidoPA = apellidoPA;
+        this.apellidoMA = apellidoMA;
+        this.correo = correo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.ubicacion = ubicacion;
         this.idCiudad = idCiudad;
+    }
+    
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNombre() {
@@ -125,29 +124,12 @@ public class ClienteEntidad {
         this.ubicacion = ubicacion;
     }
 
-    public boolean getEstaEliminado() {
-        return estaEliminado;
+    public int getIdCiudad() {
+        return idCiudad;
     }
 
-    public void setEstaEliminado(boolean estaEliminado) {
-        this.estaEliminado = estaEliminado;
-    }
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Cliente{");
-        sb.append("id=").append(id);
-        sb.append(", idCiudad=").append(idCiudad);
-        sb.append(", nombre=").append(nombre);
-        sb.append(", correo=").append(correo);
-        sb.append(", fechaNacimiento=").append(fechaNacimiento);
-        sb.append(", ubicacion=").append(ubicacion);
-        sb.append('}');
-        return sb.toString();
+    public void setIdCiudad(int idCiudad) {
+        this.idCiudad = idCiudad;
     }
 
 }
-
-
