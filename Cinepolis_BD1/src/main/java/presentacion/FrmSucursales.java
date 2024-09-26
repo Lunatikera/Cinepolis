@@ -17,6 +17,7 @@ public class FrmSucursales extends javax.swing.JFrame {
      */
     public FrmSucursales() {
         initComponents();
+        btnSucursales.setSelected(true);
     }
 
     /**
@@ -33,7 +34,7 @@ public class FrmSucursales extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         menuButton11 = new utilerias.MenuButton();
-        menuButton12 = new utilerias.MenuButton();
+        btnSucursales = new utilerias.MenuButton();
         menuButton13 = new utilerias.MenuButton();
         menuButton14 = new utilerias.MenuButton();
         menuButton3 = new utilerias.MenuButton();
@@ -96,9 +97,9 @@ public class FrmSucursales extends javax.swing.JFrame {
         menuButton11.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
         jPanel3.add(menuButton11);
 
-        menuButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
-        menuButton12.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
-        jPanel3.add(menuButton12);
+        btnSucursales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
+        btnSucursales.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
+        jPanel3.add(btnSucursales);
 
         menuButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
         menuButton13.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
@@ -425,6 +426,7 @@ public class FrmSucursales extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private utilerias.MenuButton btnSucursales;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
@@ -448,7 +450,6 @@ public class FrmSucursales extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private utilerias.MenuButton menuButton1;
     private utilerias.MenuButton menuButton11;
-    private utilerias.MenuButton menuButton12;
     private utilerias.MenuButton menuButton13;
     private utilerias.MenuButton menuButton14;
     private utilerias.MenuButton menuButton18;

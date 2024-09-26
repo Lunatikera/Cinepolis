@@ -12,6 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import negocio.SucursalBO;
 
 /**
  *
@@ -27,16 +30,16 @@ public class SucursalDAO implements ISucursalDAO {
 
     @Override
     public SucursalEntidad buscarSucursalMasCercana(int clienteId) throws PersistenciaException {
-           SucursalEntidad sucursal = null;
+        SucursalEntidad sucursal = null;
         String query = "{CALL BuscarSucursalMasCercana(?)}";
 
-        try ( Connection connection = conexionBD.crearConexion();  CallableStatement stmt = connection.prepareCall(query)) {
+        try (Connection connection = conexionBD.crearConexion(); CallableStatement stmt = connection.prepareCall(query)) {
 
             // Configurar el parámetro de entrada
             stmt.setInt(1, clienteId);
 
             // Ejecutar la consulta
-            try ( ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     sucursal = new SucursalEntidad();
                     sucursal.setId(rs.getInt("sucursal_id"));
@@ -45,6 +48,8 @@ public class SucursalDAO implements ISucursalDAO {
                 }
             }
         } catch (SQLException ex) {
+            Logger.getLogger(SucursalDAO.class.getName()).log(Level.SEVERE, null, ex);
+
             throw new PersistenciaException("Error al obtener la sucursal mas cercana");
         }
 
@@ -56,7 +61,7 @@ public class SucursalDAO implements ISucursalDAO {
         List<SucursalEntidad> sucursales = new ArrayList<>();
         String query = "SELECT sucursal_id, nombre, direccion, ubicacion, ciudad_id FROM Sucursales";
 
-        try ( Connection connection = conexionBD.crearConexion();  PreparedStatement stmt = connection.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
+        try (Connection connection = conexionBD.crearConexion(); PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 SucursalEntidad sucursal = new SucursalEntidad();
@@ -73,22 +78,23 @@ public class SucursalDAO implements ISucursalDAO {
 
         return sucursales;
     }
+
     @Override
     public List<SucursalEntidad> listaSucursalesporCiudad(int idCiudad) throws PersistenciaException {
-       List<SucursalEntidad> sucursales = new ArrayList<>();
+        List<SucursalEntidad> sucursales = new ArrayList<>();
 
         // Consulta SQL para obtener las sucursales de una ciudad
         String sentenciaSQL = "SELECT sucursal_id, nombre, direccion, ubicacion, ciudad_id "
                 + "FROM Sucursales "
                 + "WHERE ciudad_id = ?";
 
-        try ( Connection conexion = this.conexionBD.crearConexion();  PreparedStatement pS = conexion.prepareStatement(sentenciaSQL)) {
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pS = conexion.prepareStatement(sentenciaSQL)) {
 
             // Establecer el parámetro del ID de ciudad en la consulta preparada
             pS.setInt(1, idCiudad);
 
             // Ejecutar la consulta
-            try ( ResultSet resultSet = pS.executeQuery()) {
+            try (ResultSet resultSet = pS.executeQuery()) {
                 // Iterar sobre los resultados y mapearlos a objetos Sucursal
                 while (resultSet.next()) {
                     int sucursalId = resultSet.getInt("sucursal_id");

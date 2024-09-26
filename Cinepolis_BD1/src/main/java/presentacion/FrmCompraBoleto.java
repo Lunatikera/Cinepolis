@@ -17,6 +17,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
      */
     public FrmCompraBoleto() {
         initComponents();
+        btnInicio.setSelected(true);
     }
 
     /**
@@ -32,7 +33,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        menuButton11 = new utilerias.MenuButton();
+        btnInicio = new utilerias.MenuButton();
         menuButton12 = new utilerias.MenuButton();
         menuButton13 = new utilerias.MenuButton();
         menuButton14 = new utilerias.MenuButton();
@@ -106,9 +107,9 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(1280, 65));
         jPanel3.setLayout(new java.awt.GridLayout(1, 5, 50, 0));
 
-        menuButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Inicio.png"))); // NOI18N
-        menuButton11.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
-        jPanel3.add(menuButton11);
+        btnInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Inicio.png"))); // NOI18N
+        btnInicio.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
+        jPanel3.add(btnInicio);
 
         menuButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
         menuButton12.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
@@ -595,6 +596,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private utilerias.MenuButton btnInicio;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -625,7 +627,6 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private utilerias.MenuButton menuButton1;
-    private utilerias.MenuButton menuButton11;
     private utilerias.MenuButton menuButton12;
     private utilerias.MenuButton menuButton13;
     private utilerias.MenuButton menuButton14;

@@ -12,11 +12,11 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author Chris
+ * @author carli
  */
 public class Herramientas {
 
-    public int RegresarOFFSETMySQL(int limite, int pagina) {
+    public static int RegresarOFFSETMySQL(int limite, int pagina) {
         if (pagina <= 1) {
             return 0;
         }

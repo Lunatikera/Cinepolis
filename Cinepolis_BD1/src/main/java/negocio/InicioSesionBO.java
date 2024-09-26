@@ -10,7 +10,7 @@ import dtos.InicioSesionDTO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
-import persistencia.ClienteDAO;
+import persistencia.IClienteDAO;
 import persistencia.PersistenciaException;
 import utilerias.Encriptacion;
 
@@ -20,9 +20,9 @@ import utilerias.Encriptacion;
  */
 public class InicioSesionBO implements IInicioSesionBO {
 
-    private ClienteDAO clienteDAO;
+    private IClienteDAO clienteDAO;
 
-    public InicioSesionBO(ClienteDAO clienteDAO) {
+    public InicioSesionBO(IClienteDAO clienteDAO) {
         this.clienteDAO = clienteDAO;
     }
 

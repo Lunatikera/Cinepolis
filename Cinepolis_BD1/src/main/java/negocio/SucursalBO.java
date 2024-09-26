@@ -8,9 +8,10 @@ import dominio.SucursalEntidad;
 import dtos.SucursalDTO;
 import java.util.ArrayList;
 import java.util.List;
-import persistencia.CiudadDAO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import persistencia.ISucursalDAO;
 import persistencia.PersistenciaException;
-import persistencia.SucursalDAO;
 
 /**
  *
@@ -18,9 +19,9 @@ import persistencia.SucursalDAO;
  */
 public class SucursalBO implements ISucursalBO {
 
-    private SucursalDAO sucursalDAO;
+    private ISucursalDAO sucursalDAO;
 
-    public SucursalBO(SucursalDAO sucursalDAO) {
+    public SucursalBO(ISucursalDAO sucursalDAO) {
         this.sucursalDAO = sucursalDAO;
     }
 
@@ -40,7 +41,9 @@ public class SucursalBO implements ISucursalBO {
 
             return sucursalDTO;
         } catch (PersistenciaException e) {
+            Logger.getLogger(SucursalBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error al obtener la sucursal más cercana", e);
+
         }
     }
 
