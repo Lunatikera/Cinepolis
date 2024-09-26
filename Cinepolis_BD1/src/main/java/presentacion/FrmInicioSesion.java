@@ -7,6 +7,8 @@ package presentacion;
 import dtos.ClienteDTO;
 import dtos.InicioSesionDTO;
 import dtos.SucursalDTO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import negocio.CiudadBO;
 import negocio.ICiudadBO;
@@ -180,7 +182,10 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         } catch (Exception ex) {
             // Manejar cualquier otra excepción inesperada
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado. Por favor, intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(FrmInicioSesion.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+      
 
     }//GEN-LAST:event_ingresarBtnActionPerformed
     private void procesarInicioSesionExitoso(ClienteDTO cliente) {
@@ -191,6 +196,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             catalogo.setVisible(true);
             this.dispose();
         } catch (NegocioException ex) {
+            Logger.getLogger(FrmInicioSesion.class.getName()).log(Level.SEVERE, null, ex);
 
         }
     }

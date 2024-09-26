@@ -24,6 +24,7 @@ import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.ISucursalDAO;
 import persistencia.SucursalDAO;
+import utilerias.Geocalizacion;
 
 /**
  *
@@ -291,7 +292,9 @@ public class FrmRegistro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Error de contraseña", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        try{
+            
+        CiudadDTO ciudad = (CiudadDTO) ciudadesCB.getSelectedItem();
         // Create a RegistroUsuarioDTO instance
         ClienteDTO registro = new ClienteDTO();
         registro.setNombre(nombreTxt.getText().trim());
@@ -300,7 +303,9 @@ public class FrmRegistro extends javax.swing.JFrame {
         registro.setCorreo(correoTxt.getText().trim());
         registro.setContraseña(contraseña);
         registro.setFechaNacimiento(FechaNacimientoPicker.getDate());
-        registro.setUbicacion((String) ciudadesCB.getSelectedItem());
+        registro.setIdCiudad( ciudad.getId());
+        registro.setUbicacion(Geocalizacion.obtenerCoordenadas());
+        System.out.println(registro.toString());
         // Assuming idCiudad is part of the selected city or another input field
 
         // Proceed to register the user using the BO layer
@@ -309,6 +314,9 @@ public class FrmRegistro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Registro exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, "Error en el registro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        }catch(Exception m){
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + m.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 

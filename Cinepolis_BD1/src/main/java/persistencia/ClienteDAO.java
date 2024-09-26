@@ -186,7 +186,7 @@ public class ClienteDAO implements IClienteDAO {
 
     @Override
     public ClienteEntidad buscarClientePorCorreo(String correo) throws PersistenciaException {
-        String sentenciaSQL = "SELECT cliente_id, nombres, apellidoPA, apellidoMA, correo, contraseña, fechaNacimiento, ubicacion, estaEliminado FROM Clientes WHERE correo = ?;";
+        String sentenciaSQL = "SELECT cliente_id, nombres, apellidoPA, apellidoMA, correo, contraseña, fechaNacimiento, ubicacion, ciudad_id, estaEliminado FROM Clientes WHERE correo = ?;";
         ResultSet res = null;
         ClienteEntidad cliente = null;
 
@@ -195,6 +195,7 @@ public class ClienteDAO implements IClienteDAO {
             ps.setString(1, correo);
 
             res = ps.executeQuery();
+            System.out.println("Alv");
 
             if (res.next()) {
                 cliente = new ClienteEntidad();
@@ -204,13 +205,13 @@ public class ClienteDAO implements IClienteDAO {
                 cliente.setApellidoMA(res.getString("apellidoMA"));
                 cliente.setCorreo(res.getString("correo"));
                 cliente.setContraseña(res.getString("contraseña"));
-                cliente.setFechaNacimiento(res.getObject("fecha_nacimiento", LocalDate.class));
+                cliente.setFechaNacimiento(res.getObject("fechaNacimiento", LocalDate.class));
                 cliente.setUbicacion(res.getString("ubicacion"));
                 cliente.setIdCiudad(res.getInt("ciudad_id"));
+                cliente.setEstaEliminado(res.getBoolean("estaEliminado"));
                 return cliente;
-            } else {
-                return cliente;
-            }
+            } 
+            return cliente;
         } catch (SQLException e) {
             throw new PersistenciaException("Error al buscar el cliente por su correo: " + e.getMessage());
         }

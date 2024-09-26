@@ -132,4 +132,11 @@ public class ClienteDTO {
         this.idCiudad = idCiudad;
     }
 
+    @Override
+    public String toString() {
+        return "ClienteDTO{" + "idCliente=" + idCliente + ", nombre=" + nombre + ", apellidoPA=" + apellidoPA + ", apellidoMA=" + apellidoMA + ", correo=" + correo + ", contrase\u00f1a=" + contraseña + ", fechaNacimiento=" + fechaNacimiento + ", ubicacion=" + ubicacion + ", idCiudad=" + idCiudad + '}';
+    }
+    
+    
+
 }
