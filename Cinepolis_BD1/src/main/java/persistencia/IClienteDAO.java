@@ -12,5 +12,7 @@ import dominio.ClienteEntidad;
  */
 public interface IClienteDAO extends ICrud<ClienteEntidad>{
 
-    
+    public ClienteEntidad buscarClientePorCorreo(String correo) throws PersistenciaException;
+
+    public boolean existeClienteConCorreo(String correo) throws PersistenciaException;
 }
