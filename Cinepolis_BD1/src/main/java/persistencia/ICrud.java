@@ -12,13 +12,13 @@ import java.util.List;
  */
 public interface ICrud <T> {
   // Crear una nueva entidad
-   public void guardar(T entidad) throws PersistenciaException;
+   public T guardar(T entidad) throws PersistenciaException;
 
     // Leer una entidad por su identificador
    public T leerPorID(int id) throws PersistenciaException;
 
     // Leer todas las entidades
-    public List<T> leerTodos() throws PersistenciaException;
+    public List<T> leerPaginado(int limit, int offset) throws PersistenciaException;
 
     // Actualizar una entidad existente
     public void editar(T entidad) throws PersistenciaException;
