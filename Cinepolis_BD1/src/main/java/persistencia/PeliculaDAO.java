@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  *
- * @author carli
+ * @author Temo
  */
 public class PeliculaDAO implements IPeliculaDAO {
 
