@@ -42,6 +42,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private ISucursalBO sucursalBO;
     private SucursalDTO sucursal;
     private ClienteDTO cliente;
+    private final boolean peliculaEnSucursal= true; 
 
     public FrmCatalogoSucursal(IPeliculaBO peliculaBO, ICiudadBO ciudadBO, ISucursalBO sucursalBO, SucursalDTO sucursal, ClienteDTO cliente) {
         initComponents();
@@ -59,7 +60,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     }
 
     private void cargarMetodosIniciales() {
-        this.setTitle("Catalogo");
+        this.setTitle(sucursal.getNombre());
         this.setLocationRelativeTo(null);
         this.cargarPeliculas();
         this.estadoPagina();
@@ -70,8 +71,8 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
 
     public void cargarPeliculas() {
         try {
-            List<PeliculaDTO> peliculasLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina);
-
+            List<PeliculaDTO> peliculasLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, peliculaEnSucursal);
+            System.out.println(peliculasLista);
             peliculasCargadas.clear();
             peliculasCargadas.addAll(peliculasLista);
             this.llenarCampos(peliculasLista);
@@ -104,7 +105,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula1() {
         PeliculaDTO pelicula = peliculasCargadas.get(0);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula,cliente,sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -112,7 +113,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula2() {
         PeliculaDTO pelicula = peliculasCargadas.get(1);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula,cliente,sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -120,7 +121,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula3() {
         PeliculaDTO pelicula = peliculasCargadas.get(2);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula,cliente,sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -128,7 +129,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula4() {
         PeliculaDTO pelicula = peliculasCargadas.get(3);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula,cliente,sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -159,6 +160,8 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btnIr = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        lblPagina = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -179,7 +182,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         btnCartel4 = new javax.swing.JButton();
         btnSiguiente = new utilerias.MenuButton();
         btnAtras = new utilerias.MenuButton();
-        lblPagina = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -216,14 +218,12 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(1280, 65));
         jPanel3.setLayout(new java.awt.GridLayout(1, 5, 50, 0));
 
-        btnInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
         btnInicio.setBorderPainted(false);
         btnInicio.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
         btnInicio.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
         btnInicio.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
         jPanel3.add(btnInicio);
 
-        btnSucursales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
         btnSucursales.setBorderPainted(false);
         btnSucursales.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
         btnSucursales.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
@@ -234,7 +234,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         });
         jPanel3.add(btnSucursales);
 
-        btnBoletos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
         btnBoletos.setBorderPainted(false);
         btnBoletos.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
         btnBoletos.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
@@ -246,7 +245,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         });
         jPanel3.add(btnBoletos);
 
-        btnInbox.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
         btnInbox.setBorderPainted(false);
         btnInbox.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
         btnInbox.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
@@ -258,7 +256,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         });
         jPanel3.add(btnInbox);
 
-        btnPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfil.png"))); // NOI18N
         btnPerfil.setBorderPainted(false);
         btnPerfil.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
         btnPerfil.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfil.png"))); // NOI18N
@@ -292,6 +289,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locacion.png"))); // NOI18N
 
         btnIr.setText("Ir");
+        btnIr.setBorderPainted(false);
         btnIr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIrActionPerformed(evt);
@@ -304,8 +302,8 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-                .addGap(234, 234, 234)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addGap(276, 276, 276)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,48 +311,60 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
                     .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnIr)
-                .addGap(115, 115, 115))
+                .addGap(112, 112, 112))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                    .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                    .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                                .addComponent(btnIr)
-                                .addGap(32, 32, 32))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addGap(25, 25, 25))))))
+                                .addGap(25, 25, 25))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                .addComponent(btnIr)
+                                .addGap(33, 33, 33))))))
         );
 
         jPanel4.add(jPanel7, java.awt.BorderLayout.PAGE_START);
 
         jPanel8.setBackground(new java.awt.Color(36, 44, 99));
-        jPanel8.setPreferredSize(new java.awt.Dimension(1280, 10));
+        jPanel8.setPreferredSize(new java.awt.Dimension(1280, 70));
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1280, Short.MAX_VALUE)
+        jPanel14.setBackground(new java.awt.Color(36, 44, 99));
+
+        lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblPagina.setForeground(new java.awt.Color(255, 255, 255));
+        lblPagina.setText("Pagina 01");
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+                .addGap(0, 65, Short.MAX_VALUE)
+                .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addComponent(lblPagina)
+                .addGap(0, 46, Short.MAX_VALUE))
         );
+
+        jPanel8.add(jPanel14);
 
         jPanel4.add(jPanel8, java.awt.BorderLayout.PAGE_END);
 
@@ -368,7 +378,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         lblPelicula1.setForeground(new java.awt.Color(255, 255, 255));
         lblPelicula1.setText("Pelicula 1");
 
-        btnPelicula1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
         btnPelicula1.setBorderPainted(false);
         btnPelicula1.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicketSelected.png"))); // NOI18N
         btnPelicula1.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
@@ -418,7 +427,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         lblPelicula2.setForeground(new java.awt.Color(255, 255, 255));
         lblPelicula2.setText("Pelicula 1");
 
-        btnPelicula2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
         btnPelicula2.setBorderPainted(false);
         btnPelicula2.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicketSelected.png"))); // NOI18N
         btnPelicula2.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
@@ -468,7 +476,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         lblPelicula3.setForeground(new java.awt.Color(255, 255, 255));
         lblPelicula3.setText("Pelicula 1");
 
-        btnPelicula3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
         btnPelicula3.setBorderPainted(false);
         btnPelicula3.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicketSelected.png"))); // NOI18N
         btnPelicula3.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
@@ -518,7 +525,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         lblPelicula4.setForeground(new java.awt.Color(255, 255, 255));
         lblPelicula4.setText("Pelicula 1");
 
-        btnPelicula4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
         btnPelicula4.setBorderPainted(false);
         btnPelicula4.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicketSelected.png"))); // NOI18N
         btnPelicula4.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprarTicket.png"))); // NOI18N
@@ -585,7 +591,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
             .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/right.png"))); // NOI18N
         btnSiguiente.setBorderPainted(false);
         btnSiguiente.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/rightSelected.png"))); // NOI18N
         btnSiguiente.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/right.png"))); // NOI18N
@@ -595,7 +600,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
             }
         });
 
-        btnAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/left.png"))); // NOI18N
         btnAtras.setBorderPainted(false);
         btnAtras.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/leftSelected.png"))); // NOI18N
         btnAtras.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/left.png"))); // NOI18N
@@ -605,10 +609,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
                 btnAtrasActionPerformed(evt);
             }
         });
-
-        lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        lblPagina.setForeground(new java.awt.Color(255, 255, 255));
-        lblPagina.setText("Pagina 01");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -622,19 +622,9 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(578, 578, 578))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74))
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -642,8 +632,11 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
                         .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(196, 196, 196)
-                        .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(133, 133, 133))
         );
 
         jPanel4.add(jPanel5, java.awt.BorderLayout.CENTER);
@@ -698,10 +691,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         this.detallesPelicula4();
     }//GEN-LAST:event_btnCartel4ActionPerformed
 
-    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnIrActionPerformed
-
     private void btnCartel3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCartel3ActionPerformed
         this.detallesPelicula3();
     }//GEN-LAST:event_btnCartel3ActionPerformed
@@ -713,7 +702,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBoletosActionPerformed
 
     private void btnSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSucursalesActionPerformed
-        FrmSucursales sucursales = new FrmSucursales();
+        FrmSucursales sucursales = new FrmSucursales(ciudadBO, sucursalBO, sucursal, cliente);
         sucursales.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnSucursalesActionPerformed
@@ -738,6 +727,18 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         this.detallesPelicula1();
     }//GEN-LAST:event_btnCartel1ActionPerformed
 
+    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
+        if (cbCiudades.getSelectedItem() != null) {
+            this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
+            this.pagina = 1;
+            this.cargarPeliculas();
+            this.estadoPagina();
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "Error al buscar el catalogo, Intente de nuevo ", "Error", JOptionPane.ERROR_MESSAGE);
+
+    }//GEN-LAST:event_btnIrActionPerformed
+
     private void estadoPagina() {
         String numPagina = String.valueOf(pagina);
         if (numPagina.length() == 1) {
@@ -761,8 +762,8 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
 
         try {
             btnSiguiente.setEnabled(true);
-            if (this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), this.LIMITE, this.pagina + 1) == null
-                    || this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), this.LIMITE, this.pagina + 1).isEmpty()) {
+            if (this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), this.LIMITE, this.pagina + 1, peliculaEnSucursal) == null
+                    || this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), this.LIMITE, this.pagina + 1, peliculaEnSucursal).isEmpty()) {
                 btnSiguiente.setEnabled(false);
             }
         } catch (NegocioException ex) {
@@ -866,6 +867,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

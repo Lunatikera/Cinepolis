@@ -29,9 +29,7 @@ public class InicioSesionBO implements IInicioSesionBO {
     public ClienteDTO inicioSesion(InicioSesionDTO credenciales) throws NegocioException {
         try {
             // Retrieve the user by email from the DAO
-            System.out.println("ho");
             ClienteEntidad cliente = clienteDAO.buscarClientePorCorreo(credenciales.getCorreo());
-            System.out.println(cliente.toString());
             if (cliente == null) {
                 throw new NegocioException("Correo no encontrado.");
             }

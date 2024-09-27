@@ -5,6 +5,7 @@
 package persistencia;
 
 import dominio.SucursalEntidad;
+import dtos.TablaPeliculaSucursalDTO;
 import java.util.List;
 
 /**

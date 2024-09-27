@@ -51,10 +51,10 @@ public class PeliculaBO implements IPeliculaBO {
     }
 
     @Override
-    public List<PeliculaDTO> buscarPeliculaSucursal(int idSucursal, int limit, int pagina) throws NegocioException {
+    public List<PeliculaDTO> buscarPeliculaSucursal(int idSucursal, int limit, int pagina, boolean peliculaEnSucursal) throws NegocioException {
         try {
             int offset = utilerias.Herramientas.RegresarOFFSETMySQL(limit, pagina);
-            List<PeliculaEntidad> peliculas = peliculaDAO.buscarPeliculaSucursal(idSucursal, limit, offset);
+            List<PeliculaEntidad> peliculas = peliculaDAO.buscarPeliculaSucursal(idSucursal, limit, offset, peliculaEnSucursal);
             List<PeliculaDTO> peliculasDTO = new ArrayList<>();
 
             // Convertir las películas obtenidas a objetos PeliculaDTO
@@ -85,6 +85,27 @@ public class PeliculaBO implements IPeliculaBO {
 
         return dto;
 
+    }
+
+    @Override
+    public void eliminarPeliculaDeSucursal(int peliculaId, int sucursalId) throws NegocioException {
+        try {
+            peliculaDAO.actualizarFechaRetiro(peliculaId, sucursalId);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException("No se pudo eliminar la pelicula de la Sucursal");
+
+        }
+    }
+
+    @Override
+    public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws NegocioException {
+        try {
+            peliculaDAO.guardarPeliculaEnSucursal(peliculaId, sucursalId);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException("No se pudo guardar la pelicula en la Sucursal");
+        }
     }
 
 }

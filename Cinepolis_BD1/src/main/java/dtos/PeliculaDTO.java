@@ -117,19 +117,30 @@ public class PeliculaDTO {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PeliculaDTO other = (PeliculaDTO) obj;
+        return this.id == other.id;
+    }
+
+    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("PeliculaDTO{");
-        sb.append("id=").append(id);
-        sb.append(", titulo=").append(titulo);
-        sb.append(", sinopsis=").append(sinopsis);
-        sb.append(", pais=").append(pais);
-        sb.append(", link_trailer=").append(link_trailer);
-        sb.append(", duracion=").append(duracion);
-        sb.append(", cartel=").append(cartel);
-        sb.append(", clasificacion=").append(clasificacion);
-        sb.append('}');
-        return sb.toString();
+
+        return this.titulo;
     }
 
 }
