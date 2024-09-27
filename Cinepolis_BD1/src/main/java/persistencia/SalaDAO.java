@@ -88,7 +88,7 @@ public class SalaDAO implements ISalaDAO {
         pS.setInt(2, entidad.getNumeroAsiento());
         pS.setInt(3, entidad.getDuracionLimpieza());
         pS.setInt(4, entidad.getIdSucursal());
-        pS.setInt(6, entidad.getId());
+        pS.setInt(5, entidad.getId());
 
         int filasAfectadas = pS.executeUpdate();
         if (filasAfectadas == 0) {
