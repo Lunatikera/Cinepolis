@@ -126,6 +126,7 @@ public class FrmRegistro extends javax.swing.JFrame {
             }
         });
 
+        btnRegistrarse.setBorderPainted(false);
         btnRegistrarse.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registrarse.png"))); // NOI18N
         btnRegistrarse.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Registrarse.png"))); // NOI18N
         btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {

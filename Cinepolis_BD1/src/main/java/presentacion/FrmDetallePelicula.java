@@ -57,8 +57,13 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         lblPaisOrigen.setText(pelicula.getPais());
         lblDuracion.setText(pelicula.getDuracion() + " minutos");
         lblClasificacion.setText(pelicula.getClasificacion());
-        lblClasificacionDescripcion.setText(pelicula.getClasificacionDescripcion());
 
+        if (pelicula.getClasificacionDescripcion().length() < 3) {
+            lblClasificacionDescripcion.setText(" " + pelicula.getClasificacionDescripcion());
+
+        } else {
+            lblClasificacionDescripcion.setText(pelicula.getClasificacionDescripcion());
+        }
         //Cargar Cartel Pelicula
         ImageIcon icon = new ImageIcon(pelicula.getCartel());
         Image scaledImage = icon.getImage().getScaledInstance(229, 353, Image.SCALE_SMOOTH);
@@ -352,7 +357,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
 
         lblClasificacion.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         lblClasificacion.setForeground(new java.awt.Color(255, 255, 255));
-        lblClasificacion.setText("RA");
+        lblClasificacion.setText("RAA");
 
         lblClasificacionDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblClasificacionDescripcion.setForeground(new java.awt.Color(255, 255, 255));
@@ -363,20 +368,22 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         panelConFondo3Layout.setHorizontalGroup(
             panelConFondo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConFondo3Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(lblClasificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblClasificacionDescripcion)
+                .addContainerGap()
+                .addComponent(lblClasificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblClasificacionDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelConFondo3Layout.setVerticalGroup(
             panelConFondo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConFondo3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelConFondo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblClasificacion, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                    .addComponent(lblClasificacionDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblClasificacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(panelConFondo3Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(lblClasificacionDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         lblPaisOrigen.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -552,7 +559,15 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTrailerActionPerformed
 
     private void btnSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSucursalesActionPerformed
-        FrmSucursales sucursales = new FrmSucursales();
+        IConexionBD conexion = new ConexionBD();
+
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
+
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+
+        FrmSucursales sucursales = new FrmSucursales(ciudadBO, sucursalBO, sucursal, cliente);
         sucursales.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnSucursalesActionPerformed

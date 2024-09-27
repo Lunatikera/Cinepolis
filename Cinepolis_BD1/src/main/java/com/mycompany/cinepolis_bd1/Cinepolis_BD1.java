@@ -16,6 +16,7 @@ import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.ISucursalDAO;
 import persistencia.SucursalDAO;
+import presentacion.FrmAdminSucursal;
 import presentacion.FrmInicioSesion;
 
 /**
@@ -39,5 +40,7 @@ public class Cinepolis_BD1 {
         // Initialize and display the login form
         FrmInicioSesion iniciarSesion = new FrmInicioSesion(inicioSesionBO, clienteBO, sucursalBO);
         iniciarSesion.setVisible(true);
+        
+       
     }
 }

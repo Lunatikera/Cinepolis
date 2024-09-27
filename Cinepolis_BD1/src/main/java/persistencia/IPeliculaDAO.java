@@ -13,6 +13,10 @@ import java.util.List;
  */
 public interface IPeliculaDAO extends ICrud<PeliculaEntidad> {
 
-    public List<PeliculaEntidad> buscarPeliculaSucursal(int idSucursal, int limit, int offset) throws PersistenciaException;
+    public List<PeliculaEntidad> buscarPeliculaSucursal(int idSucursal, int limit, int offset, boolean peliculasEnSucursal) throws PersistenciaException;
+
+    public void actualizarFechaRetiro(int peliculaId, int sucursalId) throws PersistenciaException;
+
+    public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException;
 
 }

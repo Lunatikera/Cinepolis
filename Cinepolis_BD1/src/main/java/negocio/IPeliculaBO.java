@@ -12,7 +12,7 @@ import java.util.List;
  * @author carli
  */
 public interface IPeliculaBO {
-    
+
     public void agregaPelicula(PeliculaDTO peliculaDTO) throws NegocioException;
 
     public void actualizarPelicula(PeliculaDTO peliculaDTO) throws NegocioException;
@@ -23,6 +23,9 @@ public interface IPeliculaBO {
 
     public List<PeliculaDTO> buscarPaginadoPeliculas(int limite, int pagina) throws NegocioException;
 
-    public List<PeliculaDTO> buscarPeliculaSucursal(int idSucursal, int limit, int offset) throws NegocioException;
+    public List<PeliculaDTO> buscarPeliculaSucursal(int idSucursal, int limit, int pagina, boolean peliculaEnSucursal) throws NegocioException;
 
+    public void eliminarPeliculaDeSucursal(int peliculaId, int sucursalId) throws NegocioException;
+
+    public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws NegocioException;
 }
