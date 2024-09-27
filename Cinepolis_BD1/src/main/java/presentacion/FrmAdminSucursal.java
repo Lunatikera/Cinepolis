@@ -586,9 +586,10 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
 
     private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
         if (cbCiudades.getSelectedItem() != null) {
-            this.sucursal = (SucursalDTO) cbPeliculas.getSelectedItem();
+            this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
             this.pagina = 1;
             this.cargarPeliculasTabla();
+            this.llenarComboBoxPeliculasPorAnadir();
             this.estadoPagina();
             return;
         }
