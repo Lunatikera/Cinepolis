@@ -304,6 +304,7 @@
             </Component>
             <Component class="utilerias.MenuButton" name="btnRegistrarse">
               <Properties>
+                <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="iconoSeleccionado" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagenes/Registrarse.png"/>
                 </Property>

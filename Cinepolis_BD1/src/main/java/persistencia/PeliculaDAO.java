@@ -6,6 +6,7 @@ package persistencia;
 
 import dominio.PeliculaEntidad;
 import enumeradores.Clasificaciones;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -171,15 +172,23 @@ public class PeliculaDAO implements IPeliculaDAO {
     }
 
     @Override
-    public List<PeliculaEntidad> buscarPeliculaSucursal(int idSucursal, int limit, int offset) throws PersistenciaException {
+    public List<PeliculaEntidad> buscarPeliculaSucursal(int idSucursal, int limit, int offset, boolean peliculasEnSucursal) throws PersistenciaException {
         List<PeliculaEntidad> peliculas = new ArrayList<>();
-
-        // Consulta SQL para obtener películas para una sucursal específica con límite y desplazamiento
-        String sentenciaSQL = "SELECT p.pelicula_id, p.titulo, p.sinopsis, p.pais, p.link_Trailer, p.duracion, p.cartel, p.clasificacion "
-                + "FROM pelicula_sucursal s "
-                + "INNER JOIN peliculas p ON s.pelicula_id = p.pelicula_id "
-                + "WHERE s.sucursal_id = ? AND estaEliminado=0 "
-                + "LIMIT ? OFFSET ?";
+        String sentenciaSQL;
+           
+        if (peliculasEnSucursal) {
+            sentenciaSQL = "SELECT p.pelicula_id, p.titulo, p.sinopsis, p.pais, p.link_Trailer, p.duracion, p.cartel, p.clasificacion "
+                    + "FROM pelicula_sucursal s "
+                    + "INNER JOIN peliculas p ON s.pelicula_id = p.pelicula_id "
+                    + "WHERE s.sucursal_id = ? AND p.estaEliminado = 0 AND s.fechaRetiro IS NULL "
+                    + "LIMIT ? OFFSET ?";
+        } else {
+            sentenciaSQL = "SELECT p.pelicula_id, p.titulo, p.sinopsis, p.pais, p.link_Trailer, p.duracion, p.cartel, p.clasificacion "
+                    + "FROM peliculas p "
+                    + "WHERE p.pelicula_id NOT IN (SELECT s.pelicula_id FROM pelicula_sucursal s WHERE s.sucursal_id = ? AND s.fechaRetiro IS NULL) "
+                    + "AND p.estaEliminado = 0 "
+                    + "LIMIT ? OFFSET ?";
+        }
 
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pS = conexion.prepareStatement(sentenciaSQL)) {
 
@@ -214,4 +223,38 @@ public class PeliculaDAO implements IPeliculaDAO {
 
         return peliculas;
     }
+    
+     public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException {
+        String sql = "{CALL guardarPeliculaEnSucursal(?, ?)}"; // Llamada al procedimiento almacenado
+        try (Connection conexion = conexionBD.crearConexion();
+             CallableStatement callableStatement = conexion.prepareCall(sql)) {
+
+            // Establecer parámetros
+            callableStatement.setInt(1, peliculaId);
+            callableStatement.setInt(2, sucursalId);
+
+            // Ejecutar el procedimiento
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al guardar la película en la sucursal", e);
+        }
+    }
+
+    // Método para actualizar la fecha de retiro
+    public void actualizarFechaRetiro(int peliculaId, int sucursalId) throws PersistenciaException {
+        String sql = "{CALL actualizarFechaRetiro(?, ?)}"; // Llamada al procedimiento almacenado
+        try (Connection conexion = conexionBD.crearConexion();
+             CallableStatement callableStatement = conexion.prepareCall(sql)) {
+
+            // Establecer parámetros
+            callableStatement.setInt(1, peliculaId);
+            callableStatement.setInt(2, sucursalId);
+
+            // Ejecutar el procedimiento
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al actualizar la fecha de retiro", e);
+        }
+    }
 }
+
