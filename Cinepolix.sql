@@ -22,7 +22,7 @@ CREATE TABLE Salas (
     nombre VARCHAR(255) NOT NULL,
     numAsientos INT NOT NULL,
     duracionLimpieza INT NOT NULL,
-        estaEliminado bit(1) default 0,
+	estaEliminado bit(1) default 0,
     sucursal_id INT,
     FOREIGN KEY (sucursal_id) REFERENCES Sucursales(sucursal_id)
 );
@@ -70,11 +70,12 @@ CREATE TABLE Funciones (
     funcion_id INT AUTO_INCREMENT PRIMARY KEY,
     precio DECIMAL(10, 2) NOT NULL,
     dia ENUM('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo') NOT NULL,
-    hora TIME NOT NULL,
+    hora_inicio TIME NOT NULL,
     hora_final TIME NOT NULL, -- Nueva columna para la hora final
     asientos_Disponibles INT NOT NULL,
     hora_final_total TIME NOT NULL,
     duracionTotal INT NOT NULL,
+	estaEliminado bit(1) default 0,
     sala_id INT,
     pelicula_id INT,
     FOREIGN KEY (sala_id) REFERENCES Salas(sala_id),
@@ -309,7 +310,7 @@ INSERT INTO Pelicula_Sucursal (sucursal_id, pelicula_id) VALUES
 
 
 
-select*from pelicula_sucursal
+select*from funciones
 
 
 
@@ -353,6 +354,7 @@ BEGIN
     ELSE
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La película o la sucursal no existen';
     END IF;
+    
 END $$
 
 
@@ -367,5 +369,41 @@ BEGIN
     WHERE pelicula_id = p_pelicula_id AND sucursal_id = p_sucursal_id;
 END $$
 
+CREATE TRIGGER actualizar_asientos
+AFTER INSERT ON Compras
+FOR EACH ROW
+BEGIN
+    DECLARE asientos_actuales INT;
+
+    -- Obtener los asientos disponibles de la función correspondiente
+    SELECT asientos_Disponibles
+    INTO asientos_actuales
+    FROM Funciones
+    WHERE funcion_id = NEW.funcion_id;
+	UPDATE Funciones
+	SET asientos_Disponibles = asientos_Disponibles - NEW.cantidad_Boletos
+	WHERE funcion_id = NEW.funcion_id;
+END $$
+
+
 DELIMITER ;
-DELIMITER ;
+select* from funciones;
+INSERT INTO Funciones (precio, dia, hora, hora_final, asientos_Disponibles, hora_final_total, duracionTotal, sala_id, pelicula_id)
+VALUES
+(100.00, 'Lunes', '10:00:00', '12:00:00', 50, '12:00:00', 120, 1, 1),
+(120.00, 'Martes', '13:00:00', '15:00:00', 75, '15:00:00', 120, 2, 2),
+(150.00, 'Miércoles', '16:00:00', '18:00:00', 100, '18:00:00', 120, 3, 3),
+(180.00, 'Jueves', '19:00:00', '21:00:00', 125, '21:00:00', 120, 4, 4),
+(200.00, 'Viernes', '20:00:00', '22:00:00', 150, '22:00:00', 120, 5, 5),
+(220.00, 'Sábado', '21:00:00', '23:00:00', 175, '23:00:00', 120, 6, 6),
+(250.00, 'Domingo', '22:00:00', '00:00:00', 200, '00:00:00', 120, 7, 7);
+
+
+ SELECT f.funcion_id, p.titulo, p.duracion, f.hora, f.hora_final_total, f.precio 
+                FROM Funciones f 
+                INNER JOIN Peliculas p ON f.pelicula_id = p.pelicula_id 
+                INNER JOIN Salas s ON f.sala_id = s.sala_id 
+                WHERE f.estaEliminado = 0
+                AND f.dia = 'Lunes'
+                AND s.sala_id = 1
+                ORDER BY s.sala_id 

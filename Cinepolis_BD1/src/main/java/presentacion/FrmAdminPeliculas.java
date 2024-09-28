@@ -57,10 +57,8 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
 
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
-        this.llenarComboBoxCiudad();
-        this.seleccionarCiudadYSucursal();
         this.cargarConfiguracionInicialTablaPeliculas();
-        this.cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
+        this.cargarClientesEnTabla( pagina, LIMITE);
         this.estadoPagina();
     }
 
@@ -113,7 +111,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             }
         }
     }
-    private void cargarClientesEnTabla(int idSucursal,int pagina, int limite) {
+    private void cargarClientesEnTabla(int pagina, int limite) {
         try
         {
             // Borrar registros previos antes de cargar los nuevos
@@ -123,7 +121,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             int offset = (pagina - 1) * limite;
 
             // Obtén solo los clientes necesarios para la página actual
-            List<PeliculaDTO> clientesLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), limite, pagina, true);
+            List<PeliculaDTO> clientesLista = this.peliculaBO.buscarPaginadoPeliculas(limite, pagina);
 
             // Agrega los registros paginados a la tabla
             this.AgregarRegistrosTablaSalas(clientesLista);
@@ -183,7 +181,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
                 {
                     this.peliculaBO.eliminarPelicula(id);
                     // Recargar la tabla después de eliminar
-                    cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
+                    cargarClientesEnTabla(pagina, LIMITE);
                 } catch (NegocioException ex)
                 {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -200,10 +198,10 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             return;
         }
         try {
-            System.out.println("El id para editar es " + id);
-            FrmEditarPelicula editarSala = new FrmEditarPelicula(this.peliculaBO,id);
+            PeliculaDTO pelicula=peliculaBO.buscarPeliculaPorId(id);
+            FrmEditarPelicula editarSala = new FrmEditarPelicula(this.peliculaBO,pelicula);
             editarSala.setVisible(true);
-            cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
+            cargarClientesEnTabla(pagina, LIMITE);
             estadoPagina();
         } catch (NegocioException ex) {
             Logger.getLogger(FrmAdminPeliculas.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,35 +240,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
         }
     }
 
-    private void seleccionarCiudadYSucursal() {
-        // Obtener la ciudad correspondiente a la sucursal más cercana
-        CiudadDTO ciudadSeleccionada = null;
-
-        for (CiudadDTO ciudad : listaCiudades) {
-            // Verificar si la ciudad contiene la sucursal
-            List<SucursalDTO> sucursalesCiudad;
-            try {
-                sucursalesCiudad = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
-
-                if (sucursalesCiudad.contains(sucursal)) {
-                    ciudadSeleccionada = ciudad;
-                    break;
-                }
-            } catch (NegocioException ex) {
-                Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        if (ciudadSeleccionada != null) {
-            // Seleccionar la ciudad en el combo box
-            cbCiudades.setSelectedItem(ciudadSeleccionada);
-            cbCiudades.setSelectedItem(ciudadSeleccionada);
-            // Actualizar el combo box de sucursales con las sucursales de esa ciudad
-            actualizarComboBoxCiudad();
-
-            
-        }
-    }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -283,16 +253,12 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        cbCiudades = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPeliculas = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         lblPagina = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        cbSucursales = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         imagenPerfiles1 = new utilerias.ImagenPerfiles();
         jPanel4 = new javax.swing.JPanel();
@@ -310,7 +276,6 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
         menuButton6 = new utilerias.MenuButton();
         jLabel9 = new javax.swing.JLabel();
         BtnAgregarSala = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -318,20 +283,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(36, 44, 99));
 
-        cbCiudades.setBackground(new java.awt.Color(33, 36, 59));
-        cbCiudades.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbCiudades.setForeground(new java.awt.Color(255, 255, 255));
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locacion.png"))); // NOI18N
-
-        btnIr.setText("Ir");
-        btnIr.setBorderPainted(false);
-        btnIr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIrActionPerformed(evt);
-            }
-        });
-
+        tblPeliculas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblPeliculas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -347,7 +299,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Peliculas");
+        jLabel10.setText("Peliculas En Cinepolis");
 
         lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblPagina.setForeground(new java.awt.Color(255, 255, 255));
@@ -366,10 +318,6 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-
-        cbSucursales.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursales.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursales.setForeground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 720));
@@ -490,10 +438,6 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Sucursal Bella Vista");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -501,65 +445,38 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(BtnAgregarSala)
-                                .addGap(188, 188, 188)
-                                .addComponent(jLabel11))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(238, 238, 238)
-                                .addComponent(btnAtras)
-                                .addGap(44, 44, 44)
-                                .addComponent(lblPagina)
-                                .addGap(54, 54, 54)
-                                .addComponent(btnSiguiente)))
-                        .addContainerGap(161, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(376, 376, 376)
+                        .addComponent(btnAtras)
+                        .addGap(44, 44, 44)
+                        .addComponent(lblPagina)
+                        .addGap(54, 54, 54)
+                        .addComponent(btnSiguiente)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnAgregarSala, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(111, 111, 111)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnIr))
-                            .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64))))
+                                .addGap(204, 204, 204)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(146, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(btnIr)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(57, 57, 57)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BtnAgregarSala)
-                    .addComponent(jLabel11))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPagina)
                     .addComponent(btnSiguiente)
-                    .addComponent(btnAtras))
+                    .addComponent(btnAtras)
+                    .addComponent(BtnAgregarSala, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -598,17 +515,6 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton5ActionPerformed
 
-    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-        if (cbCiudades.getSelectedItem() != null) {
-            this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
-            this.pagina = 1;
-            this.cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
-            this.estadoPagina();
-            return;
-        }
-        JOptionPane.showMessageDialog(this, "Error al buscar el catalogo, Intente de nuevo ", "Error", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_btnIrActionPerformed
-
     private void menuButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton6ActionPerformed
@@ -625,65 +531,26 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
 
     private void BtnAgregarSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarSalaActionPerformed
         
-        cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
+        cargarClientesEnTabla(pagina, LIMITE);
         estadoPagina();
         
     }//GEN-LAST:event_BtnAgregarSalaActionPerformed
    
 
-    private void llenarComboBoxCiudad() {
-        try {
-            listaCiudades = ciudadBO.listaCiudades();
+    
 
-            for (CiudadDTO ciudad : listaCiudades) {
-                cbCiudades.addItem(ciudad);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        cbCiudades.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                actualizarComboBoxCiudad();
-            }
-        });
-    }
-
-    private void actualizarComboBoxCiudad() {
-        try {
-            CiudadDTO ciudad = (CiudadDTO) cbCiudades.getSelectedItem();
-            listaSucursales = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Limpiar el combo box de ciudades
-        cbSucursales.removeAllItems();
-
-        // Añadir las ciudades correspondientes
-        if (listaSucursales != null) {
-            for (SucursalDTO sucursal : listaSucursales) {
-                cbSucursales.addItem(sucursal);
-            }
-        }
-    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarSala;
     private javax.swing.JButton btnAtras;
-    private javax.swing.JButton btnIr;
     private javax.swing.JButton btnSiguiente;
-    private javax.swing.JComboBox<CiudadDTO> cbCiudades;
-    private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

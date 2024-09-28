@@ -45,7 +45,7 @@ public class Cinepolis_BD1 {
         FrmInicioSesion iniciarSesion = new FrmInicioSesion(inicioSesionBO, clienteBO, sucursalBO);
         iniciarSesion.setVisible(true);
         
-        
+
         
        
 

@@ -14,13 +14,17 @@ import negocio.NegocioException;
  * @author NaderCroft
  */
 public interface ISalaBO {
+
     public void guardar(SalaDTO sala) throws NegocioException;
-    
+
     public SalaDTO leerPorId(int id) throws NegocioException;
-    
+
     public void editar(SalaDTO sala) throws NegocioException;
-    
+
     public void eliminarPorId(int id) throws NegocioException;
-    
+
     public List<SalaDTO> paginadoSalasPorSucursal(int idSucursal, int limit, int pagina) throws NegocioException;
+
+    public List<SalaDTO> salasPorSucursal(int idSucursal) throws NegocioException;
+
 }

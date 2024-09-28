@@ -108,7 +108,7 @@ public class PeliculaDAO implements IPeliculaDAO {
     public List<PeliculaEntidad> leerPaginado(int limit, int offset) throws PersistenciaException {
         List<PeliculaEntidad> peliculas = new ArrayList<>();
 
-        String sql = "SELECT pelicula_id, titulo, sinopsis, pais, link_trailer, duracion, cartel, clasificacion, estaEliminado FROM peliculas LIMIT ? OFFSET ?";
+        String sql = "SELECT pelicula_id, titulo, sinopsis, pais, link_trailer, duracion, cartel, clasificacion, estaEliminado FROM peliculas WHERE estaEliminado=0 LIMIT ? OFFSET ?";
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
 
             ps.setInt(1, limit);
@@ -157,7 +157,7 @@ public class PeliculaDAO implements IPeliculaDAO {
 
     @Override
     public void eliminarPorID(int id) throws PersistenciaException {
-        String sentenciaSQL = "UPDATE peliculas SET estaEliminado = 1 WHERE cliente_id = ?;";
+        String sentenciaSQL = "UPDATE peliculas SET estaEliminado = 1 WHERE pelicula_id = ?;";
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pS = conexion.prepareStatement(sentenciaSQL)) {
 
             pS.setInt(1, id);
@@ -224,6 +224,7 @@ public class PeliculaDAO implements IPeliculaDAO {
         return peliculas;
     }
     
+    @Override
      public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException {
         String sql = "{CALL guardarPeliculaEnSucursal(?, ?)}"; // Llamada al procedimiento almacenado
         try (Connection conexion = conexionBD.crearConexion();
@@ -241,6 +242,7 @@ public class PeliculaDAO implements IPeliculaDAO {
     }
 
     // Método para actualizar la fecha de retiro
+    @Override
     public void actualizarFechaRetiro(int peliculaId, int sucursalId) throws PersistenciaException {
         String sql = "{CALL actualizarFechaRetiro(?, ?)}"; // Llamada al procedimiento almacenado
         try (Connection conexion = conexionBD.crearConexion();
