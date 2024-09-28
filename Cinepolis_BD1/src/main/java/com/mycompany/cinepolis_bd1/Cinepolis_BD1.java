@@ -46,7 +46,7 @@ public class Cinepolis_BD1 {
         iniciarSesion.setVisible(true);
         
         
-       
+
         
        
 
