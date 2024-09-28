@@ -5,8 +5,11 @@
 package utilerias;
 
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -45,5 +48,13 @@ public class Herramientas {
 
         // Set the formatted text with HTML line breaks
         return ("<html>" + formattedText.toString() + "</html>");
+    }
+    
+    public static List<String> getComboBoxItems(JComboBox<String> comboBox) {
+        List<String> itemList = new ArrayList<>();
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            itemList.add(comboBox.getItemAt(i));  // Add each item to the list
+        }
+        return itemList;
     }
 }

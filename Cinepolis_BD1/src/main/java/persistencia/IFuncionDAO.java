@@ -6,6 +6,8 @@ package persistencia;
 
 import dominio.FuncionEntidad;
 import dtos.ConsultaFuncionDTO;
+import dtos.FiltroFuncionesDTO;
+import dtos.FuncionTablaDTO;
 import java.util.List;
 
 /**
@@ -13,12 +15,15 @@ import java.util.List;
  * @author samoano
  */
 public interface IFuncionDAO {
-    
+
     public FuncionEntidad guardar(FuncionEntidad entidad) throws PersistenciaException;
 
     public FuncionEntidad leerPorID(int id) throws PersistenciaException;
-    
+
     public void eliminarPorID(int id) throws PersistenciaException;
-    
+
     public List<FuncionEntidad> listaFuncionporDiaSucursalPelicula(ConsultaFuncionDTO consulta, int limit, int offset) throws PersistenciaException;
+
+    public List<FuncionTablaDTO> listaFuncionporDiaSala(FiltroFuncionesDTO filtro) throws PersistenciaException;
+
 }

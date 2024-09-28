@@ -203,9 +203,8 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                 ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
                 IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
                 ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
-                SucursalDTO sucursal = new SucursalDTO();
-                sucursal.setId(1);
-                FrmAdminSucursal sucursalAdmin = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO, sucursal);
+                
+                FrmAdminSucursal sucursalAdmin = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
                 sucursalAdmin.setVisible(true);
                 this.dispose();
             } else {
