@@ -22,5 +22,7 @@ public interface ISalaDAO {
     public void eliminarPorID(int id) throws PersistenciaException;
 
     public List<SalaEntidad> paginadoSalasporSucursal(int idSucursal, int limit, int offset) throws PersistenciaException;
+    
+    public List<SalaEntidad> salasPorSucursal(int idSucursal) throws PersistenciaException;
 
 }

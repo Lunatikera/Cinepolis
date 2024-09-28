@@ -5,30 +5,31 @@
 package presentacion;
 
 import dtos.CiudadDTO;
+import dtos.FiltroFuncionesDTO;
+import dtos.FuncionTablaDTO;
 import dtos.PeliculaDTO;
+import dtos.SalaDTO;
 import dtos.SucursalDTO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import negocio.FuncionBO;
 import negocio.ICiudadBO;
 import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
-import negocio.SalaBO;
-import persistencia.ConexionBD;
-import persistencia.FuncionDAO;
-import persistencia.IConexionBD;
-import persistencia.IFuncionDAO;
-import persistencia.ISalaDAO;
-import persistencia.SalaDAO;
+import utilerias.Dias;
+import static utilerias.Dias.obtenerDiaSiguiente;
 import utilerias.JButtonCellEditor;
 import utilerias.JButtonRenderer;
 
@@ -36,105 +37,91 @@ import utilerias.JButtonRenderer;
  *
  * @author carli
  */
-public class FrmAdminSucursal extends javax.swing.JFrame {
+public class FrmAdminFuncion extends javax.swing.JFrame {
 
-    private int pagina = 1;
-    private final int LIMITE = 6;
-    private ISucursalBO sucursalBO;
-    private ICiudadBO ciudadBO;
-    private IPeliculaBO peliculaBO;
-    private List<CiudadDTO> listaCiudades;
-    private List<SucursalDTO> listaSucursales;
-    private List<PeliculaDTO> peliculasPorAnadir;
+    private IFuncionBO funcionBO;
+    private ISalaBO salaBO;
+    private List<SalaDTO> listaSalas;
     private SucursalDTO sucursal;
-    private boolean pelicuaEnSucursal = true;
+    private PeliculaDTO pelicula;
+    private FiltroFuncionesDTO filtro;
+    private SalaDTO sala;
 
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmAdminSucursal(ISucursalBO sucursalBO, ICiudadBO ciudadBO, IPeliculaBO peliculaBO) {
+    public FrmAdminFuncion(IFuncionBO funcionBO, ISalaBO salaBO, SucursalDTO sucursal, PeliculaDTO pelicula) {
         initComponents();
-        this.sucursalBO = sucursalBO;
-        this.ciudadBO = ciudadBO;
-        this.peliculaBO = peliculaBO;
+        this.funcionBO = funcionBO;
+        this.salaBO = salaBO;
+        this.sucursal = sucursal;
+        this.pelicula = pelicula;
         this.cargarMetodosIniciales();
     }
 
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
-        this.llenarComboBoxCiudad();
-        this.cbCiudades.setSelectedIndex(1);
-        this.actualizarComboBoxCiudad();
-        this.cbSucursales.setSelectedIndex(0);
-        this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
+        this.llenarComboBoxSalas();
+        this.cbSalas.setSelectedIndex(0);
+        this.sala = (SalaDTO) cbSalas.getSelectedItem();
+        this.lblPelicula.setText(utilerias.Herramientas.textoConSaltosLinea(pelicula.getTitulo(), 5));
         this.lblSucursal.setText(sucursal.getNombre());
-        this.llenarComboBoxPeliculasPorAnadir();
-        this.seleccionarCiudadYSucursal();
+        this.lblDia.setText(this.obtenerDiaActual());
         this.cargarConfiguracionInicialTablaPeliculas();
-        this.cargarPeliculasTabla();
-        this.estadoPagina();
+        this.filtro = new FiltroFuncionesDTO(this.obtenerDiaActual(), sala.getId());
+
+        this.cargarFuncionesTabla();
         this.configuracionFrame();
     }
 
     public void configuracionFrame() {
-        this.setTitle("Administracion de Sucursales");
+        this.setTitle("Administracion de Funciones " + sucursal.getNombre());
         this.setResizable(false);
-        this.setSize(1280, 735);
+        this.setSize(1280, 780);
         this.setLocationRelativeTo(null);
     }
 
-    public void cargarPeliculasTabla() {
+    public void cargarFuncionesTabla() {
         try {
-            List<PeliculaDTO> peliculaLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, pelicuaEnSucursal);
+            System.out.println(filtro.getDia() + " ," + filtro.getIdSala());
+            List<FuncionTablaDTO> peliculaLista = this.funcionBO.listaFuncionporDiaSala(filtro);
             this.llenarTablaPeliculas(peliculaLista);
-            if (peliculaLista == null && pagina == 1) {
+            if (peliculaLista == null) {
                 JOptionPane.showMessageDialog(null, "No hay ninguna pelicula registrada", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
+
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(FrmAdminFuncion.class.getName()).log(Level.SEVERE, null, ex);
+
         }
     }
 
     private void cargarConfiguracionInicialTablaPeliculas() {
         ActionListener onEditarClickListener = new ActionListener() {
+
             final int columnaId = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Metodo para editar un cliente
 
-                removerPeliculaSucursal();
+                eliminar();
             }
         };
-        int indiceColumnaEditar = 5;
-        TableColumnModel modeloColumnas = this.tblPeliculas.getColumnModel();
+        int indiceColumnaEditar = 6;
+        TableColumnModel modeloColumnas = this.tblFunciones.getColumnModel();
         modeloColumnas.getColumn(indiceColumnaEditar)
-                .setCellRenderer(new JButtonRenderer("Remover"));
+                .setCellRenderer(new JButtonRenderer("Eliminar"));
         modeloColumnas.getColumn(indiceColumnaEditar)
-                .setCellEditor(new JButtonCellEditor("Remover",
+                .setCellEditor(new JButtonCellEditor("Eliminar",
                         onEditarClickListener));
 
-        ActionListener onEliminarClickListener = new ActionListener() {
-            final int columnaId = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Metodo para eliminar un cliente
-                verPeliculaFuncion();
-            }
-        };
-        int indiceColumnaEliminar = 6;
-        modeloColumnas = this.tblPeliculas.getColumnModel();
-        modeloColumnas.getColumn(indiceColumnaEliminar)
-                .setCellRenderer(new JButtonRenderer("Ver"));
-        modeloColumnas.getColumn(indiceColumnaEliminar)
-                .setCellEditor(new JButtonCellEditor("Ver",
-                        onEliminarClickListener));
     }
 
-    private void llenarTablaPeliculas(List<PeliculaDTO> peliculaLista) {
-        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblPeliculas.getModel();
+    private void llenarTablaPeliculas(List<FuncionTablaDTO> peliculaLista) {
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblFunciones.getModel();
 
         if (modeloTabla.getRowCount() > 0) {
             for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
@@ -145,12 +132,13 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         if (peliculaLista != null) {
             peliculaLista.forEach(row
                     -> {
-                Object[] fila = new Object[5];
+                Object[] fila = new Object[6];
                 fila[0] = row.getId();
-                fila[1] = row.getTitulo();
+                fila[1] = row.getPeliculaTitulo();
                 fila[2] = row.getDuracion();
-                fila[3] = row.getPais();
-                fila[4] = row.getClasificacion();
+                fila[3] = row.getHora();
+                fila[4] = row.getHoraFinal();
+                fila[5] = row.getPrecio();
 
                 modeloTabla.addRow(fila);
             });
@@ -158,9 +146,9 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     }
 
     private int getIdSeleccionadoTablaClientes() {
-        int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
+        int indiceFilaSeleccionada = this.tblFunciones.getSelectedRow();
         if (indiceFilaSeleccionada != -1) {
-            DefaultTableModel modelo = (DefaultTableModel) this.tblPeliculas.getModel();
+            DefaultTableModel modelo = (DefaultTableModel) this.tblFunciones.getModel();
             int indiceColumnaId = 0;
             int idSocioSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
                     indiceColumnaId);
@@ -170,106 +158,23 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         }
     }
 
-    private void removerPeliculaSucursal() {
+    private void eliminar() {
         int id = this.getIdSeleccionadoTablaClientes();
         if (id == 0) {
             JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
             return;
         }
+//            PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
+    }
+
+    private void llenarComboBoxSalas() {
         try {
-            peliculaBO.eliminarPeliculaDeSucursal(id, sucursal.getId());
-            this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
-            this.estadoPagina();
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmAdminSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private void verPeliculaFuncion() {
-        int id = this.getIdSeleccionadoTablaClientes();
-        if (id == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            IConexionBD conexionBD = new ConexionBD();
-            IFuncionDAO funcionDAO = new FuncionDAO(conexionBD);
-            ISalaDAO salaDAO = new SalaDAO(conexionBD);
-            ISalaBO salaBO = new SalaBO(salaDAO);
-            IFuncionBO funcionBO = new FuncionBO(funcionDAO);
-            PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
-            System.out.println(sucursal.getId());
-            FrmAdminFuncion adminFuncion = new FrmAdminFuncion(funcionBO, salaBO, sucursal, pelicula);
-            adminFuncion.setVisible(true);
-            this.dispose();
-
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmAdminSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void estadoPagina() {
-        String numPagina = String.valueOf(pagina);
-        if (numPagina.length() == 1) {
-            numPagina = "0" + numPagina;
-        }
-
-        lblPagina.setText("Pagina " + numPagina);
-        estatusBotonAtras();
-        estatusBotonSiguiente();
-    }
-
-    private void estatusBotonAtras() {
-        if (pagina > 1) {
-            btnAtras.setEnabled(true);
-            return;
-        }
-        btnAtras.setEnabled(false);
-    }
-
-    private void estatusBotonSiguiente() {
-
-        try {
-            btnSiguiente.setEnabled(true);
-            if (this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), this.LIMITE, this.pagina + 1, pelicuaEnSucursal) == null
-                    || this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), this.LIMITE, this.pagina + 1, pelicuaEnSucursal).isEmpty()) {
-                btnSiguiente.setEnabled(false);
+            listaSalas = salaBO.salasPorSucursal(sucursal.getId());
+            for (SalaDTO sala : listaSalas) {
+                cbSalas.addItem(sala);
             }
         } catch (NegocioException ex) {
-            System.out.println(ex);
-        }
-    }
-
-    private void seleccionarCiudadYSucursal() {
-        // Obtener la ciudad correspondiente a la sucursal más cercana
-        CiudadDTO ciudadSeleccionada = null;
-
-        for (CiudadDTO ciudad : listaCiudades) {
-            // Verificar si la ciudad contiene la sucursal
-            List<SucursalDTO> sucursalesCiudad;
-            try {
-                sucursalesCiudad = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
-
-                if (sucursalesCiudad.contains(sucursal)) {
-                    ciudadSeleccionada = ciudad;
-                    break;
-                }
-            } catch (NegocioException ex) {
-                Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        if (ciudadSeleccionada != null) {
-            // Seleccionar la ciudad en el combo box
-            cbCiudades.setSelectedItem(ciudadSeleccionada);
-            cbCiudades.setSelectedItem(ciudadSeleccionada);
-            // Actualizar el combo box de sucursales con las sucursales de esa ciudad
-            actualizarComboBoxCiudad();
-
-            // Seleccionar la sucursal más cercana en el combo box de sucursales
-            cbPeliculas.setSelectedItem(sucursal);
+            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -284,19 +189,14 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        cbCiudades = new javax.swing.JComboBox<>();
-        cbPeliculas = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
         btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPeliculas = new javax.swing.JTable();
+        tblFunciones = new javax.swing.JTable();
         lblSucursal = new javax.swing.JLabel();
-        btnAnadirPelicula = new javax.swing.JButton();
-        lblPagina = new javax.swing.JLabel();
+        lblDia = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        cbSucursales = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
+        cbSalas = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         imagenPerfiles1 = new utilerias.ImagenPerfiles();
         jPanel4 = new javax.swing.JPanel();
@@ -313,27 +213,16 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         menuButton6 = new utilerias.MenuButton();
         jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        lblPelicula = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setBackground(new java.awt.Color(36, 44, 99));
-
-        cbCiudades.setBackground(new java.awt.Color(33, 36, 59));
-        cbCiudades.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbCiudades.setForeground(new java.awt.Color(255, 255, 255));
-
-        cbPeliculas.setBackground(new java.awt.Color(33, 36, 59));
-        cbPeliculas.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbPeliculas.setForeground(new java.awt.Color(255, 255, 255));
-        cbPeliculas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPeliculasActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locacion.png"))); // NOI18N
 
         btnIr.setText("Ir");
         btnIr.setBorderPainted(false);
@@ -343,7 +232,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
             }
         });
 
-        tblPeliculas.setModel(new javax.swing.table.DefaultTableModel(
+        tblFunciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -351,25 +240,18 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Titulo", "Duracion (min)", "Pais", "Clasificacion", "Remover Pelicula", "Ver Funciones"
+                "Id", "Pelicula", "Duracion (min)", "Hora Inicio", "Hora Final", "Precio", "Eliminar"
             }
         ));
-        jScrollPane1.setViewportView(tblPeliculas);
+        jScrollPane1.setViewportView(tblFunciones);
 
         lblSucursal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblSucursal.setForeground(new java.awt.Color(255, 255, 255));
         lblSucursal.setText("Sucursal Bella Vista");
 
-        btnAnadirPelicula.setText("Añadir Pelicula");
-        btnAnadirPelicula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnadirPeliculaActionPerformed(evt);
-            }
-        });
-
-        lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        lblPagina.setForeground(new java.awt.Color(255, 255, 255));
-        lblPagina.setText("Pagina 01");
+        lblDia.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblDia.setForeground(new java.awt.Color(255, 255, 255));
+        lblDia.setText("Lunes");
 
         btnAtras.setText("atras");
         btnAtras.addActionListener(new java.awt.event.ActionListener() {
@@ -385,13 +267,9 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
             }
         });
 
-        cbSucursales.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursales.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursales.setForeground(new java.awt.Color(255, 255, 255));
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Peliculas para añadir");
+        cbSalas.setBackground(new java.awt.Color(33, 36, 59));
+        cbSalas.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbSalas.setForeground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 720));
@@ -504,6 +382,24 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                 .addContainerGap(180, Short.MAX_VALUE))
         );
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Seleccionar Sala");
+
+        lblPelicula.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblPelicula.setForeground(new java.awt.Color(255, 255, 255));
+        lblPelicula.setText("Top Gun Maverick");
+
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Line 7.png"))); // NOI18N
+
+        btnAgregar.setText("Agregar Funcion");
+        btnAgregar.setBorderPainted(false);
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -514,70 +410,57 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(56, 56, 56)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(cbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbSalas, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnIr))
-                            .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64))
+                                .addComponent(btnIr)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPelicula))
+                        .addGap(39, 39, 39))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
+                        .addGap(139, 139, 139)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(131, 131, 131)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(263, 263, 263)
-                                        .addComponent(lblSucursal))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(238, 238, 238)
-                                        .addComponent(btnAtras)
-                                        .addGap(44, 44, 44)
-                                        .addComponent(lblPagina)
-                                        .addGap(54, 54, 54)
-                                        .addComponent(btnSiguiente))))
+                                .addComponent(btnAgregar)
+                                .addGap(145, 145, 145)
+                                .addComponent(lblSucursal))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(107, 107, 107)
-                                .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(161, Short.MAX_VALUE))))
+                                .addGap(238, 238, 238)
+                                .addComponent(btnAtras)
+                                .addGap(44, 44, 44)
+                                .addComponent(lblDia)
+                                .addGap(54, 54, 54)
+                                .addComponent(btnSiguiente)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(74, 74, 74)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(btnIr))))
-                        .addGap(47, 47, 47)
-                        .addComponent(lblSucursal))
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbSalas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnIr)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jLabel12)
+                        .addComponent(lblPelicula)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(50, 50, 50)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSucursal)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPagina)
+                    .addComponent(lblDia)
                     .addComponent(btnSiguiente)
                     .addComponent(btnAtras))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -618,117 +501,57 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton5ActionPerformed
 
-    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-        if (cbCiudades.getSelectedItem() != null) {
-            this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
-            this.lblSucursal.setText(sucursal.getNombre());
-            this.pagina = 1;
-            this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
-            this.estadoPagina();
-            return;
-        }
-        JOptionPane.showMessageDialog(this, "Error al buscar el catalogo, Intente de nuevo ", "Error", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_btnIrActionPerformed
-
-    private void btnAnadirPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirPeliculaActionPerformed
-        PeliculaDTO pelicula = (PeliculaDTO) cbPeliculas.getSelectedItem();
-        try {
-            peliculaBO.guardarPeliculaEnSucursal(pelicula.getId(), sucursal.getId());
-            this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
-            this.estadoPagina();
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo añadir la pelicula a la Sucursal ", "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FrmAdminSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_btnAnadirPeliculaActionPerformed
-
     private void menuButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton6ActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
-        pagina--;
-        this.cargarPeliculasTabla();
-        this.estadoPagina();
+        lblDia.setText(Dias.obtenerDiaAnterior(lblDia.getText()));
+        this.filtro.setDia(lblDia.getText());
+        System.out.println(filtro.getDia());
+        this.cargarFuncionesTabla();
+
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        pagina++;
-        this.cargarPeliculasTabla();
-        this.estadoPagina();
+        lblDia.setText(obtenerDiaSiguiente(lblDia.getText()));
+        this.filtro.setDia(lblDia.getText());
+        this.cargarFuncionesTabla();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
-    private void cbPeliculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPeliculasActionPerformed
+    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
+        if (cbSalas.getSelectedItem() != null) {
+            sala = (SalaDTO) cbSalas.getSelectedItem();
+            this.filtro.setIdSala(sala.getId());
+            this.cargarFuncionesTabla();
+        }
+    }//GEN-LAST:event_btnIrActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbPeliculasActionPerformed
-    private void llenarComboBoxPeliculasPorAnadir() {
-        try {
-            cbPeliculas.removeAllItems();
-            peliculasPorAnadir = peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, !pelicuaEnSucursal);
-            for (PeliculaDTO pelicula : peliculasPorAnadir) {
-                cbPeliculas.addItem(pelicula);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+    private String obtenerDiaActual() {
+        LocalDate hoy = LocalDate.now();
+        DayOfWeek dia = hoy.getDayOfWeek();
+        String nombreDia = dia.getDisplayName(TextStyle.FULL, Locale.getDefault());
+        String nombreDiaFormato = nombreDia.substring(0, 1).toUpperCase() + nombreDia.substring(1);
+        return nombreDiaFormato;
     }
 
-    private void llenarComboBoxCiudad() {
-        try {
-            listaCiudades = ciudadBO.listaCiudades();
-
-            for (CiudadDTO ciudad : listaCiudades) {
-                cbCiudades.addItem(ciudad);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        cbCiudades.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                actualizarComboBoxCiudad();
-            }
-        });
-    }
-
-    private void actualizarComboBoxCiudad() {
-        try {
-            CiudadDTO ciudad = (CiudadDTO) cbCiudades.getSelectedItem();
-            listaSucursales = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Limpiar el combo box de ciudades
-        cbSucursales.removeAllItems();
-
-        // Añadir las ciudades correspondientes
-        if (listaSucursales != null) {
-            for (SucursalDTO sucursal : listaSucursales) {
-                cbSucursales.addItem(sucursal);
-            }
-        }
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnadirPelicula;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnIr;
     private javax.swing.JButton btnSiguiente;
-    private javax.swing.JComboBox<CiudadDTO> cbCiudades;
-    private javax.swing.JComboBox<PeliculaDTO> cbPeliculas;
-    private javax.swing.JComboBox<SucursalDTO> cbSucursales;
+    private javax.swing.JComboBox<SalaDTO> cbSalas;
     private utilerias.ImagenPerfiles imagenPerfiles1;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -736,7 +559,8 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblPagina;
+    private javax.swing.JLabel lblDia;
+    private javax.swing.JLabel lblPelicula;
     private javax.swing.JLabel lblSucursal;
     private utilerias.MenuButton menuButton1;
     private utilerias.MenuButton menuButton2;
@@ -744,6 +568,6 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     private utilerias.MenuButton menuButton4;
     private utilerias.MenuButton menuButton5;
     private utilerias.MenuButton menuButton6;
-    private javax.swing.JTable tblPeliculas;
+    private javax.swing.JTable tblFunciones;
     // End of variables declaration//GEN-END:variables
 }
