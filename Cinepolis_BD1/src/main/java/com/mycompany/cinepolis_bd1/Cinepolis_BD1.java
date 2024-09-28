@@ -45,8 +45,7 @@ public class Cinepolis_BD1 {
         FrmInicioSesion iniciarSesion = new FrmInicioSesion(inicioSesionBO, clienteBO, sucursalBO);
         iniciarSesion.setVisible(true);
         
-        FrmReporteSucursales dedo = new FrmReporteSucursales(sucursalBO, ciudadBO, sucursal);
-        dedo.setVisible(true);
+        
         
        
 
