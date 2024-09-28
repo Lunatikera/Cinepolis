@@ -18,7 +18,7 @@ public class ConexionBD implements IConexionBD {
     private static final String CADENA_CONEXION = "jdbc:mysql://" + SERVER + "/" + BASE_DATOS;
     private static final String USUARIO = "root";
 
-    private static final String CONTRASENA = "nata";
+    private static final String CONTRASENA = "Soleyne1804";
 
 
     @Override

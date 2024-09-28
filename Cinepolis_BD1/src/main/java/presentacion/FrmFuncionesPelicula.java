@@ -10,12 +10,12 @@ import javax.swing.border.EmptyBorder;
  *
  * @author carli
  */
-public class FrmFuncionPelicula extends javax.swing.JFrame {
+public class FrmFuncionesPelicula extends javax.swing.JFrame {
 
     /**
      * Creates new form FrmCatalogos
      */
-    public FrmFuncionPelicula() {
+    public FrmFuncionesPelicula() {
         initComponents();
     }
 
@@ -49,6 +49,7 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel16 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         menuButton4 = new utilerias.MenuButton();
@@ -58,27 +59,28 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         menuButton8 = new utilerias.MenuButton();
         menuButton9 = new utilerias.MenuButton();
         menuButton10 = new utilerias.MenuButton();
-        panelConFondoHora1 = new utilerias.PanelConFondoHora();
-        menuButton15 = new utilerias.MenuButton();
-        panelConFondoHora2 = new utilerias.PanelConFondoHora();
-        menuButton16 = new utilerias.MenuButton();
-        panelConFondoHora3 = new utilerias.PanelConFondoHora();
-        menuButton17 = new utilerias.MenuButton();
-        panelConFondoHora5 = new utilerias.PanelConFondoHora();
-        menuButton19 = new utilerias.MenuButton();
-        panelConFondoHora6 = new utilerias.PanelConFondoHora();
-        menuButton20 = new utilerias.MenuButton();
-        panelConFondoHora8 = new utilerias.PanelConFondoHora();
-        menuButton21 = new utilerias.MenuButton();
-        panelConFondoHora9 = new utilerias.PanelConFondoHora();
-        menuButton22 = new utilerias.MenuButton();
-        panelConFondoHora10 = new utilerias.PanelConFondoHora();
-        menuButton23 = new utilerias.MenuButton();
-        panelConFondoHora11 = new utilerias.PanelConFondoHora();
-        menuButton24 = new utilerias.MenuButton();
         menuButton25 = new utilerias.MenuButton();
         menuButton1 = new utilerias.MenuButton();
         menuButton2 = new utilerias.MenuButton();
+        jPanel13 = new javax.swing.JPanel();
+        panelConFondoHora3 = new utilerias.PanelConFondoHora();
+        menuButton17 = new utilerias.MenuButton();
+        panelConFondoHora1 = new utilerias.PanelConFondoHora();
+        menuButton15 = new utilerias.MenuButton();
+        panelConFondoHora10 = new utilerias.PanelConFondoHora();
+        menuButton23 = new utilerias.MenuButton();
+        panelConFondoHora2 = new utilerias.PanelConFondoHora();
+        menuButton16 = new utilerias.MenuButton();
+        panelConFondoHora6 = new utilerias.PanelConFondoHora();
+        menuButton20 = new utilerias.MenuButton();
+        panelConFondoHora5 = new utilerias.PanelConFondoHora();
+        menuButton19 = new utilerias.MenuButton();
+        panelConFondoHora8 = new utilerias.PanelConFondoHora();
+        menuButton21 = new utilerias.MenuButton();
+        panelConFondoHora11 = new utilerias.PanelConFondoHora();
+        menuButton24 = new utilerias.MenuButton();
+        panelConFondoHora12 = new utilerias.PanelConFondoHora();
+        menuButton26 = new utilerias.MenuButton();
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -102,7 +104,7 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1280, Short.MAX_VALUE)
+            .addGap(0, 1312, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,7 +171,7 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
                 .addGap(113, 113, 113)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
@@ -199,7 +201,7 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1280, Short.MAX_VALUE)
+            .addGap(0, 1312, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,11 +233,11 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
         );
 
         jPanel16.setBackground(new java.awt.Color(36, 44, 99));
@@ -243,20 +245,29 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
 
         jLabel2.setToolTipText("");
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Duracion: 160 minutos");
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(582, 582, 582)
-                        .addComponent(jLabel2))
+                        .addContainerGap()
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGap(582, 582, 582)
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel11)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -267,7 +278,9 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2))
         );
 
@@ -385,63 +398,14 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                     .addContainerGap(14, Short.MAX_VALUE)))
         );
 
-        panelConFondoHora1.setOpaque(false);
+        menuButton25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/left.png"))); // NOI18N
+        menuButton25.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/leftSelected.png"))); // NOI18N
 
-        menuButton15.setBorder(null);
-        menuButton15.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton15.setText("12:00 pm");
-        menuButton15.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        menuButton15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton15ActionPerformed(evt);
-            }
-        });
+        menuButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/right.png"))); // NOI18N
 
-        javax.swing.GroupLayout panelConFondoHora1Layout = new javax.swing.GroupLayout(panelConFondoHora1);
-        panelConFondoHora1.setLayout(panelConFondoHora1Layout);
-        panelConFondoHora1Layout.setHorizontalGroup(
-            panelConFondoHora1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora1Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
-        );
-        panelConFondoHora1Layout.setVerticalGroup(
-            panelConFondoHora1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(menuButton15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        menuButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/infroPeli.png"))); // NOI18N
 
-        panelConFondoHora2.setOpaque(false);
-
-        menuButton16.setBorder(null);
-        menuButton16.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton16.setText("12:00 pm");
-        menuButton16.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        menuButton16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton16ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelConFondoHora2Layout = new javax.swing.GroupLayout(panelConFondoHora2);
-        panelConFondoHora2.setLayout(panelConFondoHora2Layout);
-        panelConFondoHora2Layout.setHorizontalGroup(
-            panelConFondoHora2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora2Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
-        );
-        panelConFondoHora2Layout.setVerticalGroup(
-            panelConFondoHora2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(menuButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        jPanel13.setBackground(new java.awt.Color(36, 44, 99));
 
         panelConFondoHora3.setOpaque(false);
 
@@ -460,9 +424,9 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         panelConFondoHora3Layout.setHorizontalGroup(
             panelConFondoHora3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConFondoHora3Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(menuButton17, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelConFondoHora3Layout.setVerticalGroup(
             panelConFondoHora3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,121 +436,38 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        panelConFondoHora5.setOpaque(false);
+        jPanel13.add(panelConFondoHora3);
 
-        menuButton19.setBorder(null);
-        menuButton19.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton19.setText("12:00 pm");
-        menuButton19.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        menuButton19.addActionListener(new java.awt.event.ActionListener() {
+        panelConFondoHora1.setOpaque(false);
+
+        menuButton15.setBorder(null);
+        menuButton15.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton15.setText("12:00 pm");
+        menuButton15.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menuButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton19ActionPerformed(evt);
+                menuButton15ActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout panelConFondoHora5Layout = new javax.swing.GroupLayout(panelConFondoHora5);
-        panelConFondoHora5.setLayout(panelConFondoHora5Layout);
-        panelConFondoHora5Layout.setHorizontalGroup(
-            panelConFondoHora5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora5Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
-        );
-        panelConFondoHora5Layout.setVerticalGroup(
-            panelConFondoHora5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora5Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelConFondoHora1Layout = new javax.swing.GroupLayout(panelConFondoHora1);
+        panelConFondoHora1.setLayout(panelConFondoHora1Layout);
+        panelConFondoHora1Layout.setHorizontalGroup(
+            panelConFondoHora1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(menuButton19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menuButton15, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConFondoHora1Layout.setVerticalGroup(
+            panelConFondoHora1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        panelConFondoHora6.setOpaque(false);
-
-        menuButton20.setBorder(null);
-        menuButton20.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton20.setText("12:00 pm");
-        menuButton20.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        menuButton20.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton20ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelConFondoHora6Layout = new javax.swing.GroupLayout(panelConFondoHora6);
-        panelConFondoHora6.setLayout(panelConFondoHora6Layout);
-        panelConFondoHora6Layout.setHorizontalGroup(
-            panelConFondoHora6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora6Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
-        );
-        panelConFondoHora6Layout.setVerticalGroup(
-            panelConFondoHora6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(menuButton20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        panelConFondoHora8.setOpaque(false);
-
-        menuButton21.setBorder(null);
-        menuButton21.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton21.setText("12:00 pm");
-        menuButton21.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        menuButton21.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton21ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelConFondoHora8Layout = new javax.swing.GroupLayout(panelConFondoHora8);
-        panelConFondoHora8.setLayout(panelConFondoHora8Layout);
-        panelConFondoHora8Layout.setHorizontalGroup(
-            panelConFondoHora8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora8Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
-        );
-        panelConFondoHora8Layout.setVerticalGroup(
-            panelConFondoHora8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora8Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(menuButton21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        panelConFondoHora9.setOpaque(false);
-
-        menuButton22.setBorder(null);
-        menuButton22.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton22.setText("12:00 pm");
-        menuButton22.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        menuButton22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton22ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelConFondoHora9Layout = new javax.swing.GroupLayout(panelConFondoHora9);
-        panelConFondoHora9.setLayout(panelConFondoHora9Layout);
-        panelConFondoHora9Layout.setHorizontalGroup(
-            panelConFondoHora9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora9Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
-        );
-        panelConFondoHora9Layout.setVerticalGroup(
-            panelConFondoHora9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConFondoHora9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(menuButton22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        jPanel13.add(panelConFondoHora1);
 
         panelConFondoHora10.setOpaque(false);
 
@@ -605,9 +486,9 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         panelConFondoHora10Layout.setHorizontalGroup(
             panelConFondoHora10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConFondoHora10Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(menuButton23, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelConFondoHora10Layout.setVerticalGroup(
             panelConFondoHora10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -616,6 +497,131 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                 .addComponent(menuButton23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
+
+        jPanel13.add(panelConFondoHora10);
+
+        panelConFondoHora2.setOpaque(false);
+
+        menuButton16.setBorder(null);
+        menuButton16.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton16.setText("12:00 pm");
+        menuButton16.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menuButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton16ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelConFondoHora2Layout = new javax.swing.GroupLayout(panelConFondoHora2);
+        panelConFondoHora2.setLayout(panelConFondoHora2Layout);
+        panelConFondoHora2Layout.setHorizontalGroup(
+            panelConFondoHora2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton16, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConFondoHora2Layout.setVerticalGroup(
+            panelConFondoHora2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(panelConFondoHora2);
+
+        panelConFondoHora6.setOpaque(false);
+
+        menuButton20.setBorder(null);
+        menuButton20.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton20.setText("12:00 pm");
+        menuButton20.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menuButton20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton20ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelConFondoHora6Layout = new javax.swing.GroupLayout(panelConFondoHora6);
+        panelConFondoHora6.setLayout(panelConFondoHora6Layout);
+        panelConFondoHora6Layout.setHorizontalGroup(
+            panelConFondoHora6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora6Layout.createSequentialGroup()
+                .addComponent(menuButton20, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConFondoHora6Layout.setVerticalGroup(
+            panelConFondoHora6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(panelConFondoHora6);
+
+        panelConFondoHora5.setOpaque(false);
+
+        menuButton19.setBorder(null);
+        menuButton19.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton19.setText("12:00 pm");
+        menuButton19.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menuButton19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton19ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelConFondoHora5Layout = new javax.swing.GroupLayout(panelConFondoHora5);
+        panelConFondoHora5.setLayout(panelConFondoHora5Layout);
+        panelConFondoHora5Layout.setHorizontalGroup(
+            panelConFondoHora5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton19, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConFondoHora5Layout.setVerticalGroup(
+            panelConFondoHora5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(panelConFondoHora5);
+
+        panelConFondoHora8.setOpaque(false);
+
+        menuButton21.setBorder(null);
+        menuButton21.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton21.setText("12:00 pm");
+        menuButton21.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menuButton21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton21ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelConFondoHora8Layout = new javax.swing.GroupLayout(panelConFondoHora8);
+        panelConFondoHora8.setLayout(panelConFondoHora8Layout);
+        panelConFondoHora8Layout.setHorizontalGroup(
+            panelConFondoHora8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton21, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConFondoHora8Layout.setVerticalGroup(
+            panelConFondoHora8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(panelConFondoHora8);
 
         panelConFondoHora11.setOpaque(false);
 
@@ -634,9 +640,9 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         panelConFondoHora11Layout.setHorizontalGroup(
             panelConFondoHora11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConFondoHora11Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menuButton24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(menuButton24, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelConFondoHora11Layout.setVerticalGroup(
             panelConFondoHora11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -646,12 +652,38 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        menuButton25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/left.png"))); // NOI18N
-        menuButton25.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/leftSelected.png"))); // NOI18N
+        jPanel13.add(panelConFondoHora11);
 
-        menuButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/right.png"))); // NOI18N
+        panelConFondoHora12.setOpaque(false);
 
-        menuButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/infroPeli.png"))); // NOI18N
+        menuButton26.setBorder(null);
+        menuButton26.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton26.setText("12:00 pm");
+        menuButton26.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        menuButton26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButton26ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelConFondoHora12Layout = new javax.swing.GroupLayout(panelConFondoHora12);
+        panelConFondoHora12.setLayout(panelConFondoHora12Layout);
+        panelConFondoHora12Layout.setHorizontalGroup(
+            panelConFondoHora12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton26, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConFondoHora12Layout.setVerticalGroup(
+            panelConFondoHora12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConFondoHora12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menuButton26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(panelConFondoHora12);
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -660,73 +692,38 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(113, 113, 113)
                         .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(101, 101, 101)
                         .addComponent(menuButton25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelConFondoHora3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelConFondoHora2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelConFondoHora1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelConFondoHora5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelConFondoHora6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelConFondoHora8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelConFondoHora11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel12Layout.createSequentialGroup()
-                                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(panelConFondoHora9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(panelConFondoHora10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 30, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGap(225, 225, 225)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 10, Short.MAX_VALUE)))
+                .addGap(29, 29, 29))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(menuButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(254, 254, 254))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel12Layout.createSequentialGroup()
-                                .addComponent(panelConFondoHora8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(panelConFondoHora6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel12Layout.createSequentialGroup()
-                                .addComponent(panelConFondoHora11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(panelConFondoHora10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelConFondoHora5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelConFondoHora9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(82, 82, 82)
+                        .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel12Layout.createSequentialGroup()
-                                .addComponent(panelConFondoHora1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel12Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(panelConFondoHora2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel12Layout.createSequentialGroup()
-                                        .addGap(9, 9, 9)
-                                        .addComponent(menuButton25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelConFondoHora3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(64, 64, 64)
+                        .addGap(43, 43, 43)
+                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(menuButton25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(32, 32, 32)
                 .addComponent(menuButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -736,17 +733,19 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+                .addContainerGap(61, Short.MAX_VALUE)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(88, 88, 88)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
+                .addGap(29, 29, 29))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(38, 38, 38))
                     .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -759,11 +758,11 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1312, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
         );
 
         pack();
@@ -833,10 +832,6 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton21ActionPerformed
 
-    private void menuButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton22ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton22ActionPerformed
-
     private void menuButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton23ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton23ActionPerformed
@@ -844,6 +839,10 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
     private void menuButton24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton24ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton24ActionPerformed
+
+    private void menuButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton26ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuButton26ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -862,14 +861,26 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmFuncionPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFuncionesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmFuncionPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFuncionesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmFuncionPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFuncionesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmFuncionPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmFuncionesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -878,7 +889,7 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmFuncionPelicula().setVisible(true);
+                new FrmFuncionesPelicula().setVisible(true);
             }
         });
     }
@@ -887,12 +898,14 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -915,10 +928,10 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
     private utilerias.MenuButton menuButton2;
     private utilerias.MenuButton menuButton20;
     private utilerias.MenuButton menuButton21;
-    private utilerias.MenuButton menuButton22;
     private utilerias.MenuButton menuButton23;
     private utilerias.MenuButton menuButton24;
     private utilerias.MenuButton menuButton25;
+    private utilerias.MenuButton menuButton26;
     private utilerias.MenuButton menuButton3;
     private utilerias.MenuButton menuButton4;
     private utilerias.MenuButton menuButton5;
@@ -929,11 +942,11 @@ public class FrmFuncionPelicula extends javax.swing.JFrame {
     private utilerias.PanelConFondoHora panelConFondoHora1;
     private utilerias.PanelConFondoHora panelConFondoHora10;
     private utilerias.PanelConFondoHora panelConFondoHora11;
+    private utilerias.PanelConFondoHora panelConFondoHora12;
     private utilerias.PanelConFondoHora panelConFondoHora2;
     private utilerias.PanelConFondoHora panelConFondoHora3;
     private utilerias.PanelConFondoHora panelConFondoHora5;
     private utilerias.PanelConFondoHora panelConFondoHora6;
     private utilerias.PanelConFondoHora panelConFondoHora8;
-    private utilerias.PanelConFondoHora panelConFondoHora9;
     // End of variables declaration//GEN-END:variables
 }
