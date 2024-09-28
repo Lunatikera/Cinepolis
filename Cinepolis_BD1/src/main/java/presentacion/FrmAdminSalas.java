@@ -26,7 +26,7 @@ import utilerias.JButtonRenderer;
  *
  * @author carli
  */
-public class FrmAdminSucursal extends javax.swing.JFrame {
+public class FrmAdminSalas extends javax.swing.JFrame {
 
     private int pagina = 1;
     private final int LIMITE = 20;
@@ -42,7 +42,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmAdminSucursal(ISucursalBO sucursalBO, ICiudadBO ciudadBO, IPeliculaBO peliculaBO, SucursalDTO sucursal) {
+    public FrmAdminSalas(ISucursalBO sucursalBO, ICiudadBO ciudadBO, IPeliculaBO peliculaBO, SucursalDTO sucursal) {
         initComponents();
         this.sucursalBO = sucursalBO;
         this.ciudadBO = ciudadBO;
@@ -54,7 +54,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
         this.llenarComboBoxCiudad();
-        this.llenarComboBoxPeliculasPorAnadir();
+       
         this.seleccionarCiudadYSucursal();
         this.cargarConfiguracionInicialTablaPeliculas();
         this.cargarPeliculasTabla();
@@ -157,10 +157,10 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         try {
             peliculaBO.eliminarPeliculaDeSucursal(id, sucursal.getId());
             this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
+            
             this.estadoPagina();
         } catch (NegocioException ex) {
-            Logger.getLogger(FrmAdminSucursal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FrmAdminSalas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -174,7 +174,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         try {
             PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
         } catch (NegocioException ex) {
-            Logger.getLogger(FrmAdminSucursal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FrmAdminSalas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -236,8 +236,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
             // Actualizar el combo box de sucursales con las sucursales de esa ciudad
             actualizarComboBoxCiudad();
 
-            // Seleccionar la sucursal más cercana en el combo box de sucursales
-            cbPeliculas.setSelectedItem(sucursal);
+            
         }
     }
 
@@ -253,18 +252,15 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         cbCiudades = new javax.swing.JComboBox<>();
-        cbPeliculas = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPeliculas = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
-        btnAnadirPelicula = new javax.swing.JButton();
         lblPagina = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         cbSucursales = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         imagenPerfiles1 = new utilerias.ImagenPerfiles();
         jPanel4 = new javax.swing.JPanel();
@@ -281,6 +277,8 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         menuButton6 = new utilerias.MenuButton();
         jLabel9 = new javax.swing.JLabel();
+        BtnAgregarSala = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -291,15 +289,6 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         cbCiudades.setBackground(new java.awt.Color(33, 36, 59));
         cbCiudades.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbCiudades.setForeground(new java.awt.Color(255, 255, 255));
-
-        cbPeliculas.setBackground(new java.awt.Color(33, 36, 59));
-        cbPeliculas.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbPeliculas.setForeground(new java.awt.Color(255, 255, 255));
-        cbPeliculas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPeliculasActionPerformed(evt);
-            }
-        });
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locacion.png"))); // NOI18N
 
@@ -324,20 +313,13 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblPeliculas);
 
-        jLabel10.setText("Sucursal Bella Vista");
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Salas");
 
-        btnAnadirPelicula.setText("Añadir Pelicula");
-        btnAnadirPelicula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnadirPeliculaActionPerformed(evt);
-            }
-        });
-
-        lblPagina.setText("Pagina 01");
         lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblPagina.setForeground(new java.awt.Color(255, 255, 255));
+        lblPagina.setText("Pagina 01");
 
         btnAtras.setText("atras");
         btnAtras.addActionListener(new java.awt.event.ActionListener() {
@@ -356,10 +338,6 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         cbSucursales.setBackground(new java.awt.Color(33, 36, 59));
         cbSucursales.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbSucursales.setForeground(new java.awt.Color(255, 255, 255));
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Peliculas para añadir");
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 720));
@@ -472,6 +450,13 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                 .addContainerGap(180, Short.MAX_VALUE))
         );
 
+        BtnAgregarSala.setBackground(new java.awt.Color(204, 204, 204));
+        BtnAgregarSala.setText("Agregar Sala");
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Sucursal Bella Vista");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -481,10 +466,24 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
+                        .addGap(138, 138, 138)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(cbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(BtnAgregarSala)
+                                .addGap(188, 188, 188)
+                                .addComponent(jLabel11))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(238, 238, 238)
+                                .addComponent(btnAtras)
+                                .addGap(44, 44, 44)
+                                .addComponent(lblPagina)
+                                .addGap(54, 54, 54)
+                                .addComponent(btnSiguiente)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -494,54 +493,29 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnIr))
                             .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(131, 131, 131)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(263, 263, 263)
-                                        .addComponent(jLabel10))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(238, 238, 238)
-                                        .addComponent(btnAtras)
-                                        .addGap(44, 44, 44)
-                                        .addComponent(lblPagina)
-                                        .addGap(54, 54, 54)
-                                        .addComponent(btnSiguiente))))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(107, 107, 107)
-                                .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(64, 64, 64))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(74, 74, 74)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(btnIr))))
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel10))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(btnIr)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(57, 57, 57)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnAgregarSala)
+                    .addComponent(jLabel11))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -561,7 +535,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -592,26 +566,12 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
             this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
             this.pagina = 1;
             this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
+            
             this.estadoPagina();
             return;
         }
         JOptionPane.showMessageDialog(this, "Error al buscar el catalogo, Intente de nuevo ", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnIrActionPerformed
-
-    private void btnAnadirPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirPeliculaActionPerformed
-        PeliculaDTO pelicula = (PeliculaDTO) cbPeliculas.getSelectedItem();
-        try {
-            peliculaBO.guardarPeliculaEnSucursal(pelicula.getId(), sucursal.getId());
-            this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
-            this.estadoPagina();
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo añadir la pelicula a la Sucursal ", "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FrmAdminSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_btnAnadirPeliculaActionPerformed
 
     private void menuButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton6ActionPerformed
         // TODO add your handling code here:
@@ -628,21 +588,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         this.cargarPeliculasTabla();
         this.estadoPagina();
     }//GEN-LAST:event_btnSiguienteActionPerformed
-
-    private void cbPeliculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPeliculasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbPeliculasActionPerformed
-    private void llenarComboBoxPeliculasPorAnadir() {
-        try {
-            cbPeliculas.removeAllItems();
-            peliculasPorAnadir = peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, !pelicuaEnSucursal);
-            for (PeliculaDTO pelicula : peliculasPorAnadir) {
-                cbPeliculas.addItem(pelicula);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+   
 
     private void llenarComboBoxCiudad() {
         try {
@@ -682,16 +628,15 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnadirPelicula;
+    private javax.swing.JButton BtnAgregarSala;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnIr;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JComboBox<CiudadDTO> cbCiudades;
-    private javax.swing.JComboBox<PeliculaDTO> cbPeliculas;
     private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
