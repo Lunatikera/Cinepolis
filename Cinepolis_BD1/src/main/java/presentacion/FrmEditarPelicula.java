@@ -29,18 +29,24 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
     /**
      * Creates new form FrmAgregarCliente
      */
-    public FrmEditarPelicula(IPeliculaBO peliculaBO,PeliculaDTO pelicula){
+    public FrmEditarPelicula(IPeliculaBO peliculaBO,int id)throws NegocioException{
         initComponents();
         this.peliculaBO = peliculaBO;
-        this.pelicula = pelicula;
+        this.id = id;
         metodoMostrarDatos();
     }
 
     public void metodoMostrarDatos(){
-            TxtTitulo.setText(pelicula.getTitulo());
-            TxtPais.setText(pelicula.getPais());
-            TxtLink.setText(pelicula.getLink_trailer());
-            TxtSinopsis.setText(pelicula.getSinopsis());
+            try{
+                PeliculaDTO c = this.peliculaBO.buscarPeliculaPorId(id);
+                TxtCartel.setText(c.getCartel());
+                TxtDuracion.setText(String.valueOf(c.getDuracion()));
+                TxtLink.setText(c.getLink_trailer());
+                TxtSinopsis.setText(c.getSinopsis());
+                TxtTitulo.setText(c.getTitulo());
+            }catch(NegocioException ex){
+            System.out.println(ex.getMessage());
+            }
             
             
             
@@ -208,11 +214,14 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
     private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
-            String nombre = TxtTitulo.getText();
-            int numA = Integer.parseInt(TxtPais.getText());
-            int duracion = Integer.parseInt(TxtLink.getText());
+            String titulo = TxtTitulo.getText();
+            String pais = TxtPais.getText();
+            int duracion = Integer.parseInt(TxtDuracion.getText());
+            String link = TxtLink.getText();
+            String sinopsis = TxtSinopsis.getText();
             
-            if (nombre.isEmpty() || numA == 0 || duracion == 0) {
+            
+            if (titulo.isEmpty() || duracion == 0 || link.isEmpty() || sinopsis.isEmpty() || pais.isEmpty()) {
              JOptionPane.showMessageDialog(this, "Ingrese todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
            
