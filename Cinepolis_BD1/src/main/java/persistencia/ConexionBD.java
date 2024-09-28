@@ -13,13 +13,12 @@ import java.sql.SQLException;
  * @author carli
  */
 public class ConexionBD implements IConexionBD {
+
     private static final String SERVER = "localhost";
     private static final String BASE_DATOS = "CinepolisBD";
     private static final String CADENA_CONEXION = "jdbc:mysql://" + SERVER + "/" + BASE_DATOS;
     private static final String USUARIO = "root";
-
-
-
+    private static final String CONTRASENA = "";
 
     @Override
     public Connection crearConexion() throws SQLException {
@@ -27,7 +26,3 @@ public class ConexionBD implements IConexionBD {
         return conexion;
     }
 }
-
-   
-    
-
