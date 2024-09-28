@@ -87,7 +87,12 @@ public class ClienteBO implements IClienteBO {
     
     @Override
     public void eliminarCliente(int idCliente) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try{
+            this.clienteDAO.eliminarPorID(idCliente);
+        }catch(PersistenciaException e){
+            Logger.getLogger(SalaBO.class.getName()).log(Level.SEVERE, null, e);
+            throw new NegocioException("Error en la capa de negocio al buscar películas para la sucursal", e);
+        }
     }
     
     @Override
@@ -114,7 +119,22 @@ public class ClienteBO implements IClienteBO {
     
     @Override
     public List<ClienteDTO> buscarClientes(int limite, int pagina) throws NegocioException {
-       throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       try{
+            int offset = utilerias.Herramientas.RegresarOFFSETMySQL(limite, pagina);
+            List<ClienteEntidad> clientes = clienteDAO.leerPaginado(limite, offset);
+            List<ClienteDTO> clientesDTO = new ArrayList<>();
+            
+                for(ClienteEntidad cliente : clientes){
+                    ClienteDTO clienteDTO = new ClienteDTO(cliente.getId(), cliente.getNombre(), cliente.getApellidoPA(),cliente.getApellidoMA(), cliente.getCorreo(), 
+                            cliente.getContraseña(), cliente.getFechaNacimiento(),cliente.getUbicacion(),cliente.getIdCiudad());
+                    clientesDTO.add(clienteDTO);
+                }
+                return clientesDTO;
+        }catch(PersistenciaException e){
+            Logger.getLogger(ClienteBO.class.getName()).log(Level.SEVERE, null, e);
+            throw new NegocioException("Eroror en la capa de negocio al querre mostrar los clientes", e);
+            
+        }
     }
 
    
