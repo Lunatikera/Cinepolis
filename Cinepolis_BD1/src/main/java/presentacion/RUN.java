@@ -9,7 +9,9 @@ import dtos.SucursalDTO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import negocio.CiudadBO;
+import negocio.ClienteBO;
 import negocio.ICiudadBO;
+import negocio.IClienteBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
@@ -18,6 +20,7 @@ import negocio.PeliculaBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
+import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
@@ -47,13 +50,17 @@ public class RUN {
         ISucursalBO a = new SucursalBO(suda);
         CiudadDAO cd = new CiudadDAO(conexion);
         ICiudadBO cdd = new CiudadBO(cd);
+        ClienteDAO cl = new ClienteDAO(conexion);
+        IClienteBO clienteBO = new ClienteBO(cl);
         SucursalDTO dsd = new SucursalDTO(1, "Cinépolis Sendero Obregón", "Plaza Sendero, C. 300 85180, Franja Comercial 300, 85065, Cdad. Obregón, Son.", 2);
        
         
         //FrmPeliculas frmCliente = new FrmPeliculas(peliculaBO);
         //frmCliente.setVisible(true);
-        FrmAdminPeliculas peli = new FrmAdminPeliculas(a, cdd, dsd, peliculaBO);
-        peli.setVisible(true);
+        //FrmAdminPeliculas peli = new FrmAdminPeliculas(a, cdd, dsd, peliculaBO);
+        //peli.setVisible(true);
+        FrmAdminClientes admin = new FrmAdminClientes(cdd, clienteBO);
+        admin.setVisible(true);
     }
 
 }

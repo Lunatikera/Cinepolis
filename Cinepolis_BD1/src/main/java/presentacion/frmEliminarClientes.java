@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import dtos.CiudadDTO;
 import dtos.ClienteDTO;
 import dtos.ClienteTablaFiltroDTO;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import negocio.ICiudadBO;
 import negocio.NegocioException;
 import negocio.IClienteBO;
 
@@ -20,17 +22,18 @@ import negocio.IClienteBO;
  * @author Rios 233537
  */
 public class frmEliminarClientes extends javax.swing.JFrame {
-    FrmCrudClientes pantallaPrincipal;
-    ClienteDTO clienteDTO;
     ClienteTablaFiltroDTO filtro;
     IClienteBO clienteNegocio;
+    List<CiudadDTO> listaCiudades;
+    ICiudadBO ciudad;;
+    int id;
 
  
-    public frmEliminarClientes(FrmCrudClientes pantallaPrincipal, IClienteBO clienteNegocio, ClienteDTO clienteDTO) {
+    public frmEliminarClientes(int id,IClienteBO clienteNegocio,ICiudadBO ciudad) throws NegocioException {
     initComponents(); // Inicializa los componentes del formulario
-    this.pantallaPrincipal = pantallaPrincipal; // Asigna la pantalla principal
     this.clienteNegocio = clienteNegocio; // Asigna el negocio de clientes
-    this.clienteDTO = clienteDTO; // Asigna el cliente que se está editando
+    this.ciudad = ciudad;
+    this.id = id;
     this.setTitle("Eliminar Cliente"); // Cambia el título del formulario
     metodosInciales();
 }
@@ -52,20 +55,16 @@ public class frmEliminarClientes extends javax.swing.JFrame {
         apellidoPATxt = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnGuardar1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        apellidoMAtxt1 = new javax.swing.JTextField();
+        apellidoMAtxt = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         Correotxt1 = new javax.swing.JTextField();
-        Ubicaciontxt2 = new javax.swing.JTextField();
-        Ciudadtxt3 = new javax.swing.JTextField();
-        Contrasenatxt4 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        ciudadesCB = new javax.swing.JComboBox<>();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -80,17 +79,19 @@ public class frmEliminarClientes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jPanel2.setBackground(new java.awt.Color(36, 44, 99));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        iDlabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        iDlabel.setText("ID Cliente:");
-        jPanel2.add(iDlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 166, -1));
+        iDlabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        iDlabel.setForeground(new java.awt.Color(255, 255, 255));
+        iDlabel.setText("Eliminar Cliente");
+        jPanel2.add(iDlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 260, -1));
 
         NombresTxt.setEditable(false);
         jPanel2.add(NombresTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 184, 39));
 
         Nacimientotxt.setEditable(false);
-        jPanel2.add(Nacimientotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, 184, 39));
+        jPanel2.add(Nacimientotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, 184, 39));
 
         apellidoPATxt.setEditable(false);
         jPanel2.add(apellidoPATxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 184, 39));
@@ -111,47 +112,48 @@ public class frmEliminarClientes extends javax.swing.JFrame {
         });
         jPanel2.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 480, 157, 33));
 
-        jLabel1.setText("Contraseña");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, 110, -1));
-
         jLabel2.setText("Nombres: *");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 110, -1));
 
         jLabel3.setText("Apellido Paterno: *");
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 110, -1));
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("* Significan campos obligatorios");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, -1, -1));
 
-        apellidoMAtxt1.setEditable(false);
-        jPanel2.add(apellidoMAtxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 184, 39));
+        apellidoMAtxt.setEditable(false);
+        jPanel2.add(apellidoMAtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 184, 39));
 
         jLabel5.setText("Apellido Materno: *");
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 110, -1));
 
         Correotxt1.setEditable(false);
         jPanel2.add(Correotxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 184, 39));
 
-        Ubicaciontxt2.setEditable(false);
-        jPanel2.add(Ubicaciontxt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, 184, 39));
+        jLabel6.setText("Fecha Nacimiento *");
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, 110, -1));
 
-        Ciudadtxt3.setEditable(false);
-        jPanel2.add(Ciudadtxt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 270, 184, 39));
+        jLabel8.setText("Ciudad *");
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, 110, -1));
 
-        Contrasenatxt4.setEditable(false);
-        jPanel2.add(Contrasenatxt4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 184, 39));
-
-        jLabel6.setText("Nacimineto");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, 110, -1));
-
-        jLabel7.setText("Ubicacion");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, 110, -1));
-
-        jLabel8.setText("Ciudad");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 250, 110, -1));
-
-        jLabel9.setText("Correo");
+        jLabel9.setText("Correo *");
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 110, -1));
+
+        ciudadesCB.setBackground(new java.awt.Color(242, 242, 242));
+        jPanel2.add(ciudadesCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, 190, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,52 +169,48 @@ public class frmEliminarClientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void metodosInciales() {
-
-        iDlabel.setText("ID Cliente: " + clienteDTO.getIdCliente());
-        NombresTxt.setText(clienteDTO.getNombre());
-        apellidoPATxt.setText(clienteDTO.getApellidoPA());
-        apellidoMAtxt1.setText(clienteDTO.getApellidoMA());
-        Correotxt1.setText(clienteDTO.getCorreo());
-        Contrasenatxt4.setText(clienteDTO.getContraseña());
-        Nacimientotxt.setText(clienteDTO.getFechaNacimiento().format(DateTimeFormatter.ISO_DATE));
-        Ubicaciontxt2.setText(clienteDTO.getUbicacion());
-        
+    private void metodosInciales() throws NegocioException {
+        llenarComboBoxCiudades();
+        metodoMostrarDatos();;
     }
-    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-        String nombres = NombresTxt.getText();
-        String apellidoPa = apellidoPATxt.getText();
-        String apellidoMa = Nacimientotxt.getText();
-
-        ClienteDTO edicionCliente = new ClienteDTO(clienteDTO.getIdCliente());
-         int confirmacion = JOptionPane.showOptionDialog(this,
-                    "¿Está seguro de que deseas eliminar al Cliente "+ clienteDTO.getIdCliente(),
-                    "Confirmación de eliminacion",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new Object[]{"Cancelar", "Confirmar"},
-                    "Confirmar");
-
-            // Si el usuario selecciona "Cancelar", no se hace nada
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                return;
-            }
-       try {
-        List<ClienteDTO> clientes = this.clienteNegocio.buscarPaginadosClienteTabla(10, 1); // Por ejemplo, límite 10, página 1
-
-          if (clientes == null || clientes.isEmpty()) {
-        // Si no hay clientes, puedes restar la página o manejar la lógica de paginación aquí
-        pantallaPrincipal.estadoPagina();
-         } else {
-        // Cargar los clientes en la tabla si hay resultados
-        this.pantallaPrincipal.cargarClientesEnTabla();
-                     }
-         dispose();
     
+    public void metodoMostrarDatos() throws NegocioException{
+        try{
+        ClienteDTO c = this.clienteNegocio.buscarClientePorId(this.id);
+        NombresTxt.setText(c.getNombre());
+        apellidoPATxt.setText(c.getApellidoPA());
+        apellidoMAtxt.setText(c.getApellidoMA());
+        Correotxt1.setText(c.getCorreo());
+        Nacimientotxt.setText(c.getFechaNacimiento().toString());
+        }catch(NegocioException ex){
+            System.out.println(ex.getMessage());
+        } 
+    };
+    
+    private void llenarComboBoxCiudades() {
+        try {
+            listaCiudades = ciudad.listaCiudades();
+            ClienteDTO cliente = this.clienteNegocio.buscarClientePorId(id);
+            for (CiudadDTO ciudad : listaCiudades) {
+                if (ciudad.getId() == cliente.getIdCiudad()) {
+                    ciudadesCB.addItem(ciudad);
+                    break;
+                }
+            }
+            ciudadesCB.setEditable(false);
         } catch (NegocioException ex) {
-         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+       try{
+        this.clienteNegocio.eliminarCliente(id);
+        dispose();
+       }catch(NegocioException ex){
+        Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
+       }
+       
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -269,24 +267,20 @@ public class frmEliminarClientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField Ciudadtxt3;
-    private javax.swing.JTextField Contrasenatxt4;
     private javax.swing.JTextField Correotxt1;
     private javax.swing.JTextField Nacimientotxt;
     private javax.swing.JTextField NombresTxt;
-    private javax.swing.JTextField Ubicaciontxt2;
-    private javax.swing.JTextField apellidoMAtxt1;
+    private javax.swing.JTextField apellidoMAtxt;
     private javax.swing.JTextField apellidoPATxt;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar1;
+    private javax.swing.JComboBox<CiudadDTO> ciudadesCB;
     private javax.swing.JLabel iDlabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

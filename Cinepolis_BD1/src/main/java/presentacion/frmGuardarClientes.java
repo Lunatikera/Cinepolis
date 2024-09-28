@@ -4,28 +4,33 @@
  */
 package presentacion;
 
+import dtos.CiudadDTO;
 import dtos.ClienteDTO;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import negocio.ICiudadBO;
 import negocio.NegocioException;
 import negocio.IClienteBO;
+import utilerias.Geocalizacion;
 
 /**
  *
- * @author Rios 233537
+ * @author samoano y temo
  */
 public class frmGuardarClientes extends javax.swing.JFrame {
 
-    FrmCrudClientes pantallaPrincipal;
+    List<CiudadDTO> listaCiudades;
+    ICiudadBO ciudad;
     IClienteBO clienteNegocio;
 
   
-    public frmGuardarClientes(FrmCrudClientes pantallaPrincipal, IClienteBO clienteNegocio) {
+    public frmGuardarClientes(IClienteBO clienteNegocio,ICiudadBO ciudad) {
         initComponents();
-        this.pantallaPrincipal = pantallaPrincipal;
         this.clienteNegocio = clienteNegocio;
+        this.ciudad = ciudad;
         this.setTitle("Editar Cliente");
         metodosInciales();
     }
@@ -51,6 +56,15 @@ public class frmGuardarClientes extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        TxtCorreo = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        ciudadesCB = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        FechaNacimientoPicker = new com.github.lgooddatepicker.components.DatePicker();
+        contraseñaTxt = new javax.swing.JPasswordField();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -65,11 +79,13 @@ public class frmGuardarClientes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jPanel2.setBackground(new java.awt.Color(36, 44, 99));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        iDlabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         iDlabel.setText("Ingrese los Datos");
-        jPanel2.add(iDlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 230, -1));
+        iDlabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        iDlabel.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(iDlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, 230, -1));
         jPanel2.add(NombresTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 184, 39));
         jPanel2.add(apellidoMAtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 184, 39));
         jPanel2.add(apellidoPATxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 184, 39));
@@ -90,17 +106,53 @@ public class frmGuardarClientes extends javax.swing.JFrame {
         });
         jPanel2.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 400, 157, 33));
 
-        jLabel1.setText("Apellido Materno: *");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 110, -1));
+        jLabel1.setText("Ciudad *");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 110, -1));
 
         jLabel2.setText("Nombres: *");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 110, -1));
 
         jLabel3.setText("Apellido Paterno: *");
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 110, -1));
 
         jLabel4.setText("* Significan campos obligatorios");
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 370, -1, -1));
+
+        jLabel5.setText("Fecha Nacimiento *");
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 100, 110, -1));
+
+        jLabel6.setText("Fecha Nacimiento *");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 100, 110, -1));
+        jPanel2.add(TxtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, 184, 39));
+
+        jLabel8.setText("Correo");
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 170, 110, -1));
+
+        jPanel2.add(ciudadesCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 190, -1));
+
+        jLabel10.setText("Apellido Materno: *");
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 110, -1));
+
+        jLabel9.setText("Contraseña *");
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, 110, -1));
+        jPanel2.add(FechaNacimientoPicker, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 130, 200, 30));
+        jPanel2.add(contraseñaTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 180, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,21 +171,47 @@ public class frmGuardarClientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void metodosInciales() {
-
+        llenarComboBoxCiudades();
+    }
+    private void llenarComboBoxCiudades() {
+        try {
+            listaCiudades = ciudad.listaCiudades();
+            for (CiudadDTO ciudad : listaCiudades) {
+                ciudadesCB.addItem(ciudad);
+            }
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         String nombres = NombresTxt.getText();
         String apellidoPa = apellidoPATxt.getText();
         String apellidoMa = apellidoMAtxt.getText();
+        String ciudad = TxtCorreo.getText();
+        LocalDate fecha = (FechaNacimientoPicker.getDate());
+        String correo = TxtCorreo.getText();
         if (nombres.isEmpty() || apellidoPa.isEmpty() || apellidoMa.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingrese todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        ClienteDTO cliente = new ClienteDTO(WIDTH, nombres, apellidoPa, apellidoMa, nombres, nombres, LocalDate.MIN, apellidoMa, WIDTH);
-
+        String contraseña = new String(contraseñaTxt.getPassword()).trim();
+        try{
+        CiudadDTO ciudades = (CiudadDTO) ciudadesCB.getSelectedItem();
+            // Create a RegistroUsuarioDTO instance
+            ClienteDTO registro = new ClienteDTO();
+            registro.setNombre(NombresTxt.getText().trim());
+            registro.setApellidoPA(apellidoPATxt.getText().trim());
+            registro.setApellidoMA(apellidoMAtxt.getText().trim());
+            registro.setCorreo(TxtCorreo.getText().trim());
+            registro.setContraseña(contraseña);
+            registro.setFechaNacimiento(FechaNacimientoPicker.getDate());
+            registro.setIdCiudad(ciudades.getId());
+            registro.setUbicacion(Geocalizacion.obtenerCoordenadas());
+            
+            
         int confirmacion = JOptionPane.showOptionDialog(this,
-                "¿Está seguro de que deseas editar al Cliente " + cliente.getIdCliente(),
+                "¿Está seguro de que deseas guardar al Cliente " + registro.getIdCliente(),
                 "Confirmación de edicion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -145,13 +223,14 @@ public class frmGuardarClientes extends javax.swing.JFrame {
             return;
         }
         try {
-            clienteNegocio.agregaCliente(cliente);
-            this.pantallaPrincipal.cargarClientesEnTabla();
-            this.pantallaPrincipal.estadoPagina();
+            clienteNegocio.agregaCliente(registro);
             dispose();
 
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (Exception m) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + m.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
@@ -159,58 +238,28 @@ public class frmGuardarClientes extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmGuardarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmGuardarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmGuardarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmGuardarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.github.lgooddatepicker.components.DatePicker FechaNacimientoPicker;
     private javax.swing.JTextField NombresTxt;
+    private javax.swing.JTextField TxtCorreo;
     private javax.swing.JTextField apellidoMAtxt;
     private javax.swing.JTextField apellidoPATxt;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar1;
+    private javax.swing.JComboBox<CiudadDTO> ciudadesCB;
+    private javax.swing.JPasswordField contraseñaTxt;
     private javax.swing.JLabel iDlabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

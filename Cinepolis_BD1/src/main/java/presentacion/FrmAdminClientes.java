@@ -6,9 +6,7 @@ package presentacion;
 
 import dtos.CiudadDTO;
 import dtos.ClienteDTO;
-import dtos.PeliculaDTO;
-import dtos.SalaDTO;
-import dtos.SucursalDTO;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -52,9 +50,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     }
 
     public void cargarMetodosIniciales() {
-        //this.cargarConfiguracionInicialPantalla();
-        this.llenarComboBoxCiudad();
-        this.seleccionarCiudadYSucursal();
         this.cargarConfiguracionInicialTablaClientes();
         this.cargarClientesEnTabla(pagina, LIMITE);
         this.estadoPagina();
@@ -86,8 +81,12 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Metodo para eliminar un cliente
-                editarSala();
+                try {
+                    //Metodo para eliminar un cliente
+                    editarSala();
+                } catch (NegocioException ex) {
+                    Logger.getLogger(FrmAdminClientes.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         int indiceColumnaEliminar = 7;
@@ -179,7 +178,8 @@ public class FrmAdminClientes extends javax.swing.JFrame {
             {
                 try
                 {
-                    this.clienteBO.eliminarCliente(id);
+                    frmEliminarClientes eliminar = new frmEliminarClientes(id, this.clienteBO, this.ciudadBO);
+                    eliminar.setVisible(true);
                     // Recargar la tabla después de eliminar
                     cargarClientesEnTabla(pagina, LIMITE);
                 } catch (NegocioException ex)
@@ -191,21 +191,19 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
     }
 
-    private void editarSala() {
+    private void editarSala() throws NegocioException {
         int id = this.getIdSeleccionadoTablaClientes();
         if (id == 0) {
             JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        try {
+       
             System.out.println("El id para editar es " + id);
-            FrmEditarPelicula editarSala = new FrmEditarPelicula(this.peliculaBO,id);
-            editarSala.setVisible(true);
+            frmEditarClientes editar = new frmEditarClientes(id, this.clienteBO, this.ciudadBO);
+            editar.setVisible(true);
             cargarClientesEnTabla(pagina, LIMITE);
             estadoPagina();
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmAdminClientes.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     public void estadoPagina() {
@@ -240,35 +238,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         }
     }
 
-    private void seleccionarCiudadYSucursal() {
-        // Obtener la ciudad correspondiente a la sucursal más cercana
-        CiudadDTO ciudadSeleccionada = null;
 
-        for (CiudadDTO ciudad : listaCiudades) {
-            // Verificar si la ciudad contiene la sucursal
-            List<SucursalDTO> sucursalesCiudad;
-            try {
-                sucursalesCiudad = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
-
-                if (sucursalesCiudad.contains(sucursal)) {
-                    ciudadSeleccionada = ciudad;
-                    break;
-                }
-            } catch (NegocioException ex) {
-                Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        if (ciudadSeleccionada != null) {
-            // Seleccionar la ciudad en el combo box
-            cbCiudades.setSelectedItem(ciudadSeleccionada);
-            cbCiudades.setSelectedItem(ciudadSeleccionada);
-            // Actualizar el combo box de sucursales con las sucursales de esa ciudad
-            actualizarComboBoxCiudad();
-
-            
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -281,16 +251,12 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        cbCiudades = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         lblPagina = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        cbSucursales = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         imagenPerfiles1 = new utilerias.ImagenPerfiles();
         jPanel4 = new javax.swing.JPanel();
@@ -315,20 +281,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setBackground(new java.awt.Color(36, 44, 99));
-
-        cbCiudades.setBackground(new java.awt.Color(33, 36, 59));
-        cbCiudades.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbCiudades.setForeground(new java.awt.Color(255, 255, 255));
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locacion.png"))); // NOI18N
-
-        btnIr.setText("Ir");
-        btnIr.setBorderPainted(false);
-        btnIr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIrActionPerformed(evt);
-            }
-        });
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -364,10 +316,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-
-        cbSucursales.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursales.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursales.setForeground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 720));
@@ -519,35 +467,14 @@ public class FrmAdminClientes extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnIr))
-                            .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64))))
+                        .addGap(64, 872, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(btnIr)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(57, 57, 57)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(109, 109, 109)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BtnAgregarCliente)
                     .addComponent(jLabel11))
@@ -596,17 +523,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton5ActionPerformed
 
-    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-        if (cbCiudades.getSelectedItem() != null) {
-            this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
-            this.pagina = 1;
-            this.cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
-            this.estadoPagina();
-            return;
-        }
-        JOptionPane.showMessageDialog(this, "Error al buscar el catalogo, Intente de nuevo ", "Error", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_btnIrActionPerformed
-
     private void menuButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton6ActionPerformed
@@ -622,57 +538,17 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void BtnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarClienteActionPerformed
-        
-        cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
+        frmGuardarClientes guardar = new frmGuardarClientes(this.clienteBO,this.ciudadBO);
+        guardar.setVisible(true);
+        cargarClientesEnTabla(pagina, LIMITE);
         estadoPagina();
         
     }//GEN-LAST:event_BtnAgregarClienteActionPerformed
    
-
-    private void llenarComboBoxCiudad() {
-        try {
-            listaCiudades = ciudadBO.listaCiudades();
-
-            for (CiudadDTO ciudad : listaCiudades) {
-                cbCiudades.addItem(ciudad);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        cbCiudades.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                actualizarComboBoxCiudad();
-            }
-        });
-    }
-
-    private void actualizarComboBoxCiudad() {
-        try {
-            CiudadDTO ciudad = (CiudadDTO) cbCiudades.getSelectedItem();
-            listaSucursales = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Limpiar el combo box de ciudades
-        cbSucursales.removeAllItems();
-
-        // Añadir las ciudades correspondientes
-        if (listaSucursales != null) {
-            for (SucursalDTO sucursal : listaSucursales) {
-                cbSucursales.addItem(sucursal);
-            }
-        }
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarCliente;
     private javax.swing.JButton btnAtras;
-    private javax.swing.JButton btnIr;
     private javax.swing.JButton btnSiguiente;
-    private javax.swing.JComboBox<CiudadDTO> cbCiudades;
-    private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -681,7 +557,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
