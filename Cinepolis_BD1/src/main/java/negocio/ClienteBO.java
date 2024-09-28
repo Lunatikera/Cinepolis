@@ -6,6 +6,8 @@ package negocio;
 
 import dominio.ClienteEntidad;
 import dtos.ClienteDTO;
+import dtos.ClienteTablaFiltroDTO;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,12 +92,77 @@ public class ClienteBO implements IClienteBO {
     
     @Override
     public ClienteDTO buscarClientePorId(int idCliente) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Verifica que el ID no sea negativo
+    if (this.esNumeroNegativo(idCliente)) {
+        throw new NegocioException("No ingrese números negativos.");
+    }
+    try {
+        // Busca el cliente en la base de datos
+        ClienteEntidad clienteEntidad = this.clienteDAO.leerPorID(idCliente);
+        
+        // Verifica si el cliente fue encontrado
+        if (clienteEntidad == null) {
+            throw new NegocioException("Cliente no encontrado con ID: " + idCliente);
+        }
+        
+        // Convierte el cliente a DTO y lo retorna
+        return convertirClienteAClienteDTO(clienteEntidad);
+    } catch (PersistenciaException ex) {
+        throw new NegocioException("Error en la capa de persistencia: " + ex.getMessage(), ex);
+    }
     }
     
     @Override
     public List<ClienteDTO> buscarClientes(int limite, int pagina) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
+    
+   
+
+    @Override
+    public List<ClienteDTO> buscarPaginadosClienteTabla(int limite, int pagina) throws NegocioException {
+         try{
+            int offset = utilerias.Herramientas.RegresarOFFSETMySQL(limite, pagina);
+            List<ClienteEntidad> clientes = clienteDAO.leerPaginado(limite, offset);
+            List<ClienteDTO> clientesDTO = new ArrayList<>();
+            
+                for(ClienteEntidad cliente : clientes){
+                    ClienteDTO clienteDTO = new ClienteDTO(cliente.getId(), cliente.getNombre(), cliente.getApellidoPA(),cliente.getApellidoMA(), cliente.getCorreo(), cliente.getContraseña(), cliente.getFechaNacimiento(),cliente.getUbicacion(),cliente.getIdCiudad());
+                    clientesDTO.add(clienteDTO);
+                }
+                return clientesDTO;
+        }catch(PersistenciaException e){
+            Logger.getLogger(ClienteBO.class.getName()).log(Level.SEVERE, null, e);
+            
+            throw new NegocioException("Eroror en la capa de negocio al querre mostrar los clientes", e);
+            
+        }
+       
     }
     
-}
+    public static ClienteDTO convertirClienteAClienteDTO(ClienteEntidad cliente) {
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setIdCliente(cliente.getId());
+        clienteDTO.setNombre(cliente.getNombre());
+        clienteDTO.setApellidoPA(cliente.getApellidoPA());
+        clienteDTO.setApellidoMA(cliente.getApellidoMA());
+        clienteDTO.setCorreo(cliente.getCorreo());
+        clienteDTO.setContraseña(cliente.getContraseña());
+        clienteDTO.setFechaNacimiento(cliente.getFechaNacimiento());
+        clienteDTO.setUbicacion(cliente.getUbicacion());
+        clienteDTO.setIdCiudad(cliente.getIdCiudad());
+        
+        
+        
+
+        return clienteDTO;
+    
+    
+   }
+    private boolean esNumeroNegativo(int numero) {
+        return numero < 0;
+    }
+        
+    }
