@@ -5,6 +5,7 @@
 package negocio;
 
 import dtos.ClienteDTO;
+import dtos.ClienteTablaFiltroDTO;
 import java.util.List;
 
 /**
@@ -22,5 +23,7 @@ public interface IClienteBO {
     public ClienteDTO buscarClientePorId(int idCliente) throws NegocioException;
 
     public List<ClienteDTO> buscarClientes(int limite, int pagina) throws NegocioException;
+    
+    public List<ClienteDTO> buscarPaginadosClienteTabla(int limite, int pagina) throws NegocioException;;
 
 }

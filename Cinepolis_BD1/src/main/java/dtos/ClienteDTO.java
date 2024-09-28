@@ -58,6 +58,12 @@ public class ClienteDTO {
         this.ubicacion = ubicacion;
         this.idCiudad = idCiudad;
     }
+
+    public ClienteDTO(int idCliente) {
+        this.idCliente = idCliente;
+    }
+    
+    
     
 
     public int getIdCliente() {
