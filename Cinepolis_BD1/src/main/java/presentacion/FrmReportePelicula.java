@@ -194,7 +194,6 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        cbSucursal = new javax.swing.JComboBox<>();
         btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReporteSucursal = new javax.swing.JTable();
@@ -219,24 +218,23 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         fechaFinDP = new com.github.lgooddatepicker.components.DatePicker();
         fechaInicioDP = new com.github.lgooddatepicker.components.DatePicker();
-        cbSucursal1 = new javax.swing.JComboBox<>();
-        btnQuitarSucursal = new javax.swing.JButton();
-        btnAnadirSucursal3 = new javax.swing.JButton();
+        cbCiudadAñadir = new javax.swing.JComboBox<>();
+        btnQuitarCiudad = new javax.swing.JButton();
+        btnAnadirCiudad = new javax.swing.JButton();
+        cbCiudadQuitar = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        cbPeliculaAñadir = new javax.swing.JComboBox<>();
+        cbPeliculaQuitar = new javax.swing.JComboBox<>();
+        btnAnadirPelicula = new javax.swing.JButton();
+        btnQuitarPelicula = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setBackground(new java.awt.Color(36, 44, 99));
-
-        cbSucursal.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursal.setForeground(new java.awt.Color(255, 255, 255));
-        cbSucursal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSucursalActionPerformed(evt);
-            }
-        });
 
         btnIr.setText("Ir");
         btnIr.setBorderPainted(false);
@@ -248,20 +246,20 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
         tblReporteSucursal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Ciudad", "Sucursal", "Funciones", "Fecha", "Ganancia"
+                "Ciudad", "Pelicula", "Fecha", "Ganancia"
             }
         ));
         jScrollPane1.setViewportView(tblReporteSucursal);
 
+        jLabel10.setText("Reporte de ganacias por pelicula");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Reporte de ganacias por sucursal");
 
         btnImprimir.setText("Imprimir ");
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -270,9 +268,9 @@ public class FrmReportePelicula extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setText("Pelicula para añadir");
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Sucusal para añadir");
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 720));
@@ -385,28 +383,81 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                 .addContainerGap(180, Short.MAX_VALUE))
         );
 
-        cbSucursal1.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursal1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursal1.setForeground(new java.awt.Color(255, 255, 255));
-        cbSucursal1.addActionListener(new java.awt.event.ActionListener() {
+        cbCiudadAñadir.setBackground(new java.awt.Color(33, 36, 59));
+        cbCiudadAñadir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbCiudadAñadir.setForeground(new java.awt.Color(255, 255, 255));
+        cbCiudadAñadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSucursal1ActionPerformed(evt);
+                cbCiudadAñadirActionPerformed(evt);
             }
         });
 
-        btnQuitarSucursal.setText("Quitar Sucursal");
-        btnQuitarSucursal.addActionListener(new java.awt.event.ActionListener() {
+        btnQuitarCiudad.setText("Quitar Ciudad");
+        btnQuitarCiudad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarSucursalActionPerformed(evt);
+                btnQuitarCiudadActionPerformed(evt);
             }
         });
 
-        btnAnadirSucursal3.setText("Añadir Sucursal");
-        btnAnadirSucursal3.addActionListener(new java.awt.event.ActionListener() {
+        btnAnadirCiudad.setText("Añadir Ciudad");
+        btnAnadirCiudad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnadirSucursal3ActionPerformed(evt);
+                btnAnadirCiudadActionPerformed(evt);
             }
         });
+
+        cbCiudadQuitar.setBackground(new java.awt.Color(33, 36, 59));
+        cbCiudadQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbCiudadQuitar.setForeground(new java.awt.Color(255, 255, 255));
+        cbCiudadQuitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCiudadQuitarActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Ciudad para añadir");
+
+        cbPeliculaAñadir.setBackground(new java.awt.Color(33, 36, 59));
+        cbPeliculaAñadir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbPeliculaAñadir.setForeground(new java.awt.Color(255, 255, 255));
+        cbPeliculaAñadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPeliculaAñadirActionPerformed(evt);
+            }
+        });
+
+        cbPeliculaQuitar.setBackground(new java.awt.Color(33, 36, 59));
+        cbPeliculaQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbPeliculaQuitar.setForeground(new java.awt.Color(255, 255, 255));
+        cbPeliculaQuitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPeliculaQuitarActionPerformed(evt);
+            }
+        });
+
+        btnAnadirPelicula.setText("Añadir Pelicula");
+        btnAnadirPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnadirPeliculaActionPerformed(evt);
+            }
+        });
+
+        btnQuitarPelicula.setText("Quitar Pelicula");
+        btnQuitarPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarPeliculaActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("Fecha inicio");
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setText("Fecha fin");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -417,76 +468,106 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(379, 379, 379)
-                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(jLabel10))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbSucursal1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cbSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(69, 69, 69)
-                                .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(379, 379, 379)
+                                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(297, 297, 297)
-                                .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnIr))
+                                .addGap(85, 85, 85)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addComponent(btnQuitarCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(155, 155, 155)
+                                .addComponent(btnQuitarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(339, 339, 339)
-                        .addComponent(btnQuitarSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(68, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(286, 286, 286)
-                    .addComponent(btnAnadirSucursal3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(768, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cbCiudadAñadir, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(49, 49, 49)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel12)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(cbPeliculaQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(cbPeliculaAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(57, 57, 57)
+                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(89, 89, 89)
+                                                .addComponent(jLabel14))))))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(46, 46, 46)
+                                .addComponent(btnAnadirCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(154, 154, 154)
+                                .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel15)
+                                .addGap(59, 59, 59)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addComponent(btnIr)
+                        .addGap(85, 85, 85))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbSucursal1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(btnIr))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnQuitarSucursal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel12))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbCiudadAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbPeliculaAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAnadirCiudad)
+                            .addComponent(btnAnadirPelicula)
+                            .addComponent(btnIr))
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbPeliculaQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnQuitarCiudad)
+                            .addComponent(btnQuitarPelicula))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)))
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(152, 152, 152)
-                    .addComponent(btnAnadirSucursal3)
-                    .addContainerGap(560, Short.MAX_VALUE)))
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -530,25 +611,41 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton6ActionPerformed
 
-    private void cbSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbSucursalActionPerformed
-
     private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton3ActionPerformed
 
-    private void cbSucursal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursal1ActionPerformed
+    private void cbCiudadAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCiudadAñadirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbSucursal1ActionPerformed
+    }//GEN-LAST:event_cbCiudadAñadirActionPerformed
 
-    private void btnQuitarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarSucursalActionPerformed
+    private void btnQuitarCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarCiudadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnQuitarSucursalActionPerformed
+    }//GEN-LAST:event_btnQuitarCiudadActionPerformed
 
-    private void btnAnadirSucursal3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirSucursal3ActionPerformed
+    private void btnAnadirCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirCiudadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAnadirSucursal3ActionPerformed
+    }//GEN-LAST:event_btnAnadirCiudadActionPerformed
+
+    private void cbCiudadQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCiudadQuitarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCiudadQuitarActionPerformed
+
+    private void cbPeliculaAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPeliculaAñadirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbPeliculaAñadirActionPerformed
+
+    private void cbPeliculaQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPeliculaQuitarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbPeliculaQuitarActionPerformed
+
+    private void btnAnadirPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirPeliculaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAnadirPeliculaActionPerformed
+
+    private void btnQuitarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarPeliculaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnQuitarPeliculaActionPerformed
     private void llenarComboBoxPeliculasPorAnadir() {
         try {
             cbSucursal.removeAllItems();
@@ -601,17 +698,24 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         }
     }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnadirSucursal3;
+    private javax.swing.JButton btnAnadirCiudad;
+    private javax.swing.JButton btnAnadirPelicula;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnIr;
-    private javax.swing.JButton btnQuitarSucursal;
-    private javax.swing.JComboBox<PeliculaDTO> cbSucursal;
-    private javax.swing.JComboBox<PeliculaDTO> cbSucursal1;
+    private javax.swing.JButton btnQuitarCiudad;
+    private javax.swing.JButton btnQuitarPelicula;
+    private javax.swing.JComboBox<PeliculaDTO> cbCiudadAñadir;
+    private javax.swing.JComboBox<PeliculaDTO> cbCiudadQuitar;
+    private javax.swing.JComboBox<PeliculaDTO> cbPeliculaAñadir;
+    private javax.swing.JComboBox<PeliculaDTO> cbPeliculaQuitar;
     private com.github.lgooddatepicker.components.DatePicker fechaFinDP;
     private com.github.lgooddatepicker.components.DatePicker fechaInicioDP;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
