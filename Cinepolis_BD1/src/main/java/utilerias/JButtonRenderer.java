@@ -6,7 +6,10 @@ package utilerias;
 
 /**
  *
- * @author Temo
+
+
+ * @author Rios 233537
+
  */
 import java.awt.Component;
 import javax.swing.JButton;

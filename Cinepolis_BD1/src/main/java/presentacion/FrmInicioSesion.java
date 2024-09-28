@@ -38,14 +38,14 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private IInicioSesionBO inicioSesionBO;
     private IClienteBO clientoBO;
     private ISucursalBO sucursalBO;
-    private boolean modoAdmin;
+    private boolean modoAdmin = false;
 
     public FrmInicioSesion(IInicioSesionBO inicioSesionBO, IClienteBO clientoBO, ISucursalBO sucursalBO) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.inicioSesionBO = inicioSesionBO;
-        this.clientoBO=clientoBO;
-        this.sucursalBO=sucursalBO;
+        this.clientoBO = clientoBO;
+        this.sucursalBO = sucursalBO;
     }
 
     /**
@@ -161,58 +161,76 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private void ingresarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBtnActionPerformed
         String correo = txtCorreo.getText().trim();
         String contraseña = new String(txtContraseña.getPassword());
-       
+
         if (correo.isEmpty() || contraseña.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese su correo electrónico y contraseña.", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        try {
-            InicioSesionDTO credenciales = new InicioSesionDTO(correo, contraseña);
-            ClienteDTO cliente = inicioSesionBO.inicioSesion(credenciales);
-            System.out.println(cliente.getUbicacion());
-            if (cliente != null) {
-                // Inicio de sesión exitoso
-                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso. ¡Bienvenido, " + cliente.getNombre() + "!");
+        if (!modoAdmin) {
+            try {
+                InicioSesionDTO credenciales = new InicioSesionDTO(correo, contraseña);
+                ClienteDTO cliente = inicioSesionBO.inicioSesion(credenciales);
+                System.out.println(cliente.getUbicacion());
+                if (cliente != null) {
+                    // Inicio de sesión exitoso
+                    JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso. ¡Bienvenido, " + cliente.getNombre() + "!");
 
-                // Obtener la ubicación del cliente
-                String ubicacion = obtenerCoordenadas();
-                cliente.setUbicacion(ubicacion);
+                    // Obtener la ubicación del cliente
+                    String ubicacion = obtenerCoordenadas();
+                    cliente.setUbicacion(ubicacion);
 
-                // Realizar acciones adicionales necesarias después del inicio de sesión
-                this.procesarInicioSesionExitoso(cliente);
+                    // Realizar acciones adicionales necesarias después del inicio de sesión
+                    this.procesarInicioSesionExitoso(cliente);
 
-            } else {
-                // Credenciales incorrectas
-                JOptionPane.showMessageDialog(this, "Inicio de sesión fallido. Por favor, verifica tus credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Credenciales incorrectas
+                    JOptionPane.showMessageDialog(this, "Inicio de sesión fallido. Por favor, verifica tus credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error durante el inicio de sesión. Por favor verifique sus credenciales,.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado. Por favor, intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(FrmInicioSesion.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, "Ocurrió un error durante el inicio de sesión. Por favor verifique sus credenciales,.", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            // Manejar cualquier otra excepción inesperada
-            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado. Por favor, intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FrmInicioSesion.class.getName()).log(Level.SEVERE, null, ex);
+
         }
-        
-      
+
+        if (modoAdmin) {
+            if (contraseña.equals("admin") && correo.equals("admin")) {
+                JOptionPane.showMessageDialog(this, "Inicio de Administrador exitoso. ¡Bienvenido!");
+                IConexionBD conexion = new ConexionBD();
+                IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+                ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+                IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+                ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+                SucursalDTO sucursal = new SucursalDTO();
+                sucursal.setId(1);
+                FrmAdminSucursal sucursalAdmin = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO, sucursal);
+                sucursalAdmin.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Inicio de sesión fallido. Por favor, verifica tus credenciales de Administrador.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
 
     }//GEN-LAST:event_ingresarBtnActionPerformed
     private void procesarInicioSesionExitoso(ClienteDTO cliente) {
         try {
             clientoBO.actualizarCliente(cliente);
             SucursalDTO sucursalFavorable = sucursalBO.buscarSucursalMasCercana(cliente.getIdCliente());
-            
-            IConexionBD conexion=new ConexionBD();
-            
-            IPeliculaDAO peliculaDAO=new PeliculaDAO(conexion);
-            ICiudadDAO ciudadDAO= new CiudadDAO(conexion);
-            ISucursalDAO sucursalDAO= new SucursalDAO(conexion);
-            
-            IPeliculaBO peliculaBO= new PeliculaBO(peliculaDAO);
-            ICiudadBO ciudadBO= new CiudadBO(ciudadDAO);
-            ISucursalBO sucursalBO= new SucursalBO(sucursalDAO);
-            
-            FrmCatalogoSucursal catalogo= new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursalFavorable, cliente);
+
+            IConexionBD conexion = new ConexionBD();
+
+            IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+            ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+            ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
+
+            IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+            ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+            ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+
+            FrmCatalogoSucursal catalogo = new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursalFavorable, cliente);
             catalogo.setVisible(true);
             this.dispose();
         } catch (NegocioException ex) {
@@ -221,21 +239,20 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         }
     }
     private void modoAdminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoAdminBtnActionPerformed
-        // TODO add your handling code here:
+        this.modoAdmin = !modoAdmin;
     }//GEN-LAST:event_modoAdminBtnActionPerformed
 
     private void registrarseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBtnActionPerformed
-        IConexionBD conexion=new ConexionBD();
-        ICiudadDAO ciudadDAO= new CiudadDAO(conexion);
-        ICiudadBO ciudadBO= new CiudadBO(ciudadDAO);
-        
-        FrmRegistro registrarse= new FrmRegistro(clientoBO, ciudadBO);
-        
+        IConexionBD conexion = new ConexionBD();
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+
+        FrmRegistro registrarse = new FrmRegistro(clientoBO, ciudadBO);
+
         registrarse.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_registrarseBtnActionPerformed
 
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private utilerias.MenuButton ingresarBtn;

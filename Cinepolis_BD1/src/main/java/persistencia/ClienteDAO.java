@@ -123,7 +123,7 @@ public class ClienteDAO implements IClienteDAO {
     public List<ClienteEntidad> leerPaginado(int limit, int offset) throws PersistenciaException {
         List<ClienteEntidad> clientes = new ArrayList<>();
 
-        String sql = "SELECT cliente_id, nombres, apellidoPA, apellidoMA, correo, contraseña, fechaNacimiento, ubicacion, estaEliminado, ciudad_id FROM clientes LIMIT ? OFFSET ?";
+        String sql = "SELECT cliente_id, nombres, apellidoPA, apellidoMA, correo, contraseña, fechaNacimiento, ubicacion, estaEliminado, ciudad_id FROM clientes WHERE estaEliminado=0 LIMIT ? OFFSET ?";
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
 
             ps.setInt(1, limit);
@@ -187,7 +187,7 @@ public class ClienteDAO implements IClienteDAO {
 
     @Override
     public ClienteEntidad buscarClientePorCorreo(String correo) throws PersistenciaException {
-        String sentenciaSQL = "SELECT cliente_id, nombres, apellidoPA, apellidoMA, correo, contraseña, fechaNacimiento, ubicacion, ciudad_id, estaEliminado FROM Clientes WHERE correo = ?;";
+        String sentenciaSQL = "SELECT cliente_id, nombres, apellidoPA, apellidoMA, correo, contraseña, fechaNacimiento, ubicacion, ciudad_id, estaEliminado FROM Clientes WHERE correo = ? and estaEliminado = 0 ;";
         ResultSet res = null;
         ClienteEntidad cliente = null;
 
@@ -220,7 +220,7 @@ public class ClienteDAO implements IClienteDAO {
 
     @Override
     public boolean existeClienteConCorreo(String correo) throws PersistenciaException {
-        String sql = "SELECT COUNT(*) FROM Clientes WHERE correo = ?";
+        String sql = "SELECT COUNT(*) FROM Clientes WHERE correo = ? and estaEliminado=0 ;";
 
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
 

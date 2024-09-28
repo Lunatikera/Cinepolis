@@ -16,7 +16,9 @@ import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.ISucursalDAO;
 import persistencia.SucursalDAO;
-import presentacion.FrmCrudClientes;
+
+import presentacion.FrmAdminSucursal;
+
 import presentacion.FrmInicioSesion;
 
 /**
@@ -38,10 +40,11 @@ public class Cinepolis_BD1 {
         IClienteBO clienteBO = new ClienteBO((ClienteDAO) clienteDAO);
 
         // Initialize and display the login form
-       // FrmInicioSesion iniciarSesion = new FrmInicioSesion(inicioSesionBO, clienteBO, sucursalBO);
-       // iniciarSesion.setVisible(true);
+
+        FrmInicioSesion iniciarSesion = new FrmInicioSesion(inicioSesionBO, clienteBO, sucursalBO);
+        iniciarSesion.setVisible(true);
         
-          FrmCrudClientes frmCrudClientes = new FrmCrudClientes(clienteBO);
-                frmCrudClientes.setVisible(true);
+       
+
     }
 }

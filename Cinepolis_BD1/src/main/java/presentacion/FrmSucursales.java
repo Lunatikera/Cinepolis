@@ -4,7 +4,25 @@
  */
 package presentacion;
 
+import dtos.CiudadDTO;
+import dtos.ClienteDTO;
+import dtos.SucursalDTO;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.border.EmptyBorder;
+import negocio.ICiudadBO;
+import negocio.IPeliculaBO;
+import negocio.ISucursalBO;
+import negocio.NegocioException;
+import negocio.PeliculaBO;
+import persistencia.ConexionBD;
+import persistencia.IConexionBD;
+import persistencia.IPeliculaDAO;
+import persistencia.PeliculaDAO;
+import static utilerias.Geocalizacion.obtenerCoordenadas;
 
 /**
  *
@@ -12,12 +30,28 @@ import javax.swing.border.EmptyBorder;
  */
 public class FrmSucursales extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmCatalogos
-     */
-    public FrmSucursales() {
+    private ICiudadBO ciudadBO;
+    private ISucursalBO sucursalBO;
+    private List<CiudadDTO> listaCiudades;
+    private List<SucursalDTO> listaSucursales;
+    private SucursalDTO sucursal;
+    private ClienteDTO cliente;
+
+    public FrmSucursales(ICiudadBO ciudadBO, ISucursalBO sucursalBO, SucursalDTO sucursal, ClienteDTO cliente) {
         initComponents();
-        btnSucursales.setSelected(true);
+        this.ciudadBO = ciudadBO;
+        this.sucursalBO = sucursalBO;
+        this.sucursal = sucursal;
+        this.cliente = cliente;
+        this.metodoIniciales();
+    }
+
+    private void metodoIniciales() {
+        this.setTitle("Elegir Sucursal");
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.llenarComboBoxCiudad();
+        this.seleccionarCiudadYSucursal();
     }
 
     /**
@@ -33,11 +67,11 @@ public class FrmSucursales extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        menuButton11 = new utilerias.MenuButton();
+        btnInicio = new utilerias.MenuButton();
         btnSucursales = new utilerias.MenuButton();
-        menuButton13 = new utilerias.MenuButton();
-        menuButton14 = new utilerias.MenuButton();
-        menuButton3 = new utilerias.MenuButton();
+        btnBoletos = new utilerias.MenuButton();
+        btnInbox = new utilerias.MenuButton();
+        btnPerfil = new utilerias.MenuButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -51,10 +85,10 @@ public class FrmSucursales extends javax.swing.JFrame {
         jPanel16 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        menuButton18 = new utilerias.MenuButton();
-        menuButton1 = new utilerias.MenuButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        cbSucursales = new javax.swing.JComboBox<>();
+        btnIr = new utilerias.MenuButton();
+        btnSucursalCercana = new utilerias.MenuButton();
+        cbCiudades = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
 
@@ -93,36 +127,54 @@ public class FrmSucursales extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(1280, 65));
         jPanel3.setLayout(new java.awt.GridLayout(1, 5, 50, 0));
 
-        menuButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Inicio.png"))); // NOI18N
-        menuButton11.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
-        jPanel3.add(menuButton11);
+        btnInicio.setBorderPainted(false);
+        btnInicio.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
+        btnInicio.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Inicio.png"))); // NOI18N
+        btnInicio.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnInicio);
 
-        btnSucursales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
-        btnSucursales.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
+        btnSucursales.setBorderPainted(false);
+        btnSucursales.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
+        btnSucursales.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
         jPanel3.add(btnSucursales);
 
-        menuButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
-        menuButton13.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
-        menuButton13.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
-        jPanel3.add(menuButton13);
-
-        menuButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
-        menuButton14.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
-        menuButton14.addActionListener(new java.awt.event.ActionListener() {
+        btnBoletos.setBorderPainted(false);
+        btnBoletos.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
+        btnBoletos.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
+        btnBoletos.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
+        btnBoletos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton14ActionPerformed(evt);
+                btnBoletosActionPerformed(evt);
             }
         });
-        jPanel3.add(menuButton14);
+        jPanel3.add(btnBoletos);
 
-        menuButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfil.png"))); // NOI18N
-        menuButton3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
-        menuButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnInbox.setBorderPainted(false);
+        btnInbox.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
+        btnInbox.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
+        btnInbox.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
+        btnInbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton3ActionPerformed(evt);
+                btnInboxActionPerformed(evt);
             }
         });
-        jPanel3.add(menuButton3);
+        jPanel3.add(btnInbox);
+
+        btnPerfil.setBorderPainted(false);
+        btnPerfil.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
+        btnPerfil.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfil.png"))); // NOI18N
+        btnPerfil.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
+        btnPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerfilActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnPerfil);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -195,20 +247,17 @@ public class FrmSucursales extends javax.swing.JFrame {
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/littlelogoGrande 1.png"))); // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
+        jButton1.setFocusPainted(false);
+        jButton1.setFocusable(false);
         jButton1.setPreferredSize(new java.awt.Dimension(229, 353));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -254,25 +303,31 @@ public class FrmSucursales extends javax.swing.JFrame {
 
         jPanel12.setBackground(new java.awt.Color(36, 44, 99));
 
-        jComboBox2.setBackground(new java.awt.Color(33, 36, 59));
-        jComboBox2.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        cbSucursales.setBackground(new java.awt.Color(33, 36, 59));
+        cbSucursales.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        cbSucursales.setForeground(new java.awt.Color(255, 255, 255));
+
+        btnIr.setBorderPainted(false);
+        btnIr.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buscar.png"))); // NOI18N
+        btnIr.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buscar.png"))); // NOI18N
+        btnIr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                btnIrActionPerformed(evt);
             }
         });
 
-        menuButton18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buscar.png"))); // NOI18N
-
-        menuButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursaleCercana.png"))); // NOI18N
-
-        jComboBox3.setBackground(new java.awt.Color(33, 36, 59));
-        jComboBox3.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+        btnSucursalCercana.setBorderPainted(false);
+        btnSucursalCercana.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursaleCercana.png"))); // NOI18N
+        btnSucursalCercana.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursaleCercana.png"))); // NOI18N
+        btnSucursalCercana.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
+                btnSucursalCercanaActionPerformed(evt);
             }
         });
+
+        cbCiudades.setBackground(new java.awt.Color(33, 36, 59));
+        cbCiudades.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        cbCiudades.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -292,18 +347,18 @@ public class FrmSucursales extends javax.swing.JFrame {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(220, 220, 220))
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(menuButton18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnIr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(115, 115, 115))))
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addGap(172, 172, 172)
-                .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSucursalCercana, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 186, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
@@ -314,14 +369,14 @@ public class FrmSucursales extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(menuButton18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnIr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(61, 61, 61)
-                .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSucursalCercana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -363,73 +418,144 @@ public class FrmSucursales extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void menuButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton14ActionPerformed
+    private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
+        FrmBoletos boletos = new FrmBoletos();
+        boletos.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBoletosActionPerformed
 
-    private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton3ActionPerformed
+    private void btnInboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInboxActionPerformed
+        FrmInbox inbox = new FrmInbox();
+        inbox.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInboxActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
+        FrmConfiguracionPerfil perfil = new FrmConfiguracionPerfil();
+        perfil.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnPerfilActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
-
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void btnSucursalCercanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSucursalCercanaActionPerformed
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmSucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmSucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmSucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmSucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+            SucursalDTO sucursalFavorable = sucursalBO.buscarSucursalMasCercana(cliente.getIdCliente());
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmSucursales().setVisible(true);
+            IConexionBD conexion = new ConexionBD();
+            IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+            IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+
+            FrmCatalogoSucursal catalogo = new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursalFavorable, cliente);
+            catalogo.setVisible(true);
+            this.dispose();
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmSucursales.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSucursalCercanaActionPerformed
+
+    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
+        if (cbSucursales.getSelectedItem() != null) {
+            this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
+
+            IConexionBD conexion = new ConexionBD();
+            IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+            IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+
+            FrmCatalogoSucursal catalogo = new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursal, cliente);
+            catalogo.setVisible(true);
+            this.dispose();
+        }
+
+    }//GEN-LAST:event_btnIrActionPerformed
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        IConexionBD conexion = new ConexionBD();
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+
+        FrmCatalogoSucursal catalogo = new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursal, cliente);
+        catalogo.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInicioActionPerformed
+    private void llenarComboBoxCiudad() {
+        try {
+            listaCiudades = ciudadBO.listaCiudades();
+
+            for (CiudadDTO ciudad : listaCiudades) {
+                cbCiudades.addItem(ciudad);
+            }
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        cbCiudades.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarComboBoxCiudad();
             }
         });
     }
 
+    private void actualizarComboBoxCiudad() {
+        try {
+            CiudadDTO ciudad = (CiudadDTO) cbCiudades.getSelectedItem();
+            listaSucursales = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Limpiar el combo box de ciudades
+        cbSucursales.removeAllItems();
+
+        // Añadir las ciudades correspondientes
+        if (listaSucursales != null) {
+            for (SucursalDTO sucursal : listaSucursales) {
+                cbSucursales.addItem(sucursal);
+            }
+        }
+    }
+
+    private void seleccionarCiudadYSucursal() {
+        // Obtener la ciudad correspondiente a la sucursal más cercana
+        CiudadDTO ciudadSeleccionada = null;
+
+        for (CiudadDTO ciudad : listaCiudades) {
+            // Verificar si la ciudad contiene la sucursal
+            List<SucursalDTO> sucursalesCiudad;
+            try {
+                sucursalesCiudad = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
+
+                if (sucursalesCiudad.contains(sucursal)) {
+                    ciudadSeleccionada = ciudad;
+                    break;
+                }
+            } catch (NegocioException ex) {
+                Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (ciudadSeleccionada != null) {
+            // Seleccionar la ciudad en el combo box
+            cbCiudades.setSelectedItem(ciudadSeleccionada);
+            cbCiudades.setSelectedItem(ciudadSeleccionada);
+            // Actualizar el combo box de sucursales con las sucursales de esa ciudad
+            actualizarComboBoxCiudad();
+
+            // Seleccionar la sucursal más cercana en el combo box de sucursales
+            cbSucursales.setSelectedItem(sucursal);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private utilerias.MenuButton btnBoletos;
+    private utilerias.MenuButton btnInbox;
+    private utilerias.MenuButton btnInicio;
+    private utilerias.MenuButton btnIr;
+    private utilerias.MenuButton btnPerfil;
+    private utilerias.MenuButton btnSucursalCercana;
     private utilerias.MenuButton btnSucursales;
+    private javax.swing.JComboBox<CiudadDTO> cbCiudades;
+    private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -448,11 +574,5 @@ public class FrmSucursales extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private utilerias.MenuButton menuButton1;
-    private utilerias.MenuButton menuButton11;
-    private utilerias.MenuButton menuButton13;
-    private utilerias.MenuButton menuButton14;
-    private utilerias.MenuButton menuButton18;
-    private utilerias.MenuButton menuButton3;
     // End of variables declaration//GEN-END:variables
 }

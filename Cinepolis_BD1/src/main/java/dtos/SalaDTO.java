@@ -1,15 +1,14 @@
-    /*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dominio;
+package dtos;
 
 /**
  *
- * @author samoano
+ * @author NaderCroft
  */
-public class SalaEntidad {
-
+public class SalaDTO {
     private int id;
     private String nombre;
     private int numeroAsiento;
@@ -17,18 +16,7 @@ public class SalaEntidad {
     private int idSucursal;
     private boolean estaEliminada;
 
-    public SalaEntidad() {
-    }
-
-    public SalaEntidad(int id, String nombre, int numeroAsiento, int duracionLimpieza, int iDsucursal) {
-        this.id = id;
-        this.nombre = nombre;
-        this.numeroAsiento = numeroAsiento;
-        this.duracionLimpieza = duracionLimpieza;
-        this.idSucursal = iDsucursal;
-    }
-
-    public SalaEntidad(int id, String nombre, int numeroAsiento, int duracionLimpieza, int idSucursal, boolean estaEliminada) {
+    public SalaDTO(int id, String nombre, int numeroAsiento, int duracionLimpieza, int idSucursal, boolean estaEliminada) {
         this.id = id;
         this.nombre = nombre;
         this.numeroAsiento = numeroAsiento;
@@ -37,6 +25,27 @@ public class SalaEntidad {
         this.estaEliminada = estaEliminada;
     }
 
+    public SalaDTO() {
+    }
+
+    
+    public SalaDTO(String nombre, int numeroAsiento, int duracionLimpieza, int idSucursal, boolean estaEliminada) {
+        this.nombre = nombre;
+        this.numeroAsiento = numeroAsiento;
+        this.duracionLimpieza = duracionLimpieza;
+        this.idSucursal = idSucursal;
+        this.estaEliminada = estaEliminada;
+    }
+
+    public SalaDTO(int id, String nombre, int numeroAsiento, int duracionLimpieza, int idSucursal) {
+        this.id = id;
+        this.nombre = nombre;
+        this.numeroAsiento = numeroAsiento;
+        this.duracionLimpieza = duracionLimpieza;
+        this.idSucursal = idSucursal;
+    }
+
+    
     public int getId() {
         return id;
     }
@@ -65,14 +74,6 @@ public class SalaEntidad {
         return duracionLimpieza;
     }
 
-    public boolean isEstaEliminada() {
-        return estaEliminada;
-    }
-
-    public void setEstaEliminada(boolean estaEliminada) {
-        this.estaEliminada = estaEliminada;
-    }
-
     public void setDuracionLimpieza(int duracionLimpieza) {
         this.duracionLimpieza = duracionLimpieza;
     }
@@ -85,5 +86,12 @@ public class SalaEntidad {
         this.idSucursal = idSucursal;
     }
 
-  
+    public boolean isEstaEliminada() {
+        return estaEliminada;
+    }
+
+    public void setEstaEliminada(boolean estaEliminada) {
+        this.estaEliminada = estaEliminada;
+    }
+    
 }
