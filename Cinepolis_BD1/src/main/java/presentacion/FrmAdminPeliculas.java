@@ -198,8 +198,8 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             return;
         }
         try {
-            System.out.println("El id para editar es " + id);
-            FrmEditarPelicula editarSala = new FrmEditarPelicula(this.peliculaBO,id);
+            PeliculaDTO pelicula=peliculaBO.buscarPeliculaPorId(id);
+            FrmEditarPelicula editarSala = new FrmEditarPelicula(this.peliculaBO,pelicula);
             editarSala.setVisible(true);
             cargarClientesEnTabla(pagina, LIMITE);
             estadoPagina();

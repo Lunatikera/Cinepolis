@@ -54,9 +54,9 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
-        this.llenarComboBoxSucrsales();
-        this.llenarComboBoxPeliculasPorAnadir();
-        
+//        this.llenarComboBoxSucrsales();
+//        this.llenarComboBoxPeliculasPorAnadir();
+//        
         this.cargarConfiguracionInicialTablaPeliculas();
         this.cargarPeliculasTabla();
       
@@ -158,7 +158,7 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         try {
             peliculaBO.eliminarPeliculaDeSucursal(id, sucursal.getId());
             this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
+//            this.llenarComboBoxPeliculasPorAnadir();
             
         } catch (NegocioException ex) {
             Logger.getLogger(FrmReportePelicula.class.getName()).log(Level.SEVERE, null, ex);
@@ -646,38 +646,38 @@ public class FrmReportePelicula extends javax.swing.JFrame {
     private void btnQuitarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarPeliculaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnQuitarPeliculaActionPerformed
-    private void llenarComboBoxPeliculasPorAnadir() {
-        try {
-            cbSucursal.removeAllItems();
-            peliculasPorAnadir = peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, !pelicuaEnSucursal);
-            for (PeliculaDTO pelicula : peliculasPorAnadir) {
-                cbSucursal.addItem(pelicula);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    
-    
-     private void llenarComboBoxSucrsales() {
-        try {
-            listaSucursales = sucursalBO.obtenerSucursales();
-
-            for (SucursalDTO sucursal : listaSucursales) {
-                cbSucursal.addItemListener((ItemListener) sucursal);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        cbSucursal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //actualizarComboBoxCiudad();
-            }
-        });
-    }
+//    private void llenarComboBoxPeliculasPorAnadir() {
+//        try {
+//            cbSucursal.removeAllItems();
+//            peliculasPorAnadir = peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, !pelicuaEnSucursal);
+//            for (PeliculaDTO pelicula : peliculasPorAnadir) {
+//                cbSucursal.addItem(pelicula);
+//            }
+//        } catch (NegocioException ex) {
+//            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+//
+//    
+//    
+//     private void llenarComboBoxSucrsales() {
+//        try {
+//            listaSucursales = sucursalBO.obtenerSucursales();
+//
+//            for (SucursalDTO sucursal : listaSucursales) {
+//                cbSucursal.addItemListener((ItemListener) sucursal);
+//            }
+//        } catch (NegocioException ex) {
+//            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        cbSucursal.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                //actualizarComboBoxCiudad();
+//            }
+//        });
+//    }
 
    /* private void actualizarComboBoxCiudad() {
         try {
