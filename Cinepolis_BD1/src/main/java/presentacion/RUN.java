@@ -32,8 +32,8 @@ public class RUN {
         //ISalaBO clienteNegocio = new SalaBO(clienteDAO);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
-        FrmPeliculas frmCliente = new FrmPeliculas(peliculaBO,1);
-        frmCliente.setVisible(true);
+        //FrmPeliculas frmCliente = new FrmPeliculas(peliculaBO);
+        //frmCliente.setVisible(true);
     }
 
 }

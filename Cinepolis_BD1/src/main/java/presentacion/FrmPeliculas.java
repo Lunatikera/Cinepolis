@@ -34,19 +34,21 @@ public class FrmPeliculas extends javax.swing.JFrame {
     IPeliculaBO peliculaBO;
     private int pagina = 1;
     private final int LIMITE = 5;
-    private int idSucursal;
+    private SucursalDTO sucursal;
+    private final boolean peliculasEnSucursal = true;
+    
 
-    public FrmPeliculas(IPeliculaBO peliculaBO,int idSucursal) {
+    public FrmPeliculas(IPeliculaBO peliculaBO,SucursalDTO sucursal) {
         initComponents();
         this.peliculaBO = peliculaBO;
-        this.idSucursal = idSucursal;
+        this.sucursal = sucursal;
         this.metodosIniciales();
     }
 
     private void metodosIniciales() {
         this.cargarConfiguracionInicialPantalla();
         this.cargarConfiguracionInicialTablaClientes();
-        this.cargarClientesEnTabla(idSucursal,pagina, LIMITE);
+        this.cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
     }
 
     private void cargarConfiguracionInicialPantalla() {
@@ -132,7 +134,7 @@ public class FrmPeliculas extends javax.swing.JFrame {
                 {
                     this.peliculaBO.eliminarPelicula(id);
                     // Recargar la tabla después de eliminar
-                    cargarClientesEnTabla(idSucursal,pagina, LIMITE);
+                    cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
                 } catch (NegocioException ex)
                 {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -183,7 +185,7 @@ public class FrmPeliculas extends javax.swing.JFrame {
             int offset = (pagina - 1) * limite;
 
             // Obtén solo los clientes necesarios para la página actual
-            List<PeliculaDTO> clientesLista = this.peliculaBO.buscarPeliculaSucursal(idSucursal, limite, offset);
+            List<PeliculaDTO> clientesLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), limite, offset,peliculasEnSucursal);
 
             // Agrega los registros paginados a la tabla
             this.AgregarRegistrosTablaCliente(clientesLista);
@@ -384,7 +386,7 @@ public class FrmPeliculas extends javax.swing.JFrame {
         if (pagina > 1)
         {
             pagina--;
-            cargarClientesEnTabla(idSucursal,pagina, LIMITE);
+            cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
         }
     }//GEN-LAST:event_BtnAtrasActionPerformed
 
@@ -393,7 +395,7 @@ public class FrmPeliculas extends javax.swing.JFrame {
         if (BtnAdelante.isEnabled())
         {
             pagina++;
-            cargarClientesEnTabla(idSucursal,pagina, LIMITE);
+            cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
         }
     }//GEN-LAST:event_BtnAdelanteActionPerformed
 

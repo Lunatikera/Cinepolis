@@ -7,6 +7,7 @@ package presentacion;
 
 import dtos.PeliculaDTO;
 import dtos.SalaDTO;
+import dtos.SucursalDTO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -22,33 +23,27 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
 
     IPeliculaBO peliculaBO;
     int id;
-    int idSucursal;
+    PeliculaDTO pelicula;
     
 
     /**
      * Creates new form FrmAgregarCliente
      */
-    public FrmEditarPelicula(IPeliculaBO peliculaBO, int id,int idSucursal) throws NegocioException {
+    public FrmEditarPelicula(IPeliculaBO peliculaBO,PeliculaDTO pelicula){
         initComponents();
         this.peliculaBO = peliculaBO;
-        this.id = id;
-        this.idSucursal = idSucursal;
+        this.pelicula = pelicula;
         metodoMostrarDatos();
-        
     }
 
-    public void metodoMostrarDatos() throws NegocioException{
-        try{
-        PeliculaDTO c = this.peliculaBO.buscarPeliculaPorId(id);
-            String titulo = c.getTitulo();
-            String pais = c.getPais();
+    public void metodoMostrarDatos(){
+            TxtTitulo.setText(pelicula.getTitulo());
+            TxtPais.setText(pelicula.getPais());
+            TxtLink.setText(pelicula.getLink_trailer());
+            TxtSinopsis.setText(pelicula.getSinopsis());
             
-            TxtTitulo.setText(nombre);
-            TxtPais.setText(String.valueOf(numeroA));
-            TxtLink.setText(String.valueOf(duracionL));
-        }catch(NegocioException ex){
-            System.out.println(ex.getMessage());
-        } 
+            
+            
     };
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,10 +122,6 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(251, Short.MAX_VALUE)
-                .addComponent(LblAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(177, 177, 177))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,6 +148,10 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
                             .addComponent(TxtDuracion)
                             .addComponent(TxtSinopsis))
                         .addGap(18, 18, 18))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(538, 538, 538)
+                .addComponent(LblAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 562, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +182,7 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LblPaterno3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TxtSinopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -224,9 +219,9 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
         }
         try
         {
-            SalaDTO c = this.salaBO.leerPorId(id);
-            SalaDTO editar = new SalaDTO(c.getId(),nombre,numA,duracion,idSucursal,c.isEstaEliminada());
-            this.salaBO.editar(editar);
+            PeliculaDTO c = this.peliculaBO.buscarPeliculaPorId(pelicula.getId());
+            PeliculaDTO editar = new PeliculaDTO();
+            this.peliculaBO.actualizarPelicula(editar);
             JOptionPane.showMessageDialog(this, "Registro modificado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
         } catch (NegocioException ex)
         {
