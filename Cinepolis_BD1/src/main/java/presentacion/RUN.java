@@ -13,10 +13,12 @@ import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IPeliculaBO;
+import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
@@ -24,8 +26,10 @@ import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
 
@@ -50,17 +54,23 @@ public class RUN {
         ISucursalBO a = new SucursalBO(suda);
         CiudadDAO cd = new CiudadDAO(conexion);
         ICiudadBO cdd = new CiudadBO(cd);
+        
         ClienteDAO cl = new ClienteDAO(conexion);
         IClienteBO clienteBO = new ClienteBO(cl);
+        
         SucursalDTO dsd = new SucursalDTO(1, "Cinépolis Sendero Obregón", "Plaza Sendero, C. 300 85180, Franja Comercial 300, 85065, Cdad. Obregón, Son.", 2);
+        IReportesSucursalesDAO repdao = new ReportesSucursalesDAO(conexion);
+        IReportesSucursalesBO sdsds = new ReportesSucursalesBO(repdao); 
        
         
         //FrmPeliculas frmCliente = new FrmPeliculas(peliculaBO);
         //frmCliente.setVisible(true);
         //FrmAdminPeliculas peli = new FrmAdminPeliculas(a, cdd, dsd, peliculaBO);
         //peli.setVisible(true);
-        FrmAdminClientes admin = new FrmAdminClientes(cdd, clienteBO);
-        admin.setVisible(true);
+        //FrmAdminClientes admin = new FrmAdminClientes(cdd, clienteBO);
+        //admin.setVisible(true);
+        FrmReporteSucursales admi = new FrmReporteSucursales(a, cdd, dsd,sdsds);
+        admi.setVisible(true);
     }
 
 }
