@@ -31,7 +31,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
+import negocio.ISucursalBO;
 import negocio.NegocioException;
+import negocio.SalaBO;
+import persistencia.ConexionBD;
+import persistencia.IConexionBD;
+import persistencia.ISalaDAO;
+import persistencia.ISucursalDAO;
+import persistencia.SalaDAO;
+import persistencia.SucursalDAO;
 import utilerias.Herramientas;
 import static utilerias.Herramientas.getComboBoxItems;
 
@@ -40,8 +48,11 @@ import static utilerias.Herramientas.getComboBoxItems;
  * @author rramirez
  */
 public class FrmAgregarFuncion extends javax.swing.JFrame {
+
     private IFuncionBO funcionBO;
     private PeliculaDTO pelicula;
+    private SalaDTO sala;
+    SucursalDTO sucursal;
     private boolean modoEstreno;
     private Locale[] locales;
     private String ruta = "";
@@ -49,25 +60,34 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
     /**
      * Creates new form FrmAgregarCliente
      */
-    public FrmAgregarFuncion(IFuncionBO funcionBO,  PeliculaDTO pelicula) {
+    public FrmAgregarFuncion(IFuncionBO funcionBO, PeliculaDTO pelicula, SalaDTO sala, SucursalDTO sucursal) {
         initComponents();
         this.funcionBO = funcionBO;
         this.pelicula = pelicula;
+        this.sala = sala;
+        this.sucursal = sucursal;
         locales = Locale.getAvailableLocales();
         this.llenarComboDias();
         metodoMostrarDatos();
-        JSpinner jSpinPrecio = new JSpinner(new SpinnerNumberModel(10, 10, 1000, 10));
-        jSpinPrecio.setEditor(new JSpinner.NumberEditor(jSpinPrecio, "$000,000.00"));
+        configuracionFrame();
 
     }
 
     public void metodoMostrarDatos() {
         lblTitulo.setText(Herramientas.textoConSaltosLinea(pelicula.getTitulo(), 5));
-
+        lblSucursal.setText(sucursal.getNombre());
+        lblSala.setText(sala.getNombre());
         ImageIcon icon = new ImageIcon(pelicula.getCartel());
-        Image scaledImage = icon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+        Image scaledImage = icon.getImage().getScaledInstance(279, 382, Image.SCALE_SMOOTH);
         lblImagenCartel.setIcon(new ImageIcon(scaledImage));
 
+    }
+
+    public void configuracionFrame() {
+        this.setTitle("Agregar Funciones " + sucursal.getNombre());
+        this.setResizable(false);
+        this.setSize(1280, 780);
+        this.setLocationRelativeTo(null);
     }
 
     ;
@@ -100,6 +120,8 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         timePicker1 = new com.github.lgooddatepicker.components.TimePicker();
         rbtnEstreno = new javax.swing.JRadioButton();
+        lblSucursal = new javax.swing.JLabel();
+        lblSala = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -181,8 +203,18 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
         timePicker1.setBackground(new java.awt.Color(33, 36, 59));
 
         rbtnEstreno.setText("Modo Estreno");
+        rbtnEstreno.setBackground(new java.awt.Color(36, 44, 99));
+        rbtnEstreno.setContentAreaFilled(false);
         rbtnEstreno.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         rbtnEstreno.setForeground(new java.awt.Color(255, 255, 255));
+
+        lblSucursal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSucursal.setForeground(new java.awt.Color(255, 255, 255));
+        lblSucursal.setText("Sucursal");
+
+        lblSala.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSala.setForeground(new java.awt.Color(255, 255, 255));
+        lblSala.setText("Sala");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -190,58 +222,57 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(117, 117, 117)
-                .addComponent(LblPaterno2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(96, 96, 96))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(144, 144, 144)
-                .addComponent(lblImagenCartel, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(106, 106, 106)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(210, 210, 210)
+                        .addComponent(lblSala, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
+                        .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(186, 186, 186))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblImagenCartel, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LblPaterno2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(96, 96, 96))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(LblPaterno5)
+                                            .addGap(219, 219, 219))
+                                        .addComponent(cbDias, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(LblPaterno7)
+                                        .addComponent(jSpinPrecio)
+                                        .addComponent(LblMaterno)
+                                        .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(LblPaterno5)
-                                        .addGap(219, 219, 219))
-                                    .addComponent(cbDias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(1, 1, 1))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(LblPaterno7)
-                                .addComponent(jSpinPrecio)
-                                .addComponent(LblMaterno)
-                                .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(270, 270, 270))
+                                        .addGap(40, 40, 40)
+                                        .addComponent(rbtnEstreno)))
+                                .addGap(251, 251, 251))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(250, 250, 250)
-                        .addComponent(rbtnEstreno)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
-                .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(172, 172, 172))
+                        .addComponent(lblSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblTitulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(LblPaterno2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(lblTitulo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(LblPaterno5, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbDias, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,17 +290,23 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lblImagenCartel, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(LblPaterno2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblImagenCartel, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblSala, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,25 +317,56 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelarActionPerformed
-        dispose();
+        IConexionBD conexion = new ConexionBD();
+        ISalaDAO salaDAO = new SalaDAO(conexion);
+        ISalaBO salaBO = new SalaBO(salaDAO);
+
+        FrmAdminFuncion funcion = new FrmAdminFuncion(funcionBO, salaBO, sucursal, pelicula);
+        funcion.setVisible(true);
+        this.dispose();
+
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
     private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
+        // Validation
+        if (timePicker1.getText().isEmpty()
+                || jSpinPrecio.getValue() == null
+                || cbDias.getSelectedItem() == null) {
+
+            JOptionPane.showMessageDialog(this, "Por favor ingrese todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;  // Exit if validation fails
+        }
+
+        // Creating new FuncionDTO
         FuncionDTO funcion = new FuncionDTO();
 
+        // Setting the 'dia'
         funcion.setDia((String) cbDias.getSelectedItem());
+
+        // Set hora based on 'modoEstreno'
         if (modoEstreno) {
-            funcion.setHora(LocalTime.MIDNIGHT);
+            funcion.setHora(LocalTime.MIDNIGHT);  // Midnight if estreno mode
         } else {
-            funcion.setHora(timePicker1.getTime());
+            funcion.setHora(timePicker1.getTime());  // Get the selected time from timePicker
         }
+
+        // Setting 'precio' from jSpinPrecio
         BigDecimal precio = BigDecimal.valueOf(((Number) jSpinPrecio.getValue()).doubleValue());
         funcion.setPrecion(precio);
 
+        // Setting sala and pelicula IDs
+        funcion.setIdSala(sala.getId());
+        funcion.setIdPelicula(pelicula.getId());
+
+        // Success message
+        // Save the FuncionDTO using the business object
         try {
             funcionBO.guardar(funcion);
+            JOptionPane.showMessageDialog(this, "Funcion agregada con exito!");
+
         } catch (NegocioException ex) {
-            Logger.getLogger(FrmAgregarFuncion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al agregar la pelicula. Por favor, intente nuevamente y revise los horarios.", "Error", JOptionPane.ERROR_MESSAGE);
+
         }
 
 
@@ -340,6 +408,8 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblImagenCartel;
+    private javax.swing.JLabel lblSala;
+    private javax.swing.JLabel lblSucursal;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JRadioButton rbtnEstreno;
     private com.github.lgooddatepicker.components.TimePicker timePicker1;

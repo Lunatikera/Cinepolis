@@ -8,6 +8,8 @@ import dominio.CiudadEntidad;
 import dtos.CiudadDTO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import persistencia.ICiudadDAO;
 import persistencia.PersistenciaException;
 
@@ -35,7 +37,9 @@ public class CiudadBO implements ICiudadBO {
             return listaCiudadesDTO;
 
         } catch (PersistenciaException e) {
+            Logger.getLogger(CiudadBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error al obtener la lista de ciudades", e);
+
         }
     }
 

@@ -35,7 +35,7 @@ public class FuncionBO implements IFuncionBO{
         try {
             funcionDAO.guardar(funcion);
         } catch (PersistenciaException ex) {
-            Logger.getLogger(FuncionBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException("No se pudo agregar la funcion en la base de datos, verifica los horarios");
         }
     }
 
