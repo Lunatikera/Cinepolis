@@ -47,16 +47,16 @@ import utilerias.JButtonRenderer;
  */
 public class FrmReporteSucursales extends javax.swing.JFrame {
 
-   ;
+    ;
     private ISucursalBO sucursalBO;
     private ICiudadBO ciudadBO;
-    
+
     private List<CiudadDTO> listaCiudades;
     private List<SucursalDTO> listaSucursales;
-    
+
     private SucursalDTO sucursal;
     private boolean pelicuaEnSucursal = true;
-    
+
     private IReportesSucursalesBO reportes;
     private Set<Integer> lista;
     private List<Integer> listaL;
@@ -64,7 +64,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmReporteSucursales(ISucursalBO sucursalBO, ICiudadBO ciudadBO, SucursalDTO sucursal,IReportesSucursalesBO reportes) {
+    public FrmReporteSucursales(ISucursalBO sucursalBO, ICiudadBO ciudadBO, SucursalDTO sucursal, IReportesSucursalesBO reportes) {
         initComponents();
         this.sucursalBO = sucursalBO;
         this.ciudadBO = ciudadBO;
@@ -77,10 +77,8 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
         this.llenarComboBoxSucrsales();
-        
-    }
 
-    
+    }
 
     private void cargarConfiguracionInicialTablaPeliculas() {
         ActionListener onEditarClickListener = new ActionListener() {
@@ -90,7 +88,6 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 //Metodo para editar un cliente
 
-                
             }
         };
         int indiceColumnaEditar = 5;
@@ -107,7 +104,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Metodo para eliminar un cliente
-               
+
             }
         };
         int indiceColumnaEliminar = 6;
@@ -158,35 +155,28 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
 
     private void BorrarRegistrosTablaClientes() {
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblReporteSucursal.getModel();
-        if (modeloTabla.getRowCount() > 0)
-        {
-            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--)
-            {
+        if (modeloTabla.getRowCount() > 0) {
+            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--) {
                 modeloTabla.removeRow(row);
             }
         }
     }
-    
+
     private void cargarDatosEnTabla(List<Integer> sucursalIds, String fechaInicio, String fechaFin) {
-    try
-        {
-            System.out.println(sucursalIds+"    "+fechaInicio+"    "+fechaFin);
-            
+        try {
+            System.out.println(sucursalIds + "    " + fechaInicio + "    " + fechaFin);
+
             // Obtén solo los clientes necesarios para la página actual
             List<DatosReporteDTO> clientesLista = this.reportes.obtenerGananciasPorSucursales(sucursalIds, fechaInicio, fechaFin);
-            
+
             // Agrega los registros paginados a la tabla
             this.llenarTablaPeliculas(clientesLista);
 
-        } catch (NegocioException ex)
-        {
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
         }
-    
-    }
-   
 
-    
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -199,6 +189,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        cbSucursalQuitar = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReporteSucursal = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
@@ -208,24 +199,23 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         imagenPerfiles1 = new utilerias.ImagenPerfiles();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        menuButton3 = new utilerias.MenuButton();
+        btnMenuCliente = new utilerias.MenuButton();
         jLabel3 = new javax.swing.JLabel();
-        menuButton2 = new utilerias.MenuButton();
+        btnMenuPeliculas = new utilerias.MenuButton();
         jLabel4 = new javax.swing.JLabel();
-        menuButton1 = new utilerias.MenuButton();
+        btnMenuSalas = new utilerias.MenuButton();
         jLabel5 = new javax.swing.JLabel();
-        menuButton4 = new utilerias.MenuButton();
+        btnMenuSucursales = new utilerias.MenuButton();
         jLabel6 = new javax.swing.JLabel();
-        menuButton5 = new utilerias.MenuButton();
+        btnMenuFunciones = new utilerias.MenuButton();
         jLabel8 = new javax.swing.JLabel();
-        menuButton6 = new utilerias.MenuButton();
+        btnMenuReportePelicula = new utilerias.MenuButton();
         jLabel9 = new javax.swing.JLabel();
         fechaFinDP = new com.github.lgooddatepicker.components.DatePicker();
         fechaInicioDP = new com.github.lgooddatepicker.components.DatePicker();
         cbSucursalAgregar = new javax.swing.JComboBox<>();
         btnQuitarSucursal = new javax.swing.JButton();
         btnAnadirSucursal3 = new javax.swing.JButton();
-        cbSucursalQuitar = new javax.swing.JComboBox<>();
         btnGenerarReporte = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -233,6 +223,15 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setBackground(new java.awt.Color(36, 44, 99));
+
+        cbSucursalQuitar.setBackground(new java.awt.Color(33, 36, 59));
+        cbSucursalQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbSucursalQuitar.setForeground(new java.awt.Color(255, 255, 255));
+        cbSucursalQuitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSucursalQuitarActionPerformed(evt);
+            }
+        });
 
         tblReporteSucursal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -244,14 +243,22 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             new String [] {
                 "Ciudad", "Sucursal", "Funciones", "Fecha", "Ganancia"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblReporteSucursal);
 
         jLabel10.setText("Reporte de ganacias por sucursal");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
 
-        btnImprimir.setText("Imprimir ");
+        btnImprimir.setText("Imprimir");
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirActionPerformed(evt);
@@ -272,81 +279,61 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel2);
 
-        menuButton3.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton3.setText("Clientes");
-        menuButton3.setBorderPainted(false);
-        menuButton3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        menuButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnMenuCliente.setText("Clientes");
+        btnMenuCliente.setBorderPainted(false);
+        btnMenuCliente.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuCliente.setForeground(new java.awt.Color(255, 255, 255));
+        btnMenuCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton3ActionPerformed(evt);
+                btnMenuClienteActionPerformed(evt);
             }
         });
-        jPanel4.add(menuButton3);
+        jPanel4.add(btnMenuCliente);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel3);
 
-        menuButton2.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton2.setText("Peliculas");
-        menuButton2.setBorderPainted(false);
-        menuButton2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jPanel4.add(menuButton2);
+        btnMenuPeliculas.setText("Peliculas");
+        btnMenuPeliculas.setBorderPainted(false);
+        btnMenuPeliculas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuPeliculas.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel4.add(btnMenuPeliculas);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel4);
 
-        menuButton1.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton1.setText("Salas");
-        menuButton1.setBorderPainted(false);
-        menuButton1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        menuButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton1ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(menuButton1);
+        btnMenuSalas.setText("Salas");
+        btnMenuSalas.setBorderPainted(false);
+        btnMenuSalas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuSalas.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel4.add(btnMenuSalas);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel5);
 
-        menuButton4.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton4.setText("Sucursales");
-        menuButton4.setBorderPainted(false);
-        menuButton4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        menuButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton4ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(menuButton4);
+        btnMenuSucursales.setText("Sucursales");
+        btnMenuSucursales.setBorderPainted(false);
+        btnMenuSucursales.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuSucursales.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel4.add(btnMenuSucursales);
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel6);
 
-        menuButton5.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton5.setText("Funciones");
-        menuButton5.setBorderPainted(false);
-        menuButton5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        menuButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton5ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(menuButton5);
+        btnMenuFunciones.setText("Funciones");
+        btnMenuFunciones.setBorderPainted(false);
+        btnMenuFunciones.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuFunciones.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel4.add(btnMenuFunciones);
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel8);
 
-        menuButton6.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton6.setText("Reportes");
-        menuButton6.setBorderPainted(false);
-        menuButton6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        menuButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton6ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(menuButton6);
+        btnMenuReportePelicula.setText("Reporte Pelicula");
+        btnMenuReportePelicula.setBorderPainted(false);
+        btnMenuReportePelicula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReportePelicula.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel4.add(btnMenuReportePelicula);
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel9);
@@ -396,15 +383,6 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             }
         });
 
-        cbSucursalQuitar.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursalQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursalQuitar.setForeground(new java.awt.Color(255, 255, 255));
-        cbSucursalQuitar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSucursalQuitarActionPerformed(evt);
-            }
-        });
-
         btnGenerarReporte.setText("Generar Reporte");
         btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -421,38 +399,41 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(jLabel10))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbSucursalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(58, 58, 58)
-                                .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(247, 247, 247)
+                                .addComponent(jLabel10))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(297, 297, 297)
-                                .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(339, 339, 339)
-                        .addComponent(btnQuitarSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(cbSucursalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(69, 69, 69)
+                                        .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addGap(297, 297, 297)
+                                        .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(121, 121, 121)
-                                .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(120, Short.MAX_VALUE))
+                                .addGap(339, 339, 339)
+                                .addComponent(btnQuitarSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(87, 87, 87)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(106, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59)
+                        .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(300, 300, 300))))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(286, 286, 286)
                     .addComponent(btnAnadirSucursal3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(768, Short.MAX_VALUE)))
+                    .addContainerGap(754, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -463,8 +444,8 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
                         .addComponent(jLabel12)
                         .addGap(23, 23, 23)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbSucursalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbSucursalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -475,11 +456,11 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36))
+                .addGap(26, 26, 26))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -518,74 +499,70 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton5ActionPerformed
 
-    private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-        
-    }//GEN-LAST:event_btnIrActionPerformed
-
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         String path = "";
-JFileChooser j = new JFileChooser();
-j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-int x = j.showSaveDialog(this);
-if (x == JFileChooser.APPROVE_OPTION) {
-    path = j.getSelectedFile().getPath();
-}
+        JFileChooser j = new JFileChooser();
+        j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int x = j.showSaveDialog(this);
+        if (x == JFileChooser.APPROVE_OPTION) {
+            path = j.getSelectedFile().getPath();
+        }
 
-if (path.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "No se seleccionó ninguna carpeta.", "Error", JOptionPane.ERROR_MESSAGE);
-    return;
-}
+        if (path.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se seleccionó ninguna carpeta.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-Document doc = new Document();
-try {
-    PdfWriter.getInstance(doc, new FileOutputStream(String.format("%s/ReporteSucursales.pdf", path)));
-    doc.open();
+        Document doc = new Document();
+        try {
+            PdfWriter.getInstance(doc, new FileOutputStream(String.format("%s/ReporteSucursales.pdf", path)));
+            doc.open();
 
-    // Descripción de los filtros
-    doc.add(new Paragraph("Reporte de Ganancias por Sucursales", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
-    doc.add(new Paragraph("Filtros Aplicados:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
-    doc.add(new Paragraph("Fechas: " + fechaInicioDP.getText() + " a " + fechaFinDP.getText()));
-    doc.add(new Paragraph("Sucursales: " + obtenerValoresSeparadosPorComa(cbSucursalQuitar))); // Asegúrate de convertir la lista a cadena
-    doc.add(new Paragraph("\n")); // Espacio en blanco
+            // Descripción de los filtros
+            doc.add(new Paragraph("Reporte de Ganancias por Sucursales", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
+            doc.add(new Paragraph("Filtros Aplicados:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+            doc.add(new Paragraph("Fechas: " + fechaInicioDP.getText() + " a " + fechaFinDP.getText()));
+            doc.add(new Paragraph("Sucursales: " + obtenerValoresSeparadosPorComa(cbSucursalQuitar))); // Asegúrate de convertir la lista a cadena
+            doc.add(new Paragraph("\n")); // Espacio en blanco
 
-    // Tabla
-    PdfPTable tbl = new PdfPTable(5);
-    tbl.addCell("Ciudad");
-    tbl.addCell("Sucursales");
-    tbl.addCell("Funciones");
-    tbl.addCell("Fecha");
-    tbl.addCell("Ganancia");
-    BigDecimal suma = BigDecimal.ZERO;
-    for (int i = 0; i < tblReporteSucursal.getRowCount(); i++) {
-        String ciudad = tblReporteSucursal.getValueAt(i, 0).toString();
-        String sucursales = tblReporteSucursal.getValueAt(i, 1).toString();
-        String funciones = tblReporteSucursal.getValueAt(i, 2).toString();
-        String fecha = tblReporteSucursal.getValueAt(i, 3).toString();
-        String ganancia = tblReporteSucursal.getValueAt(i, 4).toString();
-        suma = suma.add(convertToBigDecimal(tblReporteSucursal.getValueAt(i, 4)));
-        tbl.addCell(ciudad);
-        tbl.addCell(sucursales);
-        tbl.addCell(funciones);
-        tbl.addCell(fecha);
-        tbl.addCell(ganancia);
-    }
+            // Tabla
+            PdfPTable tbl = new PdfPTable(5);
+            tbl.addCell("Ciudad");
+            tbl.addCell("Sucursales");
+            tbl.addCell("Funciones");
+            tbl.addCell("Fecha");
+            tbl.addCell("Ganancia");
+            BigDecimal suma = BigDecimal.ZERO;
+            for (int i = 0; i < tblReporteSucursal.getRowCount(); i++) {
+                String ciudad = tblReporteSucursal.getValueAt(i, 0).toString();
+                String sucursales = tblReporteSucursal.getValueAt(i, 1).toString();
+                String funciones = tblReporteSucursal.getValueAt(i, 2).toString();
+                String fecha = tblReporteSucursal.getValueAt(i, 3).toString();
+                String ganancia = tblReporteSucursal.getValueAt(i, 4).toString();
+                suma = suma.add(convertToBigDecimal(tblReporteSucursal.getValueAt(i, 4)));
+                tbl.addCell(ciudad);
+                tbl.addCell(sucursales);
+                tbl.addCell(funciones);
+                tbl.addCell(fecha);
+                tbl.addCell(ganancia);
+            }
 
-    doc.add(tbl);
-    doc.add(new Paragraph("Ganancias Totales: "+suma, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
-    JOptionPane.showMessageDialog(this, "Se imprimió con éxito el documento!");
+            doc.add(tbl);
+            doc.add(new Paragraph("Ganancias Totales: " + suma, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
+            JOptionPane.showMessageDialog(this, "Se imprimió con éxito el documento!");
 
-} catch (FileNotFoundException ex) {
-    JOptionPane.showMessageDialog(this, "Error al crear el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-} catch (DocumentException ex) {
-    Logger.getLogger(FrmReporteSucursales.class.getName()).log(Level.SEVERE, null, ex);
-} finally {
-    doc.close(); // Asegúrate de cerrar el documento en el bloque finally
-}
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Error al crear el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (DocumentException ex) {
+            Logger.getLogger(FrmReporteSucursales.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            doc.close(); // Asegúrate de cerrar el documento en el bloque finally
+        }
 
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void menuButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton6ActionPerformed
-        // TODO add your handling code here:
+        // TODO add youaar handling code here:
     }//GEN-LAST:event_menuButton6ActionPerformed
 
     private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
@@ -597,7 +574,7 @@ try {
     }//GEN-LAST:event_cbSucursalAgregarActionPerformed
 
     private void btnQuitarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarSucursalActionPerformed
-         SucursalDTO sucursal = (SucursalDTO) cbSucursalQuitar.getSelectedItem();
+        SucursalDTO sucursal = (SucursalDTO) cbSucursalQuitar.getSelectedItem();
         cbSucursalQuitar.removeItem(sucursal);
         cbSucursalAgregar.addItem(sucursal);
     }//GEN-LAST:event_btnQuitarSucursalActionPerformed
@@ -612,8 +589,11 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbSucursalQuitarActionPerformed
 
-    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
-
+    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimir1ActionPerformed
+        if (fechaInicioDP.getDate() == null || fechaFinDP.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "No se selecciono ninguna fecha.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         lista.removeAll(lista);
         for (int i = 0; i < cbSucursalQuitar.getItemCount(); i++) {
             SucursalDTO suc = cbSucursalQuitar.getItemAt(i);
@@ -624,9 +604,13 @@ try {
         String fInicio = convertLocalDateToString(fechaInicio);
         String fFin = convertLocalDateToString(fechaFin);
         listaL = new ArrayList(lista);
-        cargarDatosEnTabla(listaL,fInicio,fFin);
-    }//GEN-LAST:event_btnGenerarReporteActionPerformed
-    
+        cargarDatosEnTabla(listaL, fInicio, fFin);
+    }//GEN-LAST:event_btnImprimir1ActionPerformed
+
+    private void btnMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMenuClienteActionPerformed
+
     private String obtenerValoresSeparadosPorComa(JComboBox<SucursalDTO> comboBox) {
         StringBuilder valores = new StringBuilder();
 
@@ -643,16 +627,17 @@ try {
 
         return valores.toString();
     }
+
     private String convertLocalDateToString(LocalDate date) {
         if (date == null) {
             throw new IllegalArgumentException("The date cannot be null.");
         }
-        
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return date.format(formatter);
     }
-    
-     private void llenarComboBoxSucrsales() {
+
+    private void llenarComboBoxSucrsales() {
         try {
             listaSucursales = sucursalBO.obtenerSucursales();
 
@@ -671,11 +656,11 @@ try {
         });
     }
 
-     public static BigDecimal convertToBigDecimal(Object obj) {
+    public static BigDecimal convertToBigDecimal(Object obj) {
         if (obj == null) {
             throw new IllegalArgumentException("El objeto no puede ser nulo.");
         }
-        
+
         if (obj instanceof BigDecimal) {
             return (BigDecimal) obj;  // Ya es un BigDecimal
         } else if (obj instanceof String) {
@@ -686,7 +671,7 @@ try {
             throw new IllegalArgumentException("El objeto no se puede convertir a BigDecimal.");
         }
     }
-   /* private void actualizarComboBoxCiudad() {
+    /* private void actualizarComboBoxCiudad() {
         try {
             SucursalDTO sucursal = (SucursalDTO) cbSucursal.getSelectedItem();
             listaSucursales = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
@@ -708,6 +693,12 @@ try {
     private javax.swing.JButton btnAnadirSucursal3;
     private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnImprimir;
+    private utilerias.MenuButton btnMenuCliente;
+    private utilerias.MenuButton btnMenuFunciones;
+    private utilerias.MenuButton btnMenuPeliculas;
+    private utilerias.MenuButton btnMenuReportePelicula;
+    private utilerias.MenuButton btnMenuSalas;
+    private utilerias.MenuButton btnMenuSucursales;
     private javax.swing.JButton btnQuitarSucursal;
     private javax.swing.JComboBox<SucursalDTO> cbSucursalAgregar;
     private javax.swing.JComboBox<SucursalDTO> cbSucursalQuitar;
@@ -728,12 +719,6 @@ try {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private utilerias.MenuButton menuButton1;
-    private utilerias.MenuButton menuButton2;
-    private utilerias.MenuButton menuButton3;
-    private utilerias.MenuButton menuButton4;
-    private utilerias.MenuButton menuButton5;
-    private utilerias.MenuButton menuButton6;
     private javax.swing.JTable tblReporteSucursal;
     // End of variables declaration//GEN-END:variables
 }
