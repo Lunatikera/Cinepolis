@@ -528,7 +528,7 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        FrmAgregarFuncion funcion=new FrmAgregarFuncion(funcionBO, peliculaBO, pelicula)
     }//GEN-LAST:event_btnAgregarActionPerformed
     private String obtenerDiaActual() {
         LocalDate hoy = LocalDate.now();

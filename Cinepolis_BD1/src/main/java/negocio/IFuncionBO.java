@@ -16,7 +16,8 @@ import java.util.List;
  * @author carli
  */
 public interface IFuncionBO {
-    public FuncionDTO guardar(FuncionEntidad entidad) throws NegocioException;
+
+    public void guardar(FuncionDTO funcion) throws NegocioException;
 
     public FuncionDTO leerPorID(int id) throws NegocioException;
 
@@ -25,5 +26,5 @@ public interface IFuncionBO {
     public List<FuncionDTO> listaFuncionporDiaSucursalPelicula(ConsultaFuncionDTO consulta, int limit, int offset) throws NegocioException;
 
     public List<FuncionTablaDTO> listaFuncionporDiaSala(FiltroFuncionesDTO filtro) throws NegocioException;
-   
+
 }

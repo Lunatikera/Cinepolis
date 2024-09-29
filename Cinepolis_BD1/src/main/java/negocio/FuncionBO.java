@@ -9,7 +9,11 @@ import dtos.ConsultaFuncionDTO;
 import dtos.FiltroFuncionesDTO;
 import dtos.FuncionDTO;
 import dtos.FuncionTablaDTO;
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import persistencia.IFuncionDAO;
 import persistencia.PersistenciaException;
 
@@ -26,8 +30,13 @@ public class FuncionBO implements IFuncionBO{
     }
 
     @Override
-    public FuncionDTO guardar(FuncionEntidad entidad) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void guardar(FuncionDTO funcionDTO) throws NegocioException {
+        FuncionEntidad funcion=new FuncionEntidad(funcionDTO.getPrecion(), funcionDTO.getDia(), funcionDTO.getHora(), funcionDTO.getIdSala(), funcionDTO.getIdPelicula());
+        try {
+            funcionDAO.guardar(funcion);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FuncionBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
