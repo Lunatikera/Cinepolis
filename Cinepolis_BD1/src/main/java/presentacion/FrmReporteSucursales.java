@@ -29,14 +29,13 @@ import utilerias.JButtonRenderer;
  */
 public class FrmReporteSucursales extends javax.swing.JFrame {
 
-    private int pagina = 1;
-    private final int LIMITE = 20;
+   ;
     private ISucursalBO sucursalBO;
     private ICiudadBO ciudadBO;
-    private IPeliculaBO peliculaBO;
+    
     private List<CiudadDTO> listaCiudades;
     private List<SucursalDTO> listaSucursales;
-    private List<PeliculaDTO> peliculasPorAnadir;
+    
     private SucursalDTO sucursal;
     private boolean pelicuaEnSucursal = true;
 
@@ -55,25 +54,13 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
         this.llenarComboBoxSucrsales();
-        this.llenarComboBoxPeliculasPorAnadir();
+        
         
         this.cargarConfiguracionInicialTablaPeliculas();
-        this.cargarPeliculasTabla();
-      
+        
     }
 
-    public void cargarPeliculasTabla() {
-        try {
-            List<PeliculaDTO> peliculaLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, pelicuaEnSucursal);
-            this.llenarTablaPeliculas(peliculaLista);
-            if (peliculaLista == null && pagina == 1) {
-                JOptionPane.showMessageDialog(null, "No hay ninguna pelicula registrada", "Error", JOptionPane.ERROR_MESSAGE);
-
-            }
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    
 
     private void cargarConfiguracionInicialTablaPeliculas() {
         ActionListener onEditarClickListener = new ActionListener() {
@@ -83,7 +70,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 //Metodo para editar un cliente
 
-                removerPeliculaSucursal();
+                
             }
         };
         int indiceColumnaEditar = 5;
@@ -100,7 +87,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Metodo para eliminar un cliente
-                verPeliculaFuncion();
+               
             }
         };
         int indiceColumnaEliminar = 6;
@@ -149,37 +136,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         }
     }
 
-    private void removerPeliculaSucursal() {
-        int id = this.getIdSeleccionadoTablaClientes();
-        if (id == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            peliculaBO.eliminarPeliculaDeSucursal(id, sucursal.getId());
-            this.cargarPeliculasTabla();
-            this.llenarComboBoxPeliculasPorAnadir();
-            
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmReporteSucursales.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private void verPeliculaFuncion() {
-        int id = this.getIdSeleccionadoTablaClientes();
-        if (id == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmReporteSucursales.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    
+   
 
     
 
@@ -194,7 +151,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        cbSucursal = new javax.swing.JComboBox<>();
+        cbSucursalQuitar = new javax.swing.JComboBox<>();
         btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReporteSucursal = new javax.swing.JTable();
@@ -219,7 +176,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         fechaFinDP = new com.github.lgooddatepicker.components.DatePicker();
         fechaInicioDP = new com.github.lgooddatepicker.components.DatePicker();
-        cbSucursal1 = new javax.swing.JComboBox<>();
+        cbSucursalAgregar = new javax.swing.JComboBox<>();
         btnQuitarSucursal = new javax.swing.JButton();
         btnAnadirSucursal3 = new javax.swing.JButton();
 
@@ -229,12 +186,12 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(36, 44, 99));
 
-        cbSucursal.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursal.setForeground(new java.awt.Color(255, 255, 255));
-        cbSucursal.addActionListener(new java.awt.event.ActionListener() {
+        cbSucursalQuitar.setBackground(new java.awt.Color(33, 36, 59));
+        cbSucursalQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbSucursalQuitar.setForeground(new java.awt.Color(255, 255, 255));
+        cbSucursalQuitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSucursalActionPerformed(evt);
+                cbSucursalQuitarActionPerformed(evt);
             }
         });
 
@@ -385,12 +342,12 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
                 .addContainerGap(180, Short.MAX_VALUE))
         );
 
-        cbSucursal1.setBackground(new java.awt.Color(33, 36, 59));
-        cbSucursal1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbSucursal1.setForeground(new java.awt.Color(255, 255, 255));
-        cbSucursal1.addActionListener(new java.awt.event.ActionListener() {
+        cbSucursalAgregar.setBackground(new java.awt.Color(33, 36, 59));
+        cbSucursalAgregar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbSucursalAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        cbSucursalAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSucursal1ActionPerformed(evt);
+                cbSucursalAgregarActionPerformed(evt);
             }
         });
 
@@ -429,9 +386,9 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbSucursal1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbSucursalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(cbSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(69, 69, 69)
                                 .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -461,8 +418,8 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(23, 23, 23)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbSucursal1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbSucursalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(btnIr))))
@@ -530,17 +487,17 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton6ActionPerformed
 
-    private void cbSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursalActionPerformed
+    private void cbSucursalQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursalQuitarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbSucursalActionPerformed
+    }//GEN-LAST:event_cbSucursalQuitarActionPerformed
 
     private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton3ActionPerformed
 
-    private void cbSucursal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursal1ActionPerformed
+    private void cbSucursalAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursalAgregarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbSucursal1ActionPerformed
+    }//GEN-LAST:event_cbSucursalAgregarActionPerformed
 
     private void btnQuitarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarSucursalActionPerformed
         // TODO add your handling code here:
@@ -549,17 +506,7 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
     private void btnAnadirSucursal3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirSucursal3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAnadirSucursal3ActionPerformed
-    private void llenarComboBoxPeliculasPorAnadir() {
-        try {
-            cbSucursal.removeAllItems();
-            peliculasPorAnadir = peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, !pelicuaEnSucursal);
-            for (PeliculaDTO pelicula : peliculasPorAnadir) {
-                cbSucursal.addItem(pelicula);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
 
     
     
@@ -568,13 +515,13 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
             listaSucursales = sucursalBO.obtenerSucursales();
 
             for (SucursalDTO sucursal : listaSucursales) {
-                cbSucursal.addItemListener((ItemListener) sucursal);
+                cbSucursalQuitar.addItemListener((ItemListener) sucursal);
             }
         } catch (NegocioException ex) {
             Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        cbSucursal.addActionListener(new ActionListener() {
+        cbSucursalQuitar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //actualizarComboBoxCiudad();
@@ -605,8 +552,8 @@ public class FrmReporteSucursales extends javax.swing.JFrame {
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnIr;
     private javax.swing.JButton btnQuitarSucursal;
-    private javax.swing.JComboBox<PeliculaDTO> cbSucursal;
-    private javax.swing.JComboBox<PeliculaDTO> cbSucursal1;
+    private javax.swing.JComboBox<PeliculaDTO> cbSucursalAgregar;
+    private javax.swing.JComboBox<PeliculaDTO> cbSucursalQuitar;
     private com.github.lgooddatepicker.components.DatePicker fechaFinDP;
     private com.github.lgooddatepicker.components.DatePicker fechaInicioDP;
     private utilerias.ImagenPerfiles imagenPerfiles1;
