@@ -23,21 +23,28 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import negocio.CiudadBO;
+import negocio.ClienteBO;
 import negocio.ICiudadBO;
+import negocio.IClienteBO;
 import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
+import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 import persistencia.ICiudadDAO;
+import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
 import utilerias.Dias;
 import static utilerias.Dias.obtenerDiaSiguiente;
@@ -518,15 +525,44 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSalasActionPerformed
-        // TODO add your handling code here:
+IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        ISucursalBO  sucursalBO = new SucursalBO(sucursalDAO);
+        ISalaDAO salaDAO = new SalaDAO(conexionBD);
+        ISalaBO salaBO = new SalaBO(salaDAO);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+        
+        
+        
+        FrmAdminSalas frmAdminSalas = new FrmAdminSalas(sucursalBO, ciudadBO, salaBO);
+        frmAdminSalas.setVisible(true);
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuSalasActionPerformed
 
     private void btnMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuClienteActionPerformed
-        // TODO add your handling code here:
+IConexionBD conexionBD = new ConexionBD();
+        IClienteDAO clienteDAO = new ClienteDAO(conexionBD);
+        IClienteBO clienteBO = new ClienteBO(clienteDAO);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+        FrmAdminClientes frmAdminClientes = new FrmAdminClientes(ciudadBO, clienteBO);
+        frmAdminClientes.setVisible(true);
+         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuClienteActionPerformed
 
     private void btnMenuSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSucursalesActionPerformed
-        // TODO add your handling code here:
+IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+        
+        FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
+        frmAdminSucursal.setVisible(true);
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuSucursalesActionPerformed
 
     private void btnMenuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuFuncionesActionPerformed
@@ -560,7 +596,7 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        FrmAgregarFuncion funcion=new FrmAgregarFuncion(funcionBO, peliculaBO, pelicula)
+        
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnmenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmenuPeliculaActionPerformed

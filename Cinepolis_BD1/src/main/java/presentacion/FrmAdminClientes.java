@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import negocio.CiudadBO;
 import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
@@ -22,7 +23,19 @@ import negocio.IPeliculaBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
+import negocio.PeliculaBO;
 import negocio.SalaBO;
+import negocio.SucursalBO;
+import persistencia.CiudadDAO;
+import persistencia.ConexionBD;
+import persistencia.ICiudadDAO;
+import persistencia.IConexionBD;
+import persistencia.IPeliculaDAO;
+import persistencia.ISalaDAO;
+import persistencia.ISucursalDAO;
+import persistencia.PeliculaDAO;
+import persistencia.SalaDAO;
+import persistencia.SucursalDAO;
 import utilerias.JButtonCellEditor;
 import utilerias.JButtonRenderer;
 
@@ -263,18 +276,16 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         menuButton3 = new utilerias.MenuButton();
         jLabel3 = new javax.swing.JLabel();
-        btnMenuPeliculas = new utilerias.MenuButton();
+        menuButton2 = new utilerias.MenuButton();
         jLabel4 = new javax.swing.JLabel();
-        btnMenuSalas = new utilerias.MenuButton();
+        menuButton1 = new utilerias.MenuButton();
         jLabel5 = new javax.swing.JLabel();
-        btnMenuSucursales = new utilerias.MenuButton();
+        menuButton4 = new utilerias.MenuButton();
         jLabel6 = new javax.swing.JLabel();
-        btnMenuFuncion = new utilerias.MenuButton();
+        menuButton5 = new utilerias.MenuButton();
         jLabel8 = new javax.swing.JLabel();
-        btnMenuReporteSucursal = new utilerias.MenuButton();
+        menuButton6 = new utilerias.MenuButton();
         jLabel9 = new javax.swing.JLabel();
-        btnMenuReportePelicula = new utilerias.MenuButton();
-        jLabel12 = new javax.swing.JLabel();
         BtnAgregarCliente = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
 
@@ -343,84 +354,70 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel3);
 
-        btnMenuPeliculas.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenuPeliculas.setText("Peliculas");
-        btnMenuPeliculas.setBorderPainted(false);
-        btnMenuPeliculas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jPanel4.add(btnMenuPeliculas);
+        menuButton2.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton2.setText("Peliculas");
+        menuButton2.setBorderPainted(false);
+        menuButton2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jPanel4.add(menuButton2);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel4);
 
-        btnMenuSalas.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenuSalas.setText("Salas");
-        btnMenuSalas.setBorderPainted(false);
-        btnMenuSalas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnMenuSalas.addActionListener(new java.awt.event.ActionListener() {
+        menuButton1.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton1.setText("Salas");
+        menuButton1.setBorderPainted(false);
+        menuButton1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        menuButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuSalasActionPerformed(evt);
+                menuButton1ActionPerformed(evt);
             }
         });
-        jPanel4.add(btnMenuSalas);
+        jPanel4.add(menuButton1);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel5);
 
-        btnMenuSucursales.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenuSucursales.setText("Sucursales");
-        btnMenuSucursales.setBorderPainted(false);
-        btnMenuSucursales.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnMenuSucursales.addActionListener(new java.awt.event.ActionListener() {
+        menuButton4.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton4.setText("Sucursales");
+        menuButton4.setBorderPainted(false);
+        menuButton4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        menuButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuSucursalesActionPerformed(evt);
+                menuButton4ActionPerformed(evt);
             }
         });
-        jPanel4.add(btnMenuSucursales);
+        jPanel4.add(menuButton4);
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel6);
 
-        btnMenuFuncion.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenuFuncion.setText("Funciones");
-        btnMenuFuncion.setBorderPainted(false);
-        btnMenuFuncion.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnMenuFuncion.addActionListener(new java.awt.event.ActionListener() {
+        menuButton5.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton5.setText("Funciones");
+        menuButton5.setBorderPainted(false);
+        menuButton5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        menuButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuFuncionActionPerformed(evt);
+                menuButton5ActionPerformed(evt);
             }
         });
-        jPanel4.add(btnMenuFuncion);
+        jPanel4.add(menuButton5);
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel8);
 
-        btnMenuReporteSucursal.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenuReporteSucursal.setText("Reporte Sucursal");
-        btnMenuReporteSucursal.setBorderPainted(false);
-        btnMenuReporteSucursal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnMenuReporteSucursal.addActionListener(new java.awt.event.ActionListener() {
+        menuButton6.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton6.setText("Reportes");
+        menuButton6.setBorderPainted(false);
+        menuButton6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        menuButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuReporteSucursalActionPerformed(evt);
+                menuButton6ActionPerformed(evt);
             }
         });
-        jPanel4.add(btnMenuReporteSucursal);
+        jPanel4.add(menuButton6);
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel9);
-
-        btnMenuReportePelicula.setForeground(new java.awt.Color(255, 255, 255));
-        btnMenuReportePelicula.setText("Reporte Pelicula");
-        btnMenuReportePelicula.setBorderPainted(false);
-        btnMenuReportePelicula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnMenuReportePelicula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuReportePeliculaActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnMenuReportePelicula);
-
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
-        jPanel4.add(jLabel12);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -522,25 +519,47 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMenuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSalasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuSalasActionPerformed
+    private void menuButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton1ActionPerformed
+        IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        ISucursalBO  sucursalBO = new SucursalBO(sucursalDAO);
+        ISalaDAO salaDAO = new SalaDAO(conexionBD);
+        ISalaBO salaBO = new SalaBO(salaDAO);
+        
+        
+        
+        
+        FrmAdminSalas frmAdminSalas = new FrmAdminSalas(sucursalBO, ciudadBO, salaBO);
+        frmAdminSalas.setVisible(true);
+        this.dispose();
+        
+            // TODO add your handling code here:
+    }//GEN-LAST:event_menuButton1ActionPerformed
 
     private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuButton3ActionPerformed
 
-    private void btnMenuSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSucursalesActionPerformed
+    private void menuButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton4ActionPerformed
+        IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        
+        FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
+        frmAdminSucursal.setVisible(true);
+        this.dispose();
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuSucursalesActionPerformed
+    }//GEN-LAST:event_menuButton4ActionPerformed
 
-    private void btnMenuFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuFuncionActionPerformed
+    private void menuButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton5ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuFuncionActionPerformed
+    }//GEN-LAST:event_menuButton5ActionPerformed
 
-    private void btnMenuReporteSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursalActionPerformed
+    private void menuButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuReporteSucursalActionPerformed
+    }//GEN-LAST:event_menuButton6ActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         pagina--;
@@ -559,25 +578,14 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         estadoPagina();
         
     }//GEN-LAST:event_BtnAgregarClienteActionPerformed
-
-    private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarCliente;
     private javax.swing.JButton btnAtras;
-    private utilerias.MenuButton btnMenuFuncion;
-    private utilerias.MenuButton btnMenuPeliculas;
-    private utilerias.MenuButton btnMenuReportePelicula;
-    private utilerias.MenuButton btnMenuReporteSucursal;
-    private utilerias.MenuButton btnMenuSalas;
-    private utilerias.MenuButton btnMenuSucursales;
     private javax.swing.JButton btnSiguiente;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -591,7 +599,12 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPagina;
+    private utilerias.MenuButton menuButton1;
+    private utilerias.MenuButton menuButton2;
     private utilerias.MenuButton menuButton3;
+    private utilerias.MenuButton menuButton4;
+    private utilerias.MenuButton menuButton5;
+    private utilerias.MenuButton menuButton6;
     private javax.swing.JTable tblClientes;
     // End of variables declaration//GEN-END:variables
 }
