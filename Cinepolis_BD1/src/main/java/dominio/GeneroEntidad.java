@@ -35,6 +35,11 @@ public class GeneroEntidad {
     public void setNombreGenero(String nombreGenero) {
         this.nombreGenero = nombreGenero;
     }
+
+    @Override
+    public String toString() {
+        return "GeneroEntidad{" + "idGenero=" + idGenero + ", nombreGenero=" + nombreGenero + '}';
+    }
     
     
 }
