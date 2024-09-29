@@ -6,6 +6,7 @@ package dominio;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 
 /**
  *
@@ -15,9 +16,9 @@ public class FuncionEntidad {
    private int id;
     private BigDecimal precio;
     private String dia;
-    private Timestamp hora;
-    private Timestamp horaFinal;
-    private Timestamp horaFinalTotal;
+    private LocalTime hora;
+    private LocalTime horaFinal;
+    private LocalTime horaFinalTotal;
     private int asientosDisponibles;
     private int duracionTotalmin;
     private int idSala;
@@ -27,7 +28,7 @@ public class FuncionEntidad {
     public FuncionEntidad() {
     }
 
-    public FuncionEntidad(int id, BigDecimal precio, String dia, Timestamp hora, Timestamp horaFinal, int asientosDisponibles, int duracionTotalmin, int idSala, int idPelicula) {
+    public FuncionEntidad(int id, BigDecimal precio, String dia, LocalTime hora, LocalTime horaFinal, int asientosDisponibles, int duracionTotalmin, int idSala, int idPelicula) {
         this.id = id;
         this.precio = precio;
         this.dia = dia;
@@ -38,6 +39,16 @@ public class FuncionEntidad {
         this.idSala = idSala;
         this.idPelicula = idPelicula;
     }
+
+    public FuncionEntidad(BigDecimal precio, String dia, LocalTime hora, int idSala, int idPelicula) {
+        this.precio = precio;
+        this.dia = dia;
+        this.hora = hora;
+        this.idSala = idSala;
+        this.idPelicula = idPelicula;
+    }
+
+ 
 
     public int getId() {
         return id;
@@ -59,11 +70,11 @@ public class FuncionEntidad {
         return dia;
     }
 
-    public Timestamp getHoraFinalTotal() {
+    public LocalTime getHoraFinalTotal() {
         return horaFinalTotal;
     }
 
-    public void setHoraFinalTotal(Timestamp horaFinalTotal) {
+    public void setHoraFinalTotal(LocalTime horaFinalTotal) {
         this.horaFinalTotal = horaFinalTotal;
     }
 
@@ -71,19 +82,19 @@ public class FuncionEntidad {
         this.dia = dia;
     }
 
-    public Timestamp getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(Timestamp hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 
-    public Timestamp getHoraFinal() {
+    public LocalTime getHoraFinal() {
         return horaFinal;
     }
 
-    public void setHoraFinal(Timestamp horaFinal) {
+    public void setHoraFinal(LocalTime horaFinal) {
         this.horaFinal = horaFinal;
     }
 

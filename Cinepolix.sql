@@ -35,7 +35,7 @@ CREATE TABLE Clientes (
     correo VARCHAR(255) NOT NULL,
     contraseña VARCHAR(255) NOT NULL,
     fechaNacimiento DATE NOT NULL,
-    ubicacion POINT NOT NULL,
+    ubicacion POINT,
     estaEliminado bit(1) default 0,
     ciudad_id INT not null,
     FOREIGN KEY (ciudad_id) REFERENCES Ciudades(ciudad_id)
@@ -370,40 +370,169 @@ BEGIN
 END $$
 
 CREATE TRIGGER actualizar_asientos
-AFTER INSERT ON Compras
+AFTER INSERT ON Ventas
 FOR EACH ROW
 BEGIN
     DECLARE asientos_actuales INT;
 
-    -- Obtener los asientos disponibles de la función correspondiente
     SELECT asientos_Disponibles
     INTO asientos_actuales
     FROM Funciones
     WHERE funcion_id = NEW.funcion_id;
+    
+    if asientos_actuales >= New.cantidad_Boletos then
 	UPDATE Funciones
 	SET asientos_Disponibles = asientos_Disponibles - NEW.cantidad_Boletos
 	WHERE funcion_id = NEW.funcion_id;
+    else SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya no hay suficientes asientos disponibles para el numero de boletos';
+    END IF;
+END $$
+
+CREATE TRIGGER actualizar_precio_funcion
+BEFORE INSERT ON Ventas
+FOR EACH ROW
+BEGIN
+    -- DECLARE iva DECIMAL(10, 2) DEFAULT 0.16; -- IVA del 16%
+    DECLARE costo_funcion DECIMAL(10, 2);
+
+    -- Obtener el costo de la función correspondiente
+    SELECT precio
+    INTO costo_funcion
+    FROM Funciones
+    WHERE funcion_id = NEW.funcion_id;
+
+    -- Calcular el precio de la función con IVA
+    SET NEW.precioUnitario = costo_funcion;  
+END $$
+
+DELIMITER $$
+
+CREATE TRIGGER calcular_precio_total
+BEFORE INSERT ON Ventas
+FOR EACH ROW
+BEGIN
+    -- Calcular el precio total
+    SET NEW.totalCompra = NEW.precioUnitario * NEW.cantidad_Boletos;
 END $$
 
 
+
+CREATE EVENT reiniciar_asientos_evento
+ON SCHEDULE EVERY 1 minute
+STARTS CURRENT_TIMESTAMP 
+DO
+BEGIN
+    UPDATE Funciones f
+    JOIN Salas s ON f.sala_id = s.sala_id
+    SET f.asientos_Disponibles = s.num_asientos
+    WHERE f.hora_final < curtime();
+
+END$$
+
+CREATE TRIGGER before_insert_funciones
+BEFORE INSERT ON Funciones
+FOR EACH ROW
+BEGIN
+    DECLARE duracion_total INT;
+    DECLARE num_asientos INT;
+    DECLARE duracion_pelicula INT;
+
+    -- Obtener la duración de la película, el tiempo de limpieza y el número de asientos
+    SELECT p.duracion, s.duracionLimpieza, s.numAsientos
+    INTO duracion_pelicula, duracion_total, num_asientos
+    FROM Salas s
+    JOIN Peliculas p ON p.pelicula_id = NEW.pelicula_id
+    WHERE s.sala_id = NEW.sala_id;
+
+    -- Calcular la duración total (duración de la película + tiempo de limpieza)
+    SET duracion_total = duracion_pelicula + duracion_total;
+
+    -- Establecer el valor de duracionTotal
+    SET NEW.duracionTotal = duracion_total;
+
+    -- Calcular hora_final
+    SET NEW.hora_final = ADDTIME(NEW.hora_inicio, SEC_TO_TIME(duracion_pelicula * 60));
+
+    -- Calcular hora_final_total
+    SET NEW.hora_final_total = ADDTIME(NEW.hora_inicio, SEC_TO_TIME(duracion_total * 60));
+
+    -- Si hora_final supera 24:00:00, restar 24:00:00
+    IF NEW.hora_final >= '24:00:00' THEN
+        SET NEW.hora_final = SUBTIME(NEW.hora_final, '24:00:00');
+    END IF;
+
+    -- Si hora_final_total supera 24:00:00, restar 24:00:00
+    IF NEW.hora_final_total >= '24:00:00' THEN
+        SET NEW.hora_final_total = SUBTIME(NEW.hora_final_total, '24:00:00');
+    END IF;
+
+    -- Inicializar asientos_Disponibles con el número de asientos de la sala
+    SET NEW.asientos_Disponibles = num_asientos;
+END$$
+
+CREATE TRIGGER before_insertar_funciones
+BEFORE INSERT ON Funciones
+FOR EACH ROW
+BEGIN
+    DECLARE adjusted_hora_inicio TIME;
+    DECLARE adjusted_hora_final_total TIME;
+    
+    -- Ajustar hora_inicio
+    IF NEW.hora_inicio < '06:00:00' THEN
+        SET adjusted_hora_inicio = ADDTIME(NEW.hora_inicio, '24:00:00');
+    ELSE
+        SET adjusted_hora_inicio = NEW.hora_inicio;
+    END IF;
+
+    -- Ajustar hora_final_total
+    IF NEW.hora_final_total < '06:00:00' THEN
+        SET adjusted_hora_final_total = ADDTIME(NEW.hora_final_total, '24:00:00');
+    ELSE
+        SET adjusted_hora_final_total = NEW.hora_final_total;
+    END IF;
+
+    -- Verificar si hay solapamiento con otras funciones
+    IF EXISTS (
+        SELECT 1
+        FROM Funciones
+        WHERE sala_id = NEW.sala_id
+		AND dia = NEW.dia
+		AND estaEliminado = 0 -- Solo considerar funciones no eliminadas
+
+          AND (
+              (adjusted_hora_inicio < hora_final_total AND adjusted_hora_final_total > hora_inicio)
+          )
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: Solapamiento de funciones en la misma sala y dia.';
+    END IF;
+
+END$$
+
 DELIMITER ;
-select* from funciones;
-INSERT INTO Funciones (precio, dia, hora, hora_final, asientos_Disponibles, hora_final_total, duracionTotal, sala_id, pelicula_id)
+
+INSERT INTO Funciones (precio, dia, hora_inicio, sala_id, pelicula_id)
 VALUES
-(100.00, 'Lunes', '10:00:00', '12:00:00', 50, '12:00:00', 120, 1, 1),
-(120.00, 'Martes', '13:00:00', '15:00:00', 75, '15:00:00', 120, 2, 2),
-(150.00, 'Miércoles', '16:00:00', '18:00:00', 100, '18:00:00', 120, 3, 3),
-(180.00, 'Jueves', '19:00:00', '21:00:00', 125, '21:00:00', 120, 4, 4),
-(200.00, 'Viernes', '20:00:00', '22:00:00', 150, '22:00:00', 120, 5, 5),
-(220.00, 'Sábado', '21:00:00', '23:00:00', 175, '23:00:00', 120, 6, 6),
-(250.00, 'Domingo', '22:00:00', '00:00:00', 200, '00:00:00', 120, 7, 7);
+(100.00, 'Lunes', '00:00:00', 1, 1),
+(120.00, 'Martes', '13:00:00', 2, 2),
+(150.00, 'Miércoles', '16:00:00', 3, 3),
+(180.00, 'Jueves', '19:00:00',  4, 4),
+(200.00, 'Viernes', '20:00:00', 5, 5),
+(220.00, 'Sábado', '21:00:00', 6, 6),
+(220.00, 'Sábado', '00:00:00', 6, 6),
+(250.00, 'Domingo', '01:00:00', 7, 7);
 
+insert into Ventas(cantidad_Boletos, metodoPago, cliente_id, funcion_id) Values(1,'Efectivo', 1,1);
+select* from clientes;
+select*from ventas;
+select*from funciones;
+select*from peliculas
 
- SELECT f.funcion_id, p.titulo, p.duracion, f.hora, f.hora_final_total, f.precio 
-                FROM Funciones f 
-                INNER JOIN Peliculas p ON f.pelicula_id = p.pelicula_id 
-                INNER JOIN Salas s ON f.sala_id = s.sala_id 
-                WHERE f.estaEliminado = 0
-                AND f.dia = 'Lunes'
-                AND s.sala_id = 1
-                ORDER BY s.sala_id 
+ -- SELECT f.funcion_id, p.titulo, p.duracion, f.hora_inicio, f.hora_final_total, f.precio 
+			-- FROM Funciones f 
+               -- INNER JOIN Peliculas p ON f.pelicula_id = p.pelicula_id 
+               -- INNER JOIN Salas s ON f.sala_id = s.sala_id 
+               -- WHERE f.estaEliminado = 0
+               -- AND f.dia = 'Lunes'
+                -- AND s.sala_id = 1
+               -- ORDER BY s.sala_id 
