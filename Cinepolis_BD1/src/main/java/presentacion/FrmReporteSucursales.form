@@ -72,9 +72,9 @@
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="cbSucursal1" min="-2" pref="254" max="-2" attributes="0"/>
+                                      <Component id="cbSucursalAgregar" min="-2" pref="254" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="cbSucursal" min="-2" pref="254" max="-2" attributes="0"/>
+                                      <Component id="cbSucursalQuitar" min="-2" pref="254" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                                       <Component id="fechaFinDP" min="-2" pref="217" max="-2" attributes="0"/>
                                   </Group>
@@ -114,8 +114,8 @@
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cbSucursal" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                                          <Component id="cbSucursal1" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <Component id="cbSucursalQuitar" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <Component id="cbSucursalAgregar" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -155,7 +155,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JComboBox" name="cbSucursal">
+            <Component class="javax.swing.JComboBox" name="cbSucursalQuitar">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="3b" green="24" red="21" type="rgb"/>
@@ -171,7 +171,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSucursalActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSucursalQuitarActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PeliculaDTO&gt;"/>
@@ -471,7 +471,7 @@
             </Component>
             <Component class="com.github.lgooddatepicker.components.DatePicker" name="fechaInicioDP">
             </Component>
-            <Component class="javax.swing.JComboBox" name="cbSucursal1">
+            <Component class="javax.swing.JComboBox" name="cbSucursalAgregar">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="3b" green="24" red="21" type="rgb"/>
@@ -487,7 +487,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSucursal1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSucursalAgregarActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PeliculaDTO&gt;"/>
