@@ -596,7 +596,9 @@ IConexionBD conexionBD = new ConexionBD();
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+
         
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnmenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmenuPeliculaActionPerformed
