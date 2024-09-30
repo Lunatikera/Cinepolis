@@ -15,6 +15,8 @@ public class FuncionDTO {
     private int id;
     private String dia;
     private BigDecimal precio;
+    private int asientosDisponibles;
+    private int duracionTotal;
     private LocalTime hora;
     private LocalTime horaFinal;
     private int idSala;
@@ -23,6 +25,18 @@ public class FuncionDTO {
     public FuncionDTO(int id, String dia, LocalTime hora, LocalTime horaFinal, int idSala, int idPelicula) {
         this.id = id;
         this.dia = dia;
+        this.hora = hora;
+        this.horaFinal = horaFinal;
+        this.idSala = idSala;
+        this.idPelicula = idPelicula;
+    }
+
+    public FuncionDTO(int id, String dia, BigDecimal precio, int asientosDisponibles, int duracionTotal, LocalTime hora, LocalTime horaFinal, int idSala, int idPelicula) {
+        this.id = id;
+        this.dia = dia;
+        this.precio = precio;
+        this.asientosDisponibles = asientosDisponibles;
+        this.duracionTotal = duracionTotal;
         this.hora = hora;
         this.horaFinal = horaFinal;
         this.idSala = idSala;
@@ -48,16 +62,32 @@ public class FuncionDTO {
         this.id = id;
     }
 
-    public BigDecimal getPrecion() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecion(BigDecimal precion) {
+    public void setPrecio(BigDecimal precion) {
         this.precio = precion;
     }
 
     public String getDia() {
         return dia;
+    }
+
+    public int getAsientosDisponibles() {
+        return asientosDisponibles;
+    }
+
+    public void setAsientosDisponibles(int asientosDisponibles) {
+        this.asientosDisponibles = asientosDisponibles;
+    }
+
+    public int getDuracionTotal() {
+        return duracionTotal;
+    }
+
+    public void setDuracionTotal(int duracionTotal) {
+        this.duracionTotal = duracionTotal;
     }
 
     public void setDia(String dia) {

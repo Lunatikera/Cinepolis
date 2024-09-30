@@ -46,7 +46,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         this.inicioSesionBO = inicioSesionBO;
         this.clientoBO = clientoBO;
         this.sucursalBO = sucursalBO;
+       
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -175,7 +177,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                     // Inicio de sesión exitoso
                     JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso. ¡Bienvenido, " + cliente.getNombre() + "!");
 
-                    // Obtener la ubicación del cliente
+//                     Obtener la ubicación del cliente
                     String ubicacion = obtenerCoordenadas();
                     cliente.setUbicacion(ubicacion);
 

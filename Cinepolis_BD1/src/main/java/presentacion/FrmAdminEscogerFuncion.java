@@ -631,7 +631,7 @@ IConexionBD conexion = new ConexionBD();
         ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
-        FrmAdminPeliculas frnAdminPeliculas = new FrmAdminPeliculas(sucursalBO, ciudadBO, sucursal, peliculaBO);
+        FrmAdminPeliculas frnAdminPeliculas = new FrmAdminPeliculas(sucursalBO, ciudadBO, peliculaBO);
         frnAdminPeliculas.setVisible(true);
             this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuPeliculaActionPerformed

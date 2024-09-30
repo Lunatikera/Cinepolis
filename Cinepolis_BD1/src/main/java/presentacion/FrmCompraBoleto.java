@@ -4,7 +4,59 @@
  */
 package presentacion;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import dtos.ClienteDTO;
+import dtos.FuncionDTO;
+import dtos.PeliculaDTO;
+import dtos.SucursalDTO;
+import enumeradores.MetodosDePago;
+import java.awt.Desktop;
+import com.itextpdf.text.Image;
+import dtos.CiudadDTO;
+import dtos.SalaDTO;
+import dtos.VentaDTO;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
+import negocio.CiudadBO;
+import negocio.FuncionBO;
+import negocio.ICiudadBO;
+import negocio.IFuncionBO;
+import negocio.IPeliculaBO;
+import negocio.ISalaBO;
+import negocio.ISucursalBO;
+import negocio.ITicketBO;
+import negocio.IVentaBO;
+import negocio.NegocioException;
+import negocio.PeliculaBO;
+import negocio.SucursalBO;
+import negocio.TicketBO;
+import persistencia.CiudadDAO;
+import persistencia.ConexionBD;
+import persistencia.FuncionDAO;
+import persistencia.ICiudadDAO;
+import persistencia.IConexionBD;
+import persistencia.IFuncionDAO;
+import persistencia.IPeliculaDAO;
+import persistencia.ISucursalDAO;
+import persistencia.ITicketDAO;
+import persistencia.PeliculaDAO;
+import persistencia.SucursalDAO;
+import persistencia.TicketDAO;
 
 /**
  *
@@ -15,9 +67,52 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
     /**
      * Creates new form FrmCatalogos
      */
-    public FrmCompraBoleto() {
+    private IVentaBO ventaBO;
+    private PeliculaDTO pelicula;
+    private ClienteDTO cliente;
+    private FuncionDTO funcion;
+    private SucursalDTO sucursal;
+    private VentaDTO venta;
+    private CiudadDTO ciudad;
+    private SalaDTO sala;
+    private int cantidadBoletos;
+
+    public FrmCompraBoleto(IVentaBO ventaBO, PeliculaDTO pelicula, ClienteDTO cliente, FuncionDTO funcion, SucursalDTO sucursal, SalaDTO sala, CiudadDTO ciudad) {
         initComponents();
-        btnInicio.setSelected(true);
+        this.ventaBO = ventaBO;
+        this.pelicula = pelicula;
+        this.cliente = cliente;
+        this.funcion = funcion;
+        this.sucursal = sucursal;
+        this.sala = sala;
+        this.ciudad = ciudad;
+        this.cantidadBoletos = 0;
+        setTitle("Comprar Boleto");
+        setResizable(false);
+        setLocationRelativeTo(null);
+        metodosIniciales();
+    }
+
+    private void metodosIniciales() {
+        llenarComboClasificaciones();
+        cargarDetallesPelicula();
+    }
+
+    private void cargarDetallesPelicula() {
+        lblTitulo.setText(utilerias.Herramientas.textoConSaltosLinea(pelicula.getTitulo(), 5));
+        lblPaisOrigen.setText(pelicula.getPais());
+        lblDuracion.setText(pelicula.getDuracion() + " minutos");
+        lblClasificacion.setText(pelicula.getClasificacion());
+        lblHorario.setText(funcion.getDia() + " " + funcion.getHora() + "-" + funcion.getHoraFinal());
+        if (pelicula.getClasificacionDescripcion().length() < 3) {
+            lblClasificacionDescripcion.setText(" " + pelicula.getClasificacionDescripcion());
+
+        } else {
+            lblClasificacionDescripcion.setText(pelicula.getClasificacionDescripcion());
+        }
+        ImageIcon icon = new ImageIcon(pelicula.getCartel());
+        java.awt.Image scaledImage = icon.getImage().getScaledInstance(229, 353, java.awt.Image.SCALE_SMOOTH);
+        btnCartel.setIcon(new ImageIcon(scaledImage));
     }
 
     /**
@@ -34,42 +129,42 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnInicio = new utilerias.MenuButton();
-        menuButton12 = new utilerias.MenuButton();
-        menuButton13 = new utilerias.MenuButton();
-        menuButton14 = new utilerias.MenuButton();
-        menuButton3 = new utilerias.MenuButton();
+        btnSucursales = new utilerias.MenuButton();
+        btnBoletos = new utilerias.MenuButton();
+        btnInbox = new utilerias.MenuButton();
+        btnPerfil = new utilerias.MenuButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        menuButton2 = new utilerias.MenuButton();
+        btnCartel = new javax.swing.JButton();
+        btnTrailer = new utilerias.MenuButton();
         panelConFondo6 = new utilerias.PanelConFondo();
         jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
         panelConFondo1 = new utilerias.PanelConFondo();
         jLabel6 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblDuracion = new javax.swing.JLabel();
         panelConFondo3 = new utilerias.PanelConFondo();
         jLabel4 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblClasificacion = new javax.swing.JLabel();
+        lblClasificacionDescripcion = new javax.swing.JLabel();
+        lblPaisOrigen = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
+        lblHorario = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbMetodosPago = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        menuButton1 = new utilerias.MenuButton();
-        menuButton4 = new utilerias.MenuButton();
-        menuButton5 = new utilerias.MenuButton();
-        menuButton6 = new utilerias.MenuButton();
+        lblCantidadBoletos = new javax.swing.JLabel();
+        btnSumarCantidad = new utilerias.MenuButton();
+        btnRestarCantidad = new utilerias.MenuButton();
+        btnCancelar = new utilerias.MenuButton();
+        btnComprar = new utilerias.MenuButton();
         jLabel2 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -107,36 +202,59 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(1280, 65));
         jPanel3.setLayout(new java.awt.GridLayout(1, 5, 50, 0));
 
-        btnInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Inicio.png"))); // NOI18N
+        btnInicio.setBorderPainted(false);
+        btnInicio.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
+        btnInicio.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Inicio.png"))); // NOI18N
         btnInicio.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InicioSelected.png"))); // NOI18N
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnInicio);
 
-        menuButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
-        menuButton12.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
-        jPanel3.add(menuButton12);
-
-        menuButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
-        menuButton13.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
-        menuButton13.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
-        jPanel3.add(menuButton13);
-
-        menuButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
-        menuButton14.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
-        menuButton14.addActionListener(new java.awt.event.ActionListener() {
+        btnSucursales.setBorderPainted(false);
+        btnSucursales.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SucursalesSelected.png"))); // NOI18N
+        btnSucursales.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sucursales.png"))); // NOI18N
+        btnSucursales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton14ActionPerformed(evt);
+                btnSucursalesActionPerformed(evt);
             }
         });
-        jPanel3.add(menuButton14);
+        jPanel3.add(btnSucursales);
 
-        menuButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfil.png"))); // NOI18N
-        menuButton3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
-        menuButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnBoletos.setBorderPainted(false);
+        btnBoletos.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
+        btnBoletos.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tickets.png"))); // NOI18N
+        btnBoletos.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticketsSelected.png"))); // NOI18N
+        btnBoletos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton3ActionPerformed(evt);
+                btnBoletosActionPerformed(evt);
             }
         });
-        jPanel3.add(menuButton3);
+        jPanel3.add(btnBoletos);
+
+        btnInbox.setBorderPainted(false);
+        btnInbox.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
+        btnInbox.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
+        btnInbox.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
+        btnInbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInboxActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnInbox);
+
+        btnPerfil.setBorderPainted(false);
+        btnPerfil.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
+        btnPerfil.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfil.png"))); // NOI18N
+        btnPerfil.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
+        btnPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerfilActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnPerfil);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -151,9 +269,9 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Line 7.png"))); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setText("Top Gun Maverick");
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitulo.setText("Top Gun Maverick");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -165,7 +283,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
                 .addGap(113, 113, 113)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
+                    .addComponent(lblTitulo))
                 .addGap(176, 176, 176))
         );
         jPanel7Layout.setVerticalGroup(
@@ -175,7 +293,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel15)
+                        .addComponent(lblTitulo)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -206,20 +324,21 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
 
         jPanel10.setBackground(new java.awt.Color(36, 44, 99));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/3212c44f6aca4bc69d467d4614e6f3dc 1.png"))); // NOI18N
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setPreferredSize(new java.awt.Dimension(229, 353));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCartel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/3212c44f6aca4bc69d467d4614e6f3dc 1.png"))); // NOI18N
+        btnCartel.setBorderPainted(false);
+        btnCartel.setContentAreaFilled(false);
+        btnCartel.setPreferredSize(new java.awt.Dimension(229, 353));
+        btnCartel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCartelActionPerformed(evt);
             }
         });
 
-        menuButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/trailer.png"))); // NOI18N
-        menuButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnTrailer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/trailer.png"))); // NOI18N
+        btnTrailer.setBorderPainted(false);
+        btnTrailer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton2ActionPerformed(evt);
+                btnTrailerActionPerformed(evt);
             }
         });
 
@@ -227,9 +346,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
 
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/genero.png"))); // NOI18N
 
-        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("Accion");
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout panelConFondo6Layout = new javax.swing.GroupLayout(panelConFondo6);
         panelConFondo6.setLayout(panelConFondo6Layout);
@@ -238,19 +355,20 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
             .addGroup(panelConFondo6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel17)
-                .addGap(38, 38, 38)
-                .addComponent(jLabel18)
+                .addGap(27, 27, 27)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelConFondo6Layout.setVerticalGroup(
             panelConFondo6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConFondo6Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
                 .addGroup(panelConFondo6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17)
                     .addGroup(panelConFondo6Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jLabel18)))
+                        .addComponent(jLabel17))
+                    .addGroup(panelConFondo6Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 17, Short.MAX_VALUE))
         );
 
@@ -259,9 +377,9 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/duracion.png"))); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("120 minutos");
+        lblDuracion.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblDuracion.setForeground(new java.awt.Color(255, 255, 255));
+        lblDuracion.setText("120 minutos");
 
         javax.swing.GroupLayout panelConFondo1Layout = new javax.swing.GroupLayout(panelConFondo1);
         panelConFondo1.setLayout(panelConFondo1Layout);
@@ -271,7 +389,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel12)
+                .addComponent(lblDuracion)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         panelConFondo1Layout.setVerticalGroup(
@@ -282,7 +400,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelConFondo1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12)
+                .addComponent(lblDuracion)
                 .addGap(27, 27, 27))
         );
 
@@ -290,13 +408,13 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Clasificacion.png"))); // NOI18N
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("R");
+        lblClasificacion.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblClasificacion.setForeground(new java.awt.Color(255, 255, 255));
+        lblClasificacion.setText("R");
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Adultos");
+        lblClasificacionDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblClasificacionDescripcion.setForeground(new java.awt.Color(255, 255, 255));
+        lblClasificacionDescripcion.setText("Adultos");
 
         javax.swing.GroupLayout panelConFondo3Layout = new javax.swing.GroupLayout(panelConFondo3);
         panelConFondo3.setLayout(panelConFondo3Layout);
@@ -308,9 +426,9 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelConFondo3Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblClasificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel19)
+                .addComponent(lblClasificacionDescripcion)
                 .addGap(33, 33, 33))
         );
         panelConFondo3Layout.setVerticalGroup(
@@ -318,15 +436,15 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelConFondo3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelConFondo3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel19))
+                    .addComponent(lblClasificacion)
+                    .addComponent(lblClasificacionDescripcion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Estados Unidos");
+        lblPaisOrigen.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblPaisOrigen.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaisOrigen.setText("Estados Unidos");
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -334,27 +452,27 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCartel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelConFondo3, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(panelConFondo1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(panelConFondo6, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblPaisOrigen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(menuButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTrailer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(34, 34, 34)))
                 .addGap(20, 20, 20))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCartel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(98, 98, 98))
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(menuButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addComponent(btnTrailer, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelConFondo6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -362,25 +480,25 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelConFondo3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblPaisOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
         );
 
         jPanel16.setBackground(new java.awt.Color(36, 44, 99));
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Lunes 12:00 PM");
+        lblHorario.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblHorario.setForeground(new java.awt.Color(255, 255, 255));
+        lblHorario.setText("Lunes 12:00 PM");
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Metodo de Pago:");
 
-        jComboBox1.setBackground(new java.awt.Color(33, 36, 59));
-        jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbMetodosPago.setBackground(new java.awt.Color(33, 36, 59));
+        cbMetodosPago.setForeground(new java.awt.Color(255, 255, 255));
+        cbMetodosPago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbMetodosPagoActionPerformed(evt);
             }
         });
 
@@ -388,31 +506,47 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Numero de Boletos:");
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("0");
+        lblCantidadBoletos.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblCantidadBoletos.setForeground(new java.awt.Color(255, 255, 255));
+        lblCantidadBoletos.setText("00");
 
-        menuButton1.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton1.setText("+");
-        menuButton1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        menuButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSumarCantidad.setForeground(new java.awt.Color(255, 255, 255));
+        btnSumarCantidad.setText("+");
+        btnSumarCantidad.setBorderPainted(false);
+        btnSumarCantidad.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        btnSumarCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton1ActionPerformed(evt);
+                btnSumarCantidadActionPerformed(evt);
             }
         });
 
-        menuButton4.setForeground(new java.awt.Color(255, 255, 255));
-        menuButton4.setText("-");
-        menuButton4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        menuButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnRestarCantidad.setForeground(new java.awt.Color(255, 255, 255));
+        btnRestarCantidad.setText("-");
+        btnRestarCantidad.setBorderPainted(false);
+        btnRestarCantidad.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        btnRestarCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton4ActionPerformed(evt);
+                btnRestarCantidadActionPerformed(evt);
             }
         });
 
-        menuButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelarBoleto.png"))); // NOI18N
+        btnCancelar.setBorderPainted(false);
+        btnCancelar.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelarBoleto.png"))); // NOI18N
+        btnCancelar.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelarBoleto.png"))); // NOI18N
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
-        menuButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprar.png"))); // NOI18N
+        btnComprar.setBorderPainted(false);
+        btnComprar.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprar.png"))); // NOI18N
+        btnComprar.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comprar.png"))); // NOI18N
+        btnComprar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -421,47 +555,47 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addComponent(menuButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(menuButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGap(147, 147, 147)
-                        .addComponent(menuButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRestarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel10)
+                        .addComponent(lblCantidadBoletos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSumarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGap(69, 69, 69)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbMetodosPago, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbMetodosPago, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(menuButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(menuButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblCantidadBoletos)
+                    .addComponent(btnSumarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRestarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(menuButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(menuButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -530,91 +664,286 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void menuButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton14ActionPerformed
+    private void btnCartelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCartelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton14ActionPerformed
+    }//GEN-LAST:event_btnCartelActionPerformed
 
-    private void menuButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton3ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void menuButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton2ActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void menuButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton1ActionPerformed
-
-    private void menuButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuButton4ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void btnTrailerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrailerActionPerformed
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmCompraBoleto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+            // Abre el enlace del tráiler en el navegador
+            java.awt.Desktop.getDesktop().browse(new java.net.URI(pelicula.getLink_trailer()));
+        } catch (java.io.IOException | java.net.URISyntaxException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al abrir el tráiler: " + e.getMessage());
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTrailerActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmCompraBoleto().setVisible(true);
+    private void cbMetodosPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMetodosPagoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbMetodosPagoActionPerformed
+
+    private void btnSumarCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumarCantidadActionPerformed
+        if (this.cantidadBoletos < this.funcion.getAsientosDisponibles()) {
+            this.cantidadBoletos++;
+            estadoPagina();  // Update the UI
+        }
+
+    }//GEN-LAST:event_btnSumarCantidadActionPerformed
+
+    private void btnRestarCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestarCantidadActionPerformed
+        if (this.cantidadBoletos > 0) {
+            this.cantidadBoletos--;
+            estadoPagina();  // Update the UI
+        }
+
+    }//GEN-LAST:event_btnRestarCantidadActionPerformed
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        IConexionBD conexion = new ConexionBD();
+
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
+
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        FrmCatalogoSucursal catalogo = new FrmCatalogoSucursal(peliculaBO, ciudadBO, sucursalBO, sucursal, cliente);
+        catalogo.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSucursalesActionPerformed
+        IConexionBD conexion = new ConexionBD();
+
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
+
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+
+        FrmSucursales sucursales = new FrmSucursales(ciudadBO, sucursalBO, sucursal, cliente);
+        sucursales.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnSucursalesActionPerformed
+
+    private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
+        IConexionBD conexionBD = new ConexionBD();
+        ITicketDAO ticketDAO = new TicketDAO(conexionBD);
+        ITicketBO ticketBO = new TicketBO(ticketDAO);
+        FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
+        boletos.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBoletosActionPerformed
+
+    private void btnInboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInboxActionPerformed
+        FrmInbox inbox = new FrmInbox();
+        inbox.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInboxActionPerformed
+
+    private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
+        FrmConfiguracionPerfil perfil = new FrmConfiguracionPerfil();
+        perfil.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnPerfilActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        IConexionBD conexion = new ConexionBD();
+        IFuncionDAO funcionDAO = new FuncionDAO(conexion);
+        IFuncionBO funcionBO = new FuncionBO(funcionDAO);
+        FrmFuncionesPelicula funciones = new FrmFuncionesPelicula(funcionBO, pelicula, sucursal, cliente, ciudad);
+        funciones.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
+        if (cbMetodosPago.getSelectedItem() == null || this.cantidadBoletos <= 0) {
+            JOptionPane.showMessageDialog(this, "Por favor,Seleccione un metodo de pago y cantidad valida.", "Campos Invalidos", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirmacion = JOptionPane.showOptionDialog(this,
+                "¿Está seguro de que deseas Comprar una funcion para " + pelicula.getTitulo() + " a las " + funcion.getHora(),
+                "Confirmación de eliminacion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{"Cancelar", "Aceptar"},
+                "Confirmar");
+
+        // Si el usuario selecciona "Cancelar", no se hace nada
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            return;
+        }
+        try {
+            try {
+                venta = new VentaDTO();
+                venta.setCantidadBoleto(cantidadBoletos);
+                venta.setMetodoPago((MetodosDePago) cbMetodosPago.getSelectedItem());
+                venta.setIdCliente(cliente.getIdCliente());
+                venta.setIdFuncion(funcion.getId());
+                ventaBO.agregarVenta(this.venta);
+            } catch (NegocioException ex) {
+                Logger.getLogger(FrmCompraBoleto.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+
+            imprimirTicket();
+        } catch (IOException ex) {
+            Logger.getLogger(FrmCompraBoleto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_btnComprarActionPerformed
+
+    private void llenarComboClasificaciones() {
+        for (MetodosDePago clasi : MetodosDePago.values()) {
+            cbMetodosPago.addItem(clasi);
+        }
     }
 
+    private void estadoPagina() {
+        // Update the label showing the quantity
+        String cantidad = String.valueOf(this.cantidadBoletos);
+        if (cantidad.length() == 1) {
+            cantidad = "0" + cantidad;
+        }
+
+        lblCantidadBoletos.setText(cantidad);
+
+        // Update button statuses
+        estatusBotonAtras();
+        estatusBotonSiguiente();
+    }
+
+    private void estatusBotonAtras() {
+        // Disable the "restar" button if the quantity is 0
+        btnRestarCantidad.setEnabled(this.cantidadBoletos > 0);
+    }
+
+    private void estatusBotonSiguiente() {
+        // Disable the "sumar" button if the quantity is at max available seats
+        btnSumarCantidad.setEnabled(this.cantidadBoletos < this.funcion.getAsientosDisponibles());
+    }
+
+    private void imprimirTicket() throws IOException {
+        Document document = new Document();
+
+        try {
+            String fileName = "BoletoCine.pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
+            document.open();
+
+            // Fuentes para el texto
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD);
+            Font normalFont = new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL);
+
+            // Título del establecimiento (Centrado con más espacios)
+            Paragraph title = new Paragraph("******************************************************************\n"
+                    + pelicula.getTitulo().toUpperCase() + "\n"
+                    + this.sala.getNombre().toUpperCase() + "\n"
+                    + this.funcion.getHora() + "-" + this.funcion.getHoraFinal() + "\n"
+                    + "******************************************************************\n", boldFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            // Información del cliente (Alinear con más espacios)
+            Paragraph clientInfo = new Paragraph(
+                    "     NOMBRE CLIENTE: " + this.cliente.getNombre().toUpperCase() + " " + this.cliente.getApellidoPA().toUpperCase() + " " + this.cliente.getApellidoMA().toUpperCase() + "\n", normalFont);
+            clientInfo.setAlignment(Element.ALIGN_LEFT);
+            document.add(clientInfo);
+
+            // Espacio para separar secciones
+            document.add(new Paragraph("\n"));
+
+            // Detalle de los artículos
+            Paragraph articlesHeader = new Paragraph(
+                    "     ARTICULO                     P C/U                - CANT                  TOTAL\n"
+                    + "     ------------------------------------------------------------------------------------------\n", normalFont);
+            articlesHeader.setAlignment(Element.ALIGN_LEFT);
+            document.add(articlesHeader);
+
+            // Artículos con más espacios para alinear
+            Paragraph articles = new Paragraph(
+                    "     BOLETO " + "            $" + funcion.getPrecio() + "                  -" + this.cantidadBoletos + "                   $" + (funcion.getPrecio().multiply(BigDecimal.valueOf(this.cantidadBoletos))) + "\n",
+                    normalFont);
+            articles.setAlignment(Element.ALIGN_LEFT);
+            document.add(articles);
+
+            // Espacio para separar secciones
+            document.add(new Paragraph("\n"));
+
+            // Resumen de compra
+            Paragraph summary = new Paragraph(
+                    "     TOTAL COMPRA:      " + (funcion.getPrecio().multiply(BigDecimal.valueOf(this.cantidadBoletos)))
+                    + "     METODO PAGO:     " + venta.getMetodoPago().toString().toUpperCase() + "\n"
+                    + "     FECHA:         " + utilerias.DateTimeUtil.formatearFechaHora(LocalDateTime.now()) + "\n"
+                    + "     CIUDAD:       " + ciudad.getNombre().toUpperCase() + "\n", normalFont);
+            summary.setAlignment(Element.ALIGN_LEFT);
+            document.add(summary);
+
+            // Espacio para separar secciones
+            document.add(new Paragraph("\n"));
+
+            // Espacio para separar secciones
+            document.add(new Paragraph("\n"));
+
+            // Mensaje de agradecimiento (Centrado con más espacios)
+            Paragraph thanks = new Paragraph("******************************************************************\n"
+                    + sucursal.getNombre().toUpperCase() + "\n"
+                    + "\n******************************************************************\n", boldFont);
+            thanks.setAlignment(Element.ALIGN_CENTER);
+            document.add(thanks);
+            try {
+                Image logo;
+                logo = Image.getInstance("src\\main\\resources\\imagenes\\QRreal.png"); // Cambia por la ruta de tu logo
+                logo.scaleToFit(250, 250); // Tamaño del logo
+                logo.setAlignment(Element.ALIGN_CENTER);
+                document.add(logo);
+            } catch (BadElementException ex) {
+                Logger.getLogger(FrmCompraBoleto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FrmCompraBoleto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // Cerrar el documento
+            document.close();
+
+            File pdfFile = new File(fileName);
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            } else {
+                System.out.println("Abrir archivos no es soportado en este sistema.");
+            }
+
+            System.out.println("¡Boleto generado correctamente !");
+
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private utilerias.MenuButton btnBoletos;
+    private utilerias.MenuButton btnCancelar;
+    private javax.swing.JButton btnCartel;
+    private utilerias.MenuButton btnComprar;
+    private utilerias.MenuButton btnInbox;
     private utilerias.MenuButton btnInicio;
-    private javax.swing.JButton jButton1;
+    private utilerias.MenuButton btnPerfil;
+    private utilerias.MenuButton btnRestarCantidad;
+    private utilerias.MenuButton btnSucursales;
+    private utilerias.MenuButton btnSumarCantidad;
+    private utilerias.MenuButton btnTrailer;
+    private javax.swing.JComboBox<Object> cbMetodosPago;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -627,15 +956,13 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private utilerias.MenuButton menuButton1;
-    private utilerias.MenuButton menuButton12;
-    private utilerias.MenuButton menuButton13;
-    private utilerias.MenuButton menuButton14;
-    private utilerias.MenuButton menuButton2;
-    private utilerias.MenuButton menuButton3;
-    private utilerias.MenuButton menuButton4;
-    private utilerias.MenuButton menuButton5;
-    private utilerias.MenuButton menuButton6;
+    private javax.swing.JLabel lblCantidadBoletos;
+    private javax.swing.JLabel lblClasificacion;
+    private javax.swing.JLabel lblClasificacionDescripcion;
+    private javax.swing.JLabel lblDuracion;
+    private javax.swing.JLabel lblHorario;
+    private javax.swing.JLabel lblPaisOrigen;
+    private javax.swing.JLabel lblTitulo;
     private utilerias.PanelConFondo panelConFondo1;
     private utilerias.PanelConFondo panelConFondo3;
     private utilerias.PanelConFondo panelConFondo6;

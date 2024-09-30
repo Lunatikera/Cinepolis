@@ -293,7 +293,7 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
             funcion.setHora(timePicker1.getTime());
         }
         BigDecimal precio = BigDecimal.valueOf(((Number) jSpinPrecio.getValue()).doubleValue());
-        funcion.setPrecion(precio);
+        funcion.setPrecio(precio);
 
         try {
             funcionBO.guardar(funcion);

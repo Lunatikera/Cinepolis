@@ -10,15 +10,15 @@ package dtos;
  */
 public class ConsultaFuncionDTO {
     private String dia;
-    private int idSala;
+    private int idSucursal;
     private int idPelicula;
 
     public ConsultaFuncionDTO() {
     }
 
-    public ConsultaFuncionDTO(String dia, int idSala, int idPelicula) {
+    public ConsultaFuncionDTO(String dia, int idSucursal, int idPelicula) {
         this.dia = dia;
-        this.idSala = idSala;
+        this.idSucursal = idSucursal;
         this.idPelicula = idPelicula;
     }
 
@@ -31,11 +31,11 @@ public class ConsultaFuncionDTO {
     }
 
     public int getIdSala() {
-        return idSala;
+        return idSucursal;
     }
 
     public void setIdSala(int idSala) {
-        this.idSala = idSala;
+        this.idSucursal = idSala;
     }
 
     public int getIdPelicula() {
@@ -44,6 +44,11 @@ public class ConsultaFuncionDTO {
 
     public void setIdPelicula(int idPelicula) {
         this.idPelicula = idPelicula;
+    }
+
+    @Override
+    public String toString() {
+        return "ConsultaFuncionDTO{" + "dia=" + dia + ", idSucursal=" + idSucursal + ", idPelicula=" + idPelicula + '}';
     }
     
     

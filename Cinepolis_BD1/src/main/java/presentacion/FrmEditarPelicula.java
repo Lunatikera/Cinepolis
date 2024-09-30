@@ -23,15 +23,27 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import negocio.CiudadBO;
+import negocio.ICiudadBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
+import negocio.ISucursalBO;
 import negocio.NegocioException;
+import negocio.SucursalBO;
+import persistencia.CiudadDAO;
+import persistencia.ConexionBD;
+import persistencia.ICiudadDAO;
+import persistencia.IConexionBD;
+import persistencia.ISucursalDAO;
+import persistencia.SucursalDAO;
+import presentacion.FrmAdminPeliculas;
 import static utilerias.Herramientas.getComboBoxItems;
 
 /**
  *
  * @author rramirez
  */
+
 public class FrmEditarPelicula extends javax.swing.JFrame {
 
     IPeliculaBO peliculaBO;
@@ -455,30 +467,60 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
     private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
-        String titulo = txtDuracion.getText();
-        String pais = (String) cbPaises.getSelectedItem();
-        int duracion = Integer.parseInt(txtDuracion.getText());
-        String link = txtTrailer.getText();
-        String sinopsis = tPaneSinopsis1.getText();
-        List<String> generosSeleccionados = getComboBoxItems(cbGenerosSeleccionados);
-
-        if (titulo.isEmpty() || duracion == 0 || link.isEmpty() || sinopsis.isEmpty() || pais.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        String titulo = txtTitulo.getText().trim();
+        String sinopsis = tPaneSinopsis1.getText().trim();
+        String clasificacion = cbClasificaciones.getSelectedItem().toString();
+        String trailer = txtTrailer.getText().trim();
+        String pais = cbPaises.getSelectedItem().toString().trim();
+        String duracionStr = txtDuracion.getText().trim();
+        String cartel = ruta.trim();
+        
+        if (cartel == "") {
+            cartel = pelicula.getCartel();
+        }
+        
+        if (titulo.isEmpty() || sinopsis.isEmpty() || trailer.isEmpty()
+                || pais.isEmpty() || duracionStr.isEmpty() || cartel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Campos vacíos", JOptionPane.ERROR_MESSAGE);
             return;
-
         }
+        
+        int duracion;
         try {
-            PeliculaDTO c = this.peliculaBO.buscarPeliculaPorId(pelicula.getId());
-            PeliculaDTO editar = new PeliculaDTO();
-            this.peliculaBO.actualizarPelicula(editar);
-            JOptionPane.showMessageDialog(this, "Registro modificado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmEditarPelicula.class.getName()).log(Level.SEVERE, null, ex);
+            duracion = Integer.parseInt(duracionStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La duración debe ser un número entero.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        dispose();
-
+        
+        pelicula.setTitulo(titulo);
+        pelicula.setSinopsis(sinopsis);
+        pelicula.setLink_trailer(trailer);
+        pelicula.setPais(pais);
+        pelicula.setCartel(cartel);
+        pelicula.setClasificacion(clasificacion);
+        pelicula.setDuracion(duracion);
+        
+        try {
+            peliculaBO.actualizarPelicula(pelicula);
+            JOptionPane.showMessageDialog(this, "Película actualizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            volverAdminPeliculas();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "La pelicula no ha sio actualizada!.", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        
     }//GEN-LAST:event_BtnAceptarActionPerformed
-
+    private void volverAdminPeliculas(){
+        IConexionBD cconexion= new ConexionBD();
+        ISucursalDAO sucursalDAO= new SucursalDAO(cconexion);
+        ICiudadDAO ciudadDAO= new CiudadDAO(cconexion);
+        ICiudadBO ciudadBO= new CiudadBO(ciudadDAO);
+        ISucursalBO sucursalBO= new SucursalBO(sucursalDAO);
+        FrmAdminPeliculas peliculas = new FrmAdminPeliculas(sucursalBO, ciudadBO, peliculaBO);
+            peliculas.setVisible(true);
+            this.dispose();
+    }
     private void txtTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTituloActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTituloActionPerformed
@@ -487,7 +529,7 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("JPG, PNG Y JPEG", "jpg", "png", "jpeg");
         fileChooser.setFileFilter(extensionFilter);
-
+        
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             ruta = fileChooser.getSelectedFile().getAbsolutePath();
             ImageIcon icon = new ImageIcon(ruta);
@@ -498,42 +540,42 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
      }//GEN-LAST:event_jButton3ActionPerformed
 
     private void llenarComboClasificaciones() {
-        for (Clasificaciones clasi : Clasificaciones.values()) {
-            cbClasificaciones.addItem(clasi);
-        }
+    for (Clasificaciones clasi : Clasificaciones.values()) {
+        cbClasificaciones.addItem(clasi);
     }
+}
 
     private void llenarComboPaises() {
-        cbPaises.removeAllItems();
+    cbPaises.removeAllItems();
+    
+    List<String> countryList = new ArrayList<>();
 
-        List<String> countryList = new ArrayList<>();
-
-        // Obtener todos los locales disponibles y añadir los países a la lista
-        for (Locale locale : Locale.getAvailableLocales()) {
-            String country = locale.getDisplayCountry();
-            if (!country.isEmpty() && !countryList.contains(country)) {  // Verifica si el país ya está en la lista
-                countryList.add(country);  // Añade el país a la lista temporal
-            }
-        }
-
-        // Ordenar la lista de países en orden alfabético
-        Collections.sort(countryList);
-
-        // Añadir los países ordenados al JComboBox
-        for (String country : countryList) {
-            cbPaises.addItem(country);
+    // Obtener todos los locales disponibles y añadir los países a la lista
+    for (Locale locale : Locale.getAvailableLocales()) {
+        String country = locale.getDisplayCountry();
+        if (!country.isEmpty() && !countryList.contains(country)) {  // Verifica si el país ya está en la lista
+            countryList.add(country);  // Añade el país a la lista temporal
         }
     }
+
+    // Ordenar la lista de países en orden alfabético
+    Collections.sort(countryList);
+
+    // Añadir los países ordenados al JComboBox
+    for (String country : countryList) {
+        cbPaises.addItem(country);
+    }
+}
 
 // Método auxiliar para verificar si el país ya existe en el JComboBox
     private boolean comboBoxContienePais(JComboBox<String> comboBox, String pais) {
-        for (int i = 0; i < comboBox.getItemCount(); i++) {
-            if (comboBox.getItemAt(i).equals(pais)) {
-                return true;  // El país ya está en el JComboBox
-            }
+    for (int i = 0; i < comboBox.getItemCount(); i++) {
+        if (comboBox.getItemAt(i).equals(pais)) {
+            return true;  // El país ya está en el JComboBox
         }
-        return false;
     }
+    return false;
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

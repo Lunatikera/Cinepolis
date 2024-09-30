@@ -4,6 +4,7 @@
  */
 package dominio;
 
+import enumeradores.MetodosDePago;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
 public class VentaEntidad {
     private int idVenta;
     private LocalDateTime fechaCompra;
+    private MetodosDePago metodoPago;
     private int cantidadBoletos;
     private BigDecimal precioTotal;
     private int clienteId;
@@ -23,9 +25,19 @@ public class VentaEntidad {
     public VentaEntidad() {
     }
 
-    public VentaEntidad(int idVenta, LocalDateTime fechaCompra, int cantidadBoletos, BigDecimal precioTotal, int clienteId, int funcionId) {
+    public VentaEntidad(MetodosDePago metodoPago, int cantidadBoletos, int clienteId, int funcionId) {
+        this.metodoPago = metodoPago;
+        this.cantidadBoletos = cantidadBoletos;
+        this.clienteId = clienteId;
+        this.funcionId = funcionId;
+    }
+
+
+
+    public VentaEntidad(int idVenta, LocalDateTime fechaCompra, MetodosDePago metodoPago, int cantidadBoletos, BigDecimal precioTotal, int clienteId, int funcionId) {
         this.idVenta = idVenta;
         this.fechaCompra = fechaCompra;
+        this.metodoPago = metodoPago;
         this.cantidadBoletos = cantidadBoletos;
         this.precioTotal = precioTotal;
         this.clienteId = clienteId;
@@ -70,6 +82,14 @@ public class VentaEntidad {
 
     public void setClienteId(int clienteId) {
         this.clienteId = clienteId;
+    }
+
+    public MetodosDePago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(MetodosDePago metodoPago) {
+        this.metodoPago = metodoPago;
     }
 
     public int getFuncionId() {
