@@ -22,7 +22,13 @@ import javax.swing.JOptionPane;
 import negocio.ICiudadBO;
 import negocio.IPeliculaBO;
 import negocio.ISucursalBO;
+import negocio.ITicketBO;
 import negocio.NegocioException;
+import negocio.TicketBO;
+import persistencia.ConexionBD;
+import persistencia.IConexionBD;
+import persistencia.ITicketDAO;
+import persistencia.TicketDAO;
 
 /**
  *
@@ -42,7 +48,8 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private ISucursalBO sucursalBO;
     private SucursalDTO sucursal;
     private ClienteDTO cliente;
-    private final boolean peliculaEnSucursal= true; 
+    private CiudadDTO ciudad;
+    private final boolean peliculaEnSucursal = true;
 
     public FrmCatalogoSucursal(IPeliculaBO peliculaBO, ICiudadBO ciudadBO, ISucursalBO sucursalBO, SucursalDTO sucursal, ClienteDTO cliente) {
         initComponents();
@@ -66,6 +73,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         this.estadoPagina();
         this.llenarComboBoxCiudad();
         this.seleccionarCiudadYSucursal();
+        this.ciudad=(CiudadDTO) cbCiudades.getSelectedItem();
 
     }
 
@@ -105,7 +113,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula1() {
         PeliculaDTO pelicula = peliculasCargadas.get(0);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -113,7 +121,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula2() {
         PeliculaDTO pelicula = peliculasCargadas.get(1);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -121,7 +129,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula3() {
         PeliculaDTO pelicula = peliculasCargadas.get(2);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -129,7 +137,8 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula4() {
         PeliculaDTO pelicula = peliculasCargadas.get(3);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal);
+
+        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -696,7 +705,10 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCartel3ActionPerformed
 
     private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
-        FrmBoletos boletos = new FrmBoletos();
+        IConexionBD conexionBD=new ConexionBD();
+        ITicketDAO ticketDAO=new TicketDAO(conexionBD);
+        ITicketBO ticketBO= new TicketBO(ticketDAO);
+        FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
         boletos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBoletosActionPerformed
@@ -733,6 +745,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
             this.pagina = 1;
             this.cargarPeliculas();
             this.estadoPagina();
+            this.ciudad = (CiudadDTO) cbCiudades.getSelectedItem();
             return;
         }
         JOptionPane.showMessageDialog(this, "Error al buscar el catalogo, Intente de nuevo ", "Error", JOptionPane.ERROR_MESSAGE);

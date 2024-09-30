@@ -16,12 +16,16 @@ import javax.swing.border.EmptyBorder;
 import negocio.ICiudadBO;
 import negocio.IPeliculaBO;
 import negocio.ISucursalBO;
+import negocio.ITicketBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.TicketBO;
 import persistencia.ConexionBD;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.ITicketDAO;
 import persistencia.PeliculaDAO;
+import persistencia.TicketDAO;
 import static utilerias.Geocalizacion.obtenerCoordenadas;
 
 /**
@@ -419,7 +423,10 @@ public class FrmSucursales extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
-        FrmBoletos boletos = new FrmBoletos();
+        IConexionBD conexionBD=new ConexionBD();
+        ITicketDAO ticketDAO=new TicketDAO(conexionBD);
+        ITicketBO ticketBO= new TicketBO(ticketDAO);
+        FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
         boletos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBoletosActionPerformed

@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import dtos.CiudadDTO;
 import dtos.ClienteDTO;
 import dtos.PeliculaDTO;
 import dtos.SucursalDTO;
@@ -12,19 +13,27 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 import negocio.CiudadBO;
+import negocio.FuncionBO;
 import negocio.ICiudadBO;
+import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
 import negocio.ISucursalBO;
+import negocio.ITicketBO;
 import negocio.PeliculaBO;
 import negocio.SucursalBO;
+import negocio.TicketBO;
 import persistencia.CiudadDAO;
 import persistencia.ConexionBD;
+import persistencia.FuncionDAO;
 import persistencia.ICiudadDAO;
 import persistencia.IConexionBD;
+import persistencia.IFuncionDAO;
 import persistencia.IPeliculaDAO;
 import persistencia.ISucursalDAO;
+import persistencia.ITicketDAO;
 import persistencia.PeliculaDAO;
 import persistencia.SucursalDAO;
+import persistencia.TicketDAO;
 
 /**
  *
@@ -35,12 +44,15 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     private PeliculaDTO pelicula;
     private ClienteDTO cliente;
     private SucursalDTO sucursal;
+    private CiudadDTO ciudad;
 
-    public FrmDetallePelicula(PeliculaDTO pelicula, ClienteDTO cliente, SucursalDTO sucursal) {
+    public FrmDetallePelicula(PeliculaDTO pelicula, ClienteDTO cliente, SucursalDTO sucursal, CiudadDTO ciudad) {
         initComponents();
         this.pelicula = pelicula;
         this.cliente = cliente;
         this.sucursal = sucursal;
+        this.ciudad=ciudad;
+        System.out.println(pelicula.getId());
         cargarMetodosIniciales();
     }
 
@@ -541,7 +553,13 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton18ActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexion = new ConexionBD();
+        IFuncionDAO funcionDAO = new FuncionDAO(conexion);
+        IFuncionBO funcionBO = new FuncionBO(funcionDAO);
+
+        FrmFuncionesPelicula funcionPelicula = new FrmFuncionesPelicula(funcionBO, pelicula, sucursal, cliente,ciudad);
+        funcionPelicula.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_menuButton18ActionPerformed
 
     private void btnCartelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCartelActionPerformed
@@ -573,7 +591,10 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
     private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
-        FrmBoletos boletos = new FrmBoletos();
+        IConexionBD conexionBD=new ConexionBD();
+        ITicketDAO ticketDAO=new TicketDAO(conexionBD);
+        ITicketBO ticketBO= new TicketBO(ticketDAO);
+        FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
         boletos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBoletosActionPerformed

@@ -53,19 +53,17 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
     private List<CiudadDTO> listaCiudades;
     private List<SucursalDTO> listaSucursales;
     //private List<PeliculaDTO> peliculasPorAnadir;
-    private SucursalDTO sucursal;
     private boolean pelicuaEnSucursal = true;
     
 
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmAdminPeliculas(ISucursalBO sucursalBO, ICiudadBO ciudadBO, SucursalDTO sucursal,IPeliculaBO peliculaBO) {
+    public FrmAdminPeliculas(ISucursalBO sucursalBO, ICiudadBO ciudadBO ,IPeliculaBO peliculaBO) {
         initComponents();
         this.sucursalBO = sucursalBO;
         this.ciudadBO = ciudadBO;
         this.peliculaBO = peliculaBO;
-        this.sucursal = sucursal;
         cargarMetodosIniciales();
     }
 
