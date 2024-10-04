@@ -32,11 +32,14 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public void guardar(FuncionDTO funcionDTO) throws NegocioException {
+        System.out.println(funcionDTO);
         FuncionEntidad funcion = new FuncionEntidad(funcionDTO.getPrecio(), funcionDTO.getDia(), funcionDTO.getHora(), funcionDTO.getIdSala(), funcionDTO.getIdPelicula());
         try {
             funcionDAO.guardar(funcion);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FuncionBO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException("Error al intentar agregar la función ", ex);
+
         }
     }
 

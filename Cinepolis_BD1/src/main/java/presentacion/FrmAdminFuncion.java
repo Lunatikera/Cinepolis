@@ -618,7 +618,7 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        FrmAgregarFuncion agregarFuncion = new FrmAgregarFuncion(funcionBO, pelicula);
+        FrmAgregarFuncion agregarFuncion = new FrmAgregarFuncion(funcionBO, pelicula, sala, sucursal);
         agregarFuncion.setVisible(true);
         this.dispose();
 

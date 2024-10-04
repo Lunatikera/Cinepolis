@@ -16,6 +16,8 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,10 +33,11 @@ public class FuncionDAO implements IFuncionDAO {
 
     @Override
     public FuncionEntidad guardar(FuncionEntidad funcion) throws PersistenciaException {
+        System.out.println(funcion.getHora());
         String sql = "INSERT INTO Funciones (precio, dia, hora_inicio, sala_id, pelicula_id) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = conexionBD.crearConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+            conn.setAutoCommit(true);
             // Establecer los valores del PreparedStatement
             pstmt.setBigDecimal(1, funcion.getPrecio());
             pstmt.setString(2, funcion.getDia());
@@ -46,6 +49,8 @@ public class FuncionDAO implements IFuncionDAO {
             pstmt.executeUpdate();
             return funcion;
         } catch (SQLException e) {
+            Logger.getLogger(FuncionDAO.class.getName()).log(Level.SEVERE, null, e);
+
             throw new PersistenciaException("No se pudo guardar la funcion en la base de datos");
         }
     }
