@@ -640,12 +640,6 @@ public class FrmBoletos extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
-    private void btnInboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInboxActionPerformed
-        FrmInbox inbox = new FrmInbox();
-        inbox.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnInboxActionPerformed
-
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         FrmConfiguracionPerfil perfil = new FrmConfiguracionPerfil();
         perfil.setVisible(true);
@@ -709,6 +703,12 @@ public class FrmBoletos extends javax.swing.JFrame {
         this.cargarPeliculas();
         this.estadoPagina();
     }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void btnInboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInboxActionPerformed
+        FrmInbox inbox = new FrmInbox();
+        inbox.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInboxActionPerformed
 
     private void estadoPagina() {
         String numPagina = String.valueOf(pagina);

@@ -20,10 +20,12 @@ import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IPeliculaBO;
+import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
@@ -31,9 +33,11 @@ import persistencia.ConexionBD;
 import persistencia.ICiudadDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
 import utilerias.JButtonCellEditor;
@@ -50,12 +54,11 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     private ICiudadBO ciudadBO;
     private List<CiudadDTO> listaCiudades;
     private IClienteBO clienteBO;
-    
 
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmAdminClientes(ICiudadBO ciudadBO,IClienteBO clienteBO) {
+    public FrmAdminClientes(ICiudadBO ciudadBO, IClienteBO clienteBO) {
         initComponents();
         this.clienteBO = clienteBO;
         this.ciudadBO = ciudadBO;
@@ -64,11 +67,13 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
     public void cargarMetodosIniciales() {
         this.cargarConfiguracionInicialTablaClientes();
+        this.setTitle("Administracion de Clientes ");
+        this.setResizable(false);
+        this.setSize(1280, 780);
+        this.setLocationRelativeTo(null);
         this.cargarClientesEnTabla(pagina, LIMITE);
         this.estadoPagina();
     }
-
-    
 
     private void cargarConfiguracionInicialTablaClientes() {
         ActionListener onEditarClickListener = new ActionListener() {
@@ -113,17 +118,15 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
     private void BorrarRegistrosTablaClientes() {
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblClientes.getModel();
-        if (modeloTabla.getRowCount() > 0)
-        {
-            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--)
-            {
+        if (modeloTabla.getRowCount() > 0) {
+            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--) {
                 modeloTabla.removeRow(row);
             }
         }
     }
+
     private void cargarClientesEnTabla(int pagina, int limite) {
-        try
-        {
+        try {
             // Borrar registros previos antes de cargar los nuevos
             BorrarRegistrosTablaClientes();
 
@@ -139,23 +142,19 @@ public class FrmAdminClientes extends javax.swing.JFrame {
             // Control de botones de navegación
             btnAtras.setEnabled(pagina > 1);
 
-            
-
-        } catch (NegocioException ex)
-        {
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-     private void AgregarRegistrosTablaCliente(List<ClienteDTO> clienteLista) {
-        if (clienteLista == null)
-        {
+    private void AgregarRegistrosTablaCliente(List<ClienteDTO> clienteLista) {
+        if (clienteLista == null) {
             return;
         }
 
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblClientes.getModel();
-        clienteLista.forEach(row ->
-        {
+        clienteLista.forEach(row
+                -> {
             Object[] fila = new Object[6];
             fila[0] = row.getIdCliente();
             fila[1] = row.getNombre();
@@ -166,6 +165,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
             modeloTabla.addRow(fila);
         });
     }
+
     private int getIdSeleccionadoTablaClientes() {
         int indiceFilaSeleccionada = this.tblClientes.getSelectedRow();
         if (indiceFilaSeleccionada != -1) {
@@ -185,22 +185,18 @@ public class FrmAdminClientes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor selecciona un cliente", "Información", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-            int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar el cliente seleccionado?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION)
-            {
-                try
-                {
-                    frmEliminarClientes eliminar = new frmEliminarClientes(id, this.clienteBO, this.ciudadBO);
-                    eliminar.setVisible(true);
-                    // Recargar la tabla después de eliminar
-                    cargarClientesEnTabla(pagina, LIMITE);
-                } catch (NegocioException ex)
-                {
-                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar el cliente seleccionado?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                frmEliminarClientes eliminar = new frmEliminarClientes(this, id, this.clienteBO, this.ciudadBO);
+                eliminar.setVisible(true);
+                // Recargar la tabla después de eliminar
+                cargarClientesEnTabla(pagina, LIMITE);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        
+        }
 
     }
 
@@ -210,13 +206,13 @@ public class FrmAdminClientes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
             return;
         }
-       
-            System.out.println("El id para editar es " + id);
-            frmEditarClientes editar = new frmEditarClientes(id, this.clienteBO, this.ciudadBO);
-            editar.setVisible(true);
-            cargarClientesEnTabla(pagina, LIMITE);
-            estadoPagina();
-        
+
+        System.out.println("El id para editar es " + id);
+        frmEditarClientes editar = new frmEditarClientes(this, id, this.clienteBO, this.ciudadBO);
+        editar.setVisible(true);
+        cargarClientesEnTabla(pagina, LIMITE);
+        estadoPagina();
+
     }
 
     public void estadoPagina() {
@@ -242,16 +238,14 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
         try {
             btnSiguiente.setEnabled(true);
-            if (this.clienteBO.buscarClientes(LIMITE, pagina+1) == null
-                    || this.clienteBO.buscarClientes(LIMITE, pagina+1).isEmpty()) {
+            if (this.clienteBO.buscarClientes(LIMITE, pagina + 1) == null
+                    || this.clienteBO.buscarClientes(LIMITE, pagina + 1).isEmpty()) {
                 btnSiguiente.setEnabled(false);
             }
         } catch (NegocioException ex) {
             System.out.println(ex);
         }
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -447,7 +441,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
@@ -479,8 +473,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(138, 138, 138)
@@ -500,7 +493,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addContainerGap(1280, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -543,18 +536,15 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     private void btnMenuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSalasActionPerformed
         IConexionBD conexionBD = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO  sucursalBO = new SucursalBO(sucursalDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ISalaDAO salaDAO = new SalaDAO(conexionBD);
         ISalaBO salaBO = new SalaBO(salaDAO);
-        
-        
-        
-        
+
         FrmAdminSalas frmAdminSalas = new FrmAdminSalas(sucursalBO, ciudadBO, salaBO);
         frmAdminSalas.setVisible(true);
         this.dispose();
-        
-            // TODO add your handling code here:
+
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuSalasActionPerformed
 
     private void btnMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuClienteActionPerformed
@@ -567,7 +557,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
-        
+
         FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
         frmAdminSucursal.setVisible(true);
         this.dispose();
@@ -575,11 +565,26 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuSucursalesActionPerformed
 
     private void btnMenuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuFuncionesActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        FrmAdminEscogerFuncion escogerFuncion = new FrmAdminEscogerFuncion(sucursalBO, ciudadBO, peliculaBO);
+        escogerFuncion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuFuncionesActionPerformed
 
     private void btnMenuReporteSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursalActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        IReportesSucursalesDAO reportesSucursalesDAO = new ReportesSucursalesDAO(conexionBD);
+        IReportesSucursalesBO reportesSucursalesBO = new ReportesSucursalesBO(reportesSucursalesDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+
+        FrmReporteSucursales reporteSucursales = new FrmReporteSucursales(sucursalBO, ciudadBO, reportesSucursalesBO);
+        reporteSucursales.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReporteSucursalActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
@@ -593,21 +598,35 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void BtnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarClienteActionPerformed
-        frmGuardarClientes guardar = new frmGuardarClientes(this.clienteBO,this.ciudadBO);
+        frmGuardarClientes guardar = new frmGuardarClientes(this, this.clienteBO, this.ciudadBO);
         guardar.setVisible(true);
         cargarClientesEnTabla(pagina, LIMITE);
         estadoPagina();
-        
+
     }//GEN-LAST:event_BtnAgregarClienteActionPerformed
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+        reportePelicula.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
 
     private void btnMenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPeliculaActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexion = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+
+        FrmAdminPeliculas pelicula = new FrmAdminPeliculas(sucursalBO, ciudadBO, peliculaBO);
+        pelicula.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuPeliculaActionPerformed
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarCliente;
     private javax.swing.JButton btnAtras;

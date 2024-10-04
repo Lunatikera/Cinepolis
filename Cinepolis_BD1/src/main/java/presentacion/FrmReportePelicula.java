@@ -21,10 +21,12 @@ import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IPeliculaBO;
+import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
@@ -34,9 +36,11 @@ import persistencia.ICiudadDAO;
 import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
 import utilerias.JButtonCellEditor;
@@ -62,12 +66,11 @@ public class FrmReportePelicula extends javax.swing.JFrame {
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmReportePelicula(ISucursalBO sucursalBO, ICiudadBO ciudadBO, SucursalDTO sucursal) {
+    public FrmReportePelicula(ISucursalBO sucursalBO, ICiudadBO ciudadBO) {
         initComponents();
         this.sucursalBO = sucursalBO;
         this.ciudadBO = ciudadBO;
-        
-        this.sucursal = sucursal;
+
         cargarMetodosIniciales();
     }
 
@@ -75,60 +78,16 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         //this.cargarConfiguracionInicialPantalla();
 //        this.llenarComboBoxSucrsales();
 //        this.llenarComboBoxPeliculasPorAnadir();
-//        
-        this.cargarConfiguracionInicialTablaPeliculas();
+//          this.setTitle("Reporte de Sucursales");
+        this.setResizable(false);
+        this.setSize(1280, 775);
+        this.setLocationRelativeTo(null);
         this.cargarPeliculasTabla();
-      
+
     }
 
     public void cargarPeliculasTabla() {
-        try {
-            List<PeliculaDTO> peliculaLista = this.peliculaBO.buscarPeliculaSucursal(sucursal.getId(), LIMITE, pagina, pelicuaEnSucursal);
-            this.llenarTablaPeliculas(peliculaLista);
-            if (peliculaLista == null && pagina == 1) {
-                JOptionPane.showMessageDialog(null, "No hay ninguna pelicula registrada", "Error", JOptionPane.ERROR_MESSAGE);
 
-            }
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void cargarConfiguracionInicialTablaPeliculas() {
-        ActionListener onEditarClickListener = new ActionListener() {
-            final int columnaId = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Metodo para editar un cliente
-
-                removerPeliculaSucursal();
-            }
-        };
-        int indiceColumnaEditar = 5;
-        TableColumnModel modeloColumnas = this.tblReporteSucursal.getColumnModel();
-        modeloColumnas.getColumn(indiceColumnaEditar)
-                .setCellRenderer(new JButtonRenderer("Remover"));
-        modeloColumnas.getColumn(indiceColumnaEditar)
-                .setCellEditor(new JButtonCellEditor("Remover",
-                        onEditarClickListener));
-
-        ActionListener onEliminarClickListener = new ActionListener() {
-            final int columnaId = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Metodo para eliminar un cliente
-                verPeliculaFuncion();
-            }
-        };
-        int indiceColumnaEliminar = 6;
-        modeloColumnas = this.tblReporteSucursal.getColumnModel();
-        modeloColumnas.getColumn(indiceColumnaEliminar)
-                .setCellRenderer(new JButtonRenderer("Ver"));
-        modeloColumnas.getColumn(indiceColumnaEliminar)
-                .setCellEditor(new JButtonCellEditor("Ver",
-                        onEliminarClickListener));
     }
 
     private void llenarTablaPeliculas(List<PeliculaDTO> peliculaLista) {
@@ -168,40 +127,6 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         }
     }
 
-    private void removerPeliculaSucursal() {
-        int id = this.getIdSeleccionadoTablaClientes();
-        if (id == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            peliculaBO.eliminarPeliculaDeSucursal(id, sucursal.getId());
-            this.cargarPeliculasTabla();
-//            this.llenarComboBoxPeliculasPorAnadir();
-            
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmReportePelicula.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private void verPeliculaFuncion() {
-        int id = this.getIdSeleccionadoTablaClientes();
-        if (id == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmReportePelicula.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    
-
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -235,6 +160,8 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         btnMenuReporteSucursales = new utilerias.MenuButton();
         jLabel9 = new javax.swing.JLabel();
+        btnMenuReporteSucursales1 = new utilerias.MenuButton();
+        jLabel7 = new javax.swing.JLabel();
         fechaFinDP = new com.github.lgooddatepicker.components.DatePicker();
         fechaInicioDP = new com.github.lgooddatepicker.components.DatePicker();
         cbCiudadAñadir = new javax.swing.JComboBox<>();
@@ -385,6 +312,20 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel9);
 
+        btnMenuReporteSucursales1.setForeground(new java.awt.Color(255, 255, 255));
+        btnMenuReporteSucursales1.setText("Reporte Pelicula");
+        btnMenuReporteSucursales1.setBorderPainted(false);
+        btnMenuReporteSucursales1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReporteSucursales1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuReporteSucursales1ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnMenuReporteSucursales1);
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
+        jPanel4.add(jLabel7);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -488,27 +429,12 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(379, 379, 379)
-                                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(85, 85, 85)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addComponent(btnQuitarCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(155, 155, 155)
-                                .addComponent(btnQuitarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(18, 19, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(cbCiudadAñadir, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -535,63 +461,81 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                                                 .addGap(89, 89, 89)
                                                 .addComponent(jLabel14))))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(46, 46, 46)
+                                .addGap(52, 52, 52)
                                 .addComponent(btnAnadirCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(154, 154, 154)
                                 .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel15)
                                 .addGap(59, 59, 59)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addComponent(btnIr)
-                        .addGap(85, 85, 85))))
+                        .addGap(85, 85, 85))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(294, 294, 294)
+                                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(btnQuitarCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(158, 158, 158)
+                                .addComponent(btnQuitarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbCiudadAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbPeliculaAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAnadirCiudad)
-                            .addComponent(btnAnadirPelicula)
-                            .addComponent(btnIr))
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbPeliculaQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnQuitarCiudad)
-                            .addComponent(btnQuitarPelicula))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)))
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel13)
+                                    .addComponent(jLabel12))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cbCiudadAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbPeliculaAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnAnadirCiudad)
+                                    .addComponent(btnAnadirPelicula)
+                                    .addComponent(btnIr))
+                                .addGap(14, 14, 14)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbPeliculaQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnQuitarCiudad)
+                                    .addComponent(btnQuitarPelicula))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53)))
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)))
+                .addContainerGap())
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -611,56 +555,61 @@ public class FrmReportePelicula extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSalasActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO  sucursalBO = new SucursalBO(sucursalDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ISalaDAO salaDAO = new SalaDAO(conexionBD);
         ISalaBO salaBO = new SalaBO(salaDAO);
-        
-        
-        
-        
+
         FrmAdminSalas frmAdminSalas = new FrmAdminSalas(sucursalBO, ciudadBO, salaBO);
         frmAdminSalas.setVisible(true);
         this.dispose();              // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuSalasActionPerformed
 
     private void btnMenuSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSucursalesActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
-        
+
         FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
         frmAdminSucursal.setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuSucursalesActionPerformed
 
     private void btnMenuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuFuncionesActionPerformed
-        // TODO add your handling code here:
+        FrmAdminEscogerFuncion escogerFuncion = new FrmAdminEscogerFuncion(sucursalBO, ciudadBO, peliculaBO);
+        escogerFuncion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuFuncionesActionPerformed
 
     private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-        
+
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
-        
+
 
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void btnMenuReporteSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursalesActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        IReportesSucursalesDAO reportesSucursalesDAO = new ReportesSucursalesDAO(conexionBD);
+        IReportesSucursalesBO reportesSucursalesBO = new ReportesSucursalesBO(reportesSucursalesDAO);
+
+        FrmReporteSucursales reporteSucursales = new FrmReporteSucursales(sucursalBO, ciudadBO, reportesSucursalesBO);
+        reporteSucursales.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReporteSucursalesActionPerformed
 
     private void btnMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuClienteActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
         IClienteDAO clienteDAO = new ClienteDAO(conexionBD);
         IClienteBO clienteBO = new ClienteBO(clienteDAO);
         FrmAdminClientes frmAdminClientes = new FrmAdminClientes(ciudadBO, clienteBO);
         frmAdminClientes.setVisible(true);
-         this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuClienteActionPerformed
 
     private void cbCiudadAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCiudadAñadirActionPerformed
@@ -696,7 +645,7 @@ IConexionBD conexionBD = new ConexionBD();
     }//GEN-LAST:event_btnQuitarPeliculaActionPerformed
 
     private void btnMenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPeliculaActionPerformed
-IConexionBD conexion = new ConexionBD();
+        IConexionBD conexion = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
@@ -705,8 +654,12 @@ IConexionBD conexion = new ConexionBD();
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
         FrmAdminPeliculas frnAdminPeliculas = new FrmAdminPeliculas(sucursalBO, ciudadBO, peliculaBO);
         frnAdminPeliculas.setVisible(true);
-            this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuPeliculaActionPerformed
+
+    private void btnMenuReporteSucursales1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursales1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMenuReporteSucursales1ActionPerformed
 //    private void llenarComboBoxPeliculasPorAnadir() {
 //        try {
 //            cbSucursal.removeAllItems();
@@ -740,7 +693,7 @@ IConexionBD conexion = new ConexionBD();
 //        });
 //    }
 
-   /* private void actualizarComboBoxCiudad() {
+    /* private void actualizarComboBoxCiudad() {
         try {
             SucursalDTO sucursal = (SucursalDTO) cbSucursal.getSelectedItem();
             listaSucursales = sucursalBO.listaSucursalesporCiudad(ciudad.getId());
@@ -767,6 +720,7 @@ IConexionBD conexion = new ConexionBD();
     private utilerias.MenuButton btnMenuFunciones;
     private utilerias.MenuButton btnMenuPelicula;
     private utilerias.MenuButton btnMenuReporteSucursales;
+    private utilerias.MenuButton btnMenuReporteSucursales1;
     private utilerias.MenuButton btnMenuSalas;
     private utilerias.MenuButton btnMenuSucursales;
     private javax.swing.JButton btnQuitarCiudad;
@@ -788,6 +742,7 @@ IConexionBD conexion = new ConexionBD();
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

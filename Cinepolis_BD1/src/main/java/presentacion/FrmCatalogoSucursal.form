@@ -148,23 +148,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBoletosActionPerformed"/>
               </Events>
             </Component>
-            <Component class="utilerias.MenuButton" name="btnInbox">
-              <Properties>
-                <Property name="borderPainted" type="boolean" value="false"/>
-                <Property name="iconoSeleccionado" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/inboxSelected.png"/>
-                </Property>
-                <Property name="iconoSimple" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/inbox.png"/>
-                </Property>
-                <Property name="selectedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/inboxSelected.png"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInboxActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="utilerias.MenuButton" name="btnPerfil">
               <Properties>
                 <Property name="borderPainted" type="boolean" value="false"/>

@@ -47,7 +47,13 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public void eliminarPorID(int id) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            funcionDAO.eliminarPorID(id);
+            System.out.println("Función eliminada correctamente.");
+        } catch (PersistenciaException e) {
+            // Handle business exceptions
+            throw new NegocioException("Error al intentar eliminar la función con ID: " + id, e);
+        }
     }
 
     @Override

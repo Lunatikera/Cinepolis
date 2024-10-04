@@ -25,8 +25,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 import negocio.CiudadBO;
+import negocio.GeneroBO;
 import negocio.ICiudadBO;
 import negocio.IFuncionBO;
+import negocio.IGeneroBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
@@ -40,8 +42,10 @@ import negocio.TicketBO;
 import negocio.VentaBO;
 import persistencia.CiudadDAO;
 import persistencia.ConexionBD;
+import persistencia.GeneroDAO;
 import persistencia.ICiudadDAO;
 import persistencia.IConexionBD;
+import persistencia.IGeneroDAO;
 import persistencia.IPeliculaDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
@@ -78,8 +82,8 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
         this.funcionBO = funcionBO;
         this.pelicula = pelicula;
         this.sucursal = sucursal;
-        this.cliente=cliente;
-        this.ciudad=ciudad;
+        this.cliente = cliente;
+        this.ciudad = ciudad;
         System.out.println(pelicula.getId());
         botones = new JButton[]{btnFuncion, btnFuncion1, btnFuncion2, btnFuncion3, btnFuncion4, btnFuncion5, btnFuncion6, btnFuncion7, btnFuncion8};
         consulta = new ConsultaFuncionDTO(obtenerNombreDiaDeHoy(), sucursal.getId(), pelicula.getId());
@@ -201,7 +205,7 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
         btnDomingo = new utilerias.MenuButton();
         btnAtras = new utilerias.MenuButton();
         btnSiguiente = new utilerias.MenuButton();
-        menuButton2 = new utilerias.MenuButton();
+        btnDetalles = new utilerias.MenuButton();
         jPanel13 = new javax.swing.JPanel();
         panelConFondoHora3 = new utilerias.PanelConFondoHora();
         btnFuncion = new javax.swing.JButton();
@@ -566,12 +570,12 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
         btnSiguiente.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/rightSelected.png"))); // NOI18N
         btnSiguiente.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/right.png"))); // NOI18N
 
-        menuButton2.setBorderPainted(false);
-        menuButton2.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/infroPeli.png"))); // NOI18N
-        menuButton2.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/infroPeli.png"))); // NOI18N
-        menuButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnDetalles.setBorderPainted(false);
+        btnDetalles.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/infroPeli.png"))); // NOI18N
+        btnDetalles.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/infroPeli.png"))); // NOI18N
+        btnDetalles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuButton2ActionPerformed(evt);
+                btnDetallesActionPerformed(evt);
             }
         });
 
@@ -882,7 +886,7 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                        .addComponent(menuButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(254, 254, 254))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                         .addComponent(lblPagina)
@@ -906,7 +910,7 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addComponent(lblPagina)
                 .addGap(18, 18, 18)
-                .addComponent(menuButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(67, Short.MAX_VALUE))
         );
 
@@ -1012,9 +1016,9 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
     private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
-        IConexionBD conexionBD=new ConexionBD();
-        ITicketDAO ticketDAO=new TicketDAO(conexionBD);
-        ITicketBO ticketBO= new TicketBO(ticketDAO);
+        IConexionBD conexionBD = new ConexionBD();
+        ITicketDAO ticketDAO = new TicketDAO(conexionBD);
+        ITicketBO ticketBO = new TicketBO(ticketDAO);
         FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
         boletos.setVisible(true);
         this.dispose();
@@ -1092,11 +1096,14 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
         this.comprarBoleto(funcion);
     }//GEN-LAST:event_btnFuncion8ActionPerformed
 
-    private void menuButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButton2ActionPerformed
-        FrmDetallePelicula detalles= new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
+    private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
+        IConexionBD conexion = new ConexionBD();
+        IGeneroDAO generoDAO = new GeneroDAO(conexion);
+        IGeneroBO generoBO = new GeneroBO(generoDAO);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(generoBO, pelicula, cliente, sucursal, ciudad);
         detalles.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_menuButton2ActionPerformed
+    }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void comprarBoleto(FuncionDTO funcion) {
         IConexionBD conexion = new ConexionBD();
@@ -1109,7 +1116,7 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
         try {
             sala = salaBO.leerPorId(funcion.getId());
 
-            FrmCompraBoleto comprar = new FrmCompraBoleto(ventaBO, pelicula, cliente, funcion, sucursal, sala,ciudad);
+            FrmCompraBoleto comprar = new FrmCompraBoleto(ventaBO, pelicula, cliente, funcion, sucursal, sala, ciudad);
             comprar.setVisible(true);
             this.dispose();
         } catch (NegocioException ex) {
@@ -1131,6 +1138,7 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
     private utilerias.MenuButton Sabado;
     private utilerias.MenuButton btnAtras;
     private utilerias.MenuButton btnBoletos;
+    private utilerias.MenuButton btnDetalles;
     private utilerias.MenuButton btnDomingo;
     private javax.swing.JButton btnFuncion;
     private javax.swing.JButton btnFuncion1;
@@ -1172,7 +1180,6 @@ public class FrmFuncionesPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel lblDuracion;
     private javax.swing.JLabel lblPagina;
     private javax.swing.JLabel lblPelicula;
-    private utilerias.MenuButton menuButton2;
     private utilerias.PanelConFondoHora panelConFondoHora1;
     private utilerias.PanelConFondoHora panelConFondoHora10;
     private utilerias.PanelConFondoHora panelConFondoHora11;

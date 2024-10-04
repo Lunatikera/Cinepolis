@@ -20,17 +20,19 @@ import negocio.IClienteBO;
  *
  * @author samoano y temo
  */
-public class frmEditarClientes extends javax.swing.JFrame{
+public class frmEditarClientes extends javax.swing.JFrame {
+
+    FrmAdminClientes adminClientes;
     ClienteDTO clienteDTO;
     IClienteBO clienteNegocio;
     int id;
     ICiudadBO ciudadBO;
     List<CiudadDTO> listaCiudades;
-   
-    
-    public frmEditarClientes(int id,IClienteBO clienteNegocio,ICiudadBO ciudadBO) throws NegocioException{
+
+    public frmEditarClientes(FrmAdminClientes adminClientes, int id, IClienteBO clienteNegocio, ICiudadBO ciudadBO) throws NegocioException {
         initComponents();
-        this.clienteNegocio= clienteNegocio;
+        this.adminClientes = adminClientes;
+        this.clienteNegocio = clienteNegocio;
         this.ciudadBO = ciudadBO;
         this.id = id;
         this.setTitle("Editar Cliente");
@@ -164,20 +166,22 @@ public class frmEditarClientes extends javax.swing.JFrame{
         metodoMostrarDatos();
         llenarComboBoxCiudades();
     }
-    
-    public void metodoMostrarDatos() throws NegocioException{
-        try{
-        ClienteDTO c = this.clienteNegocio.buscarClientePorId(this.id);
-        NombresTxt.setText(c.getNombre());
-        apellidoMAtxt1.setText(c.getApellidoMA());
-        apellidoPATxt.setText(c.getApellidoPA());
-        correoAtxt1.setText(c.getCorreo());
-        FechaNacimientoPicker.setDate(c.getFechaNacimiento());
-        }catch(NegocioException ex){
+
+    public void metodoMostrarDatos() throws NegocioException {
+        try {
+            ClienteDTO c = this.clienteNegocio.buscarClientePorId(this.id);
+            NombresTxt.setText(c.getNombre());
+            apellidoMAtxt1.setText(c.getApellidoMA());
+            apellidoPATxt.setText(c.getApellidoPA());
+            correoAtxt1.setText(c.getCorreo());
+            FechaNacimientoPicker.setDate(c.getFechaNacimiento());
+        } catch (NegocioException ex) {
             System.out.println(ex.getMessage());
-        } 
-        
-    };
+        }
+
+    }
+
+    ;
     
     private void llenarComboBoxCiudades() {
         try {
@@ -189,27 +193,27 @@ public class frmEditarClientes extends javax.swing.JFrame{
             Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
+
+
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         String nombre = NombresTxt.getText();
         String apPaterno = apellidoPATxt.getText();
         String apMaterno = apellidoMAtxt1.getText();
         String correo = correoAtxt1.getText();
         LocalDate fecha = FechaNacimientoPicker.getDate();
-        try{
-        CiudadDTO ciudades = (CiudadDTO) ciudadesCB.getSelectedItem();
-        ClienteDTO clienteE = this.clienteNegocio.buscarClientePorId(id);
-        clienteE.setNombre(nombre);
-        clienteE.setApellidoMA(apMaterno);
-        clienteE.setApellidoPA(apPaterno);
-        clienteE.setCorreo(correo);
-        clienteE.setFechaNacimiento(fecha);
-        clienteE.setIdCiudad(ciudades.getId());
-        this.clienteNegocio.actualizarCliente(clienteE);
-        dispose();
-        }catch(Exception m){
+        try {
+            CiudadDTO ciudades = (CiudadDTO) ciudadesCB.getSelectedItem();
+            ClienteDTO clienteE = this.clienteNegocio.buscarClientePorId(id);
+            clienteE.setNombre(nombre);
+            clienteE.setApellidoMA(apMaterno);
+            clienteE.setApellidoPA(apPaterno);
+            clienteE.setCorreo(correo);
+            clienteE.setFechaNacimiento(fecha);
+            clienteE.setIdCiudad(ciudades.getId());
+            this.clienteNegocio.actualizarCliente(clienteE);
+            this.adminClientes.cargarMetodosIniciales();
+            dispose();
+        } catch (Exception m) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + m.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGuardar1ActionPerformed
@@ -218,42 +222,6 @@ public class frmEditarClientes extends javax.swing.JFrame{
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmEditarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmEditarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmEditarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmEditarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.DatePicker FechaNacimientoPicker;

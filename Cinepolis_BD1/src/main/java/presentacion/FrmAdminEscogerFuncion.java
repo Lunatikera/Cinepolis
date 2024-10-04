@@ -17,25 +17,33 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import negocio.CiudadBO;
 import negocio.ClienteBO;
+import negocio.FuncionBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
+import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
+import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
+import persistencia.FuncionDAO;
 import persistencia.ICiudadDAO;
 import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
+import persistencia.IFuncionDAO;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
 import utilerias.JButtonCellEditor;
@@ -61,31 +69,37 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmAdminEscogerFuncion(ISucursalBO sucursalBO, ICiudadBO ciudadBO, IPeliculaBO peliculaBO, SucursalDTO sucursal) {
+    public FrmAdminEscogerFuncion(ISucursalBO sucursalBO, ICiudadBO ciudadBO, IPeliculaBO peliculaBO) {
         initComponents();
         this.sucursalBO = sucursalBO;
         this.ciudadBO = ciudadBO;
         this.peliculaBO = peliculaBO;
-        this.sucursal = sucursal;
         cargarMetodosIniciales();
     }
 
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
         this.llenarComboBoxCiudad();
+        this.cbCiudades.setSelectedIndex(1);
+        this.actualizarComboBoxCiudad();
+        this.cbSucursales.setSelectedIndex(0);
+
+        this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
+        System.out.println(sucursal);
         this.seleccionarCiudadYSucursal();
+
         this.cargarConfiguracionInicialTablaPeliculas();
         this.cargarPeliculasTabla();
         this.estadoPagina();
         configuracionFrame();
     }
+
     public void configuracionFrame() {
         this.setTitle("Administracion de Funciones ");
         this.setResizable(false);
         this.setSize(1280, 735);
         this.setLocationRelativeTo(null);
     }
-    
 
     public void cargarPeliculasTabla() {
         try {
@@ -158,7 +172,6 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         }
     }
 
-
     private void verPeliculaFuncion() {
         int id = this.getIdSeleccionadoTablaClientes();
         if (id == 0) {
@@ -167,6 +180,17 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         }
         try {
             PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
+
+            IConexionBD conexionBD = new ConexionBD();
+            IFuncionDAO funcionDAO = new FuncionDAO(conexionBD);
+            ISalaDAO salaDAO = new SalaDAO(conexionBD);
+            ISalaBO salaBO = new SalaBO(salaDAO);
+            IFuncionBO funcionBO = new FuncionBO(funcionDAO);
+
+            FrmAdminFuncion adminFuncion = new FrmAdminFuncion(funcionBO, salaBO, sucursal, pelicula);
+            adminFuncion.setVisible(true);
+            this.dispose();
+
         } catch (NegocioException ex) {
             Logger.getLogger(FrmAdminEscogerFuncion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -453,7 +477,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
@@ -473,8 +497,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(138, 138, 138)
@@ -552,15 +575,13 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSalasActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
+
         ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO  sucursalBO = new SucursalBO(sucursalDAO);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ISalaDAO salaDAO = new SalaDAO(conexionBD);
         ISalaBO salaBO = new SalaBO(salaDAO);
-        
-        
-        
-        
+
         FrmAdminSalas frmAdminSalas = new FrmAdminSalas(sucursalBO, ciudadBO, salaBO);
         frmAdminSalas.setVisible(true);
         this.dispose();        // TODO add your handling code here:
@@ -572,17 +593,17 @@ IConexionBD conexionBD = new ConexionBD();
         IClienteBO clienteBO = new ClienteBO(clienteDAO);
         FrmAdminClientes frmAdminClientes = new FrmAdminClientes(ciudadBO, clienteBO);
         frmAdminClientes.setVisible(true);
-         this.dispose();
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuClienteActionPerformed
 
     private void btnMenuSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSucursalesActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
-        
+
         FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
         frmAdminSucursal.setVisible(true);
         this.dispose();        // TODO add your handling code here:
@@ -604,7 +625,13 @@ IConexionBD conexionBD = new ConexionBD();
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnMenuReporteSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursalesActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        IReportesSucursalesDAO reportesSucursalesDAO = new ReportesSucursalesDAO(conexionBD);
+        IReportesSucursalesBO reportesSucursalesBO = new ReportesSucursalesBO(reportesSucursalesDAO);
+
+        FrmReporteSucursales reporteSucursales = new FrmReporteSucursales(sucursalBO, ciudadBO, reportesSucursalesBO);
+        reporteSucursales.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReporteSucursalesActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
@@ -620,11 +647,13 @@ IConexionBD conexionBD = new ConexionBD();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
-        // TODO add your handling code here:
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+        reportePelicula.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
 
     private void btnMenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPeliculaActionPerformed
-IConexionBD conexion = new ConexionBD();
+        IConexionBD conexion = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
@@ -633,9 +662,8 @@ IConexionBD conexion = new ConexionBD();
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
         FrmAdminPeliculas frnAdminPeliculas = new FrmAdminPeliculas(sucursalBO, ciudadBO, peliculaBO);
         frnAdminPeliculas.setVisible(true);
-            this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuPeliculaActionPerformed
-   
 
     private void llenarComboBoxCiudad() {
         try {

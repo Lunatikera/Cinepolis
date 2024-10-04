@@ -28,4 +28,6 @@ public interface IPeliculaBO {
     public void eliminarPeliculaDeSucursal(int peliculaId, int sucursalId) throws NegocioException;
 
     public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws NegocioException;
+
+
 }

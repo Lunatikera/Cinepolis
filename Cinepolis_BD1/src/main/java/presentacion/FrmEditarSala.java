@@ -14,10 +14,11 @@ import negocio.NegocioException;
 
 /**
  *
- * @author rramirez
+ * @author Rios
+ * 
  */
 public class FrmEditarSala extends javax.swing.JFrame {
-
+    FrmAdminSalas adminSalas;
     ISalaBO salaBO;
     int id;
     int idSucursal;
@@ -26,8 +27,9 @@ public class FrmEditarSala extends javax.swing.JFrame {
     /**
      * Creates new form FrmAgregarCliente
      */
-    public FrmEditarSala(ISalaBO salaBO, int id,int idSucursal) throws NegocioException {
+    public FrmEditarSala( FrmAdminSalas adminSalas, ISalaBO salaBO, int id,int idSucursal) throws NegocioException {
         initComponents();
+        this. adminSalas=adminSalas;
         this.salaBO = salaBO;
         this.id = id;
         this.idSucursal = idSucursal;
@@ -230,6 +232,7 @@ public class FrmEditarSala extends javax.swing.JFrame {
             SalaDTO c = this.salaBO.leerPorId(id);
             SalaDTO editar = new SalaDTO(c.getId(),nombre,numA,duracion,idSucursal,c.isEstaEliminada());
             this.salaBO.editar(editar);
+            adminSalas.cargarMetodosIniciales();
             JOptionPane.showMessageDialog(this, "Registro modificado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
         } catch (NegocioException ex)
         {

@@ -178,5 +178,7 @@ public class PeliculaBO implements IPeliculaBO {
             throw new NegocioException("No se pudo guardar la pelicula en la Sucursal");
         }
     }
-
 }
+
+  
+

@@ -20,10 +20,12 @@ import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IPeliculaBO;
+import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
 import persistencia.CiudadDAO;
@@ -33,8 +35,10 @@ import persistencia.ICiudadDAO;
 import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportesSucursalesDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportesSucursalesDAO;
 import persistencia.SucursalDAO;
 import utilerias.JButtonCellEditor;
 import utilerias.JButtonRenderer;
@@ -60,25 +64,34 @@ public class FrmAdminSalas extends javax.swing.JFrame {
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmAdminSalas(ISucursalBO sucursalBO, ICiudadBO ciudadBO,ISalaBO salaBO) {
+    public FrmAdminSalas(ISucursalBO sucursalBO, ICiudadBO ciudadBO, ISalaBO salaBO) {
         initComponents();
         this.sucursalBO = sucursalBO;
         this.ciudadBO = ciudadBO;
         this.salaBO = salaBO;
+        this.sucursal = new SucursalDTO();
         cargarMetodosIniciales();
     }
 
     public void cargarMetodosIniciales() {
         //this.cargarConfiguracionInicialPantalla();
+        this.setTitle("Administracion de Salas ");
+        this.setResizable(false);
+        this.setSize(1280, 780);
+        this.setLocationRelativeTo(null);
         this.llenarComboBoxCiudad();
+        this.cbCiudades.setSelectedIndex(1);
+        this.actualizarComboBoxCiudad();
+        this.cbSucursales.setSelectedIndex(0);
+
+        this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
+        System.out.println(sucursal);
         this.seleccionarCiudadYSucursal();
-        this.sucursal = cbSucursales.getPrototypeDisplayValue();
+
         this.cargarConfiguracionInicialTablaPeliculas();
         this.cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
         this.estadoPagina();
     }
-
-    
 
     private void cargarConfiguracionInicialTablaPeliculas() {
         ActionListener onEditarClickListener = new ActionListener() {
@@ -119,17 +132,15 @@ public class FrmAdminSalas extends javax.swing.JFrame {
 
     private void BorrarRegistrosTablaClientes() {
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblPeliculas.getModel();
-        if (modeloTabla.getRowCount() > 0)
-        {
-            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--)
-            {
+        if (modeloTabla.getRowCount() > 0) {
+            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--) {
                 modeloTabla.removeRow(row);
             }
         }
     }
-    private void cargarClientesEnTabla(int idSucursal,int pagina, int limite) {
-        try
-        {
+
+    private void cargarClientesEnTabla(int idSucursal, int pagina, int limite) {
+        try {
             // Borrar registros previos antes de cargar los nuevos
             BorrarRegistrosTablaClientes();
 
@@ -145,23 +156,19 @@ public class FrmAdminSalas extends javax.swing.JFrame {
             // Control de botones de navegación
             btnAtras.setEnabled(pagina > 1);
 
-            
-
-        } catch (NegocioException ex)
-        {
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-     private void AgregarRegistrosTablaSalas(List<SalaDTO> salaLista) {
-        if (salaLista == null)
-        {
+    private void AgregarRegistrosTablaSalas(List<SalaDTO> salaLista) {
+        if (salaLista == null) {
             return;
         }
 
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblPeliculas.getModel();
-        salaLista.forEach(row ->
-        {
+        salaLista.forEach(row
+                -> {
             Object[] fila = new Object[4];
             fila[0] = row.getId();
             fila[1] = row.getNombre();
@@ -170,6 +177,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
             modeloTabla.addRow(fila);
         });
     }
+
     private int getIdSeleccionadoTablaClientes() {
         int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
         if (indiceFilaSeleccionada != -1) {
@@ -189,21 +197,17 @@ public class FrmAdminSalas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor selecciona una sala", "Información", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-            int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar la sala seleccionado?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION)
-            {
-                try
-                {
-                    this.salaBO.eliminarPorId(id);
-                    // Recargar la tabla después de eliminar
-                    cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
-                } catch (NegocioException ex)
-                {
-                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar la sala seleccionado?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                this.salaBO.eliminarPorId(id);
+                // Recargar la tabla después de eliminar
+                cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
+            } catch (NegocioException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        
+        }
 
     }
 
@@ -215,9 +219,9 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         }
         try {
             System.out.println("El id para editar es " + id);
-            FrmEditarSala editarSala = new FrmEditarSala(this.salaBO,id,this.sucursal.getId());
+            FrmEditarSala editarSala = new FrmEditarSala(this, this.salaBO, id, this.sucursal.getId());
             editarSala.setVisible(true);
-            cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
+            cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
             estadoPagina();
         } catch (NegocioException ex) {
             Logger.getLogger(FrmAdminSalas.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,8 +251,8 @@ public class FrmAdminSalas extends javax.swing.JFrame {
 
         try {
             btnSiguiente.setEnabled(true);
-            if (this.salaBO.paginadoSalasPorSucursal(sucursal.getId(), LIMITE, pagina+1) == null
-                    || this.salaBO.paginadoSalasPorSucursal(sucursal.getId(), LIMITE, pagina+1).isEmpty()) {
+            if (this.salaBO.paginadoSalasPorSucursal(sucursal.getId(), LIMITE, pagina + 1) == null
+                    || this.salaBO.paginadoSalasPorSucursal(sucursal.getId(), LIMITE, pagina + 1).isEmpty()) {
                 btnSiguiente.setEnabled(false);
             }
         } catch (NegocioException ex) {
@@ -282,7 +286,6 @@ public class FrmAdminSalas extends javax.swing.JFrame {
             // Actualizar el combo box de sucursales con las sucursales de esa ciudad
             actualizarComboBoxCiudad();
 
-            
         }
     }
 
@@ -502,7 +505,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
@@ -534,8 +537,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(138, 138, 138)
@@ -552,7 +554,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
                                 .addComponent(lblPagina)
                                 .addGap(54, 54, 54)
                                 .addComponent(btnSiguiente)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(161, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -607,7 +609,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -622,28 +624,34 @@ public class FrmAdminSalas extends javax.swing.JFrame {
     }//GEN-LAST:event_menuButton1ActionPerformed
 
     private void btnMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuClienteActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
         IClienteDAO clienteDAO = new ClienteDAO(conexionBD);
         IClienteBO clienteBO = new ClienteBO(clienteDAO);
         FrmAdminClientes frmAdminClientes = new FrmAdminClientes(ciudadBO, clienteBO);
         frmAdminClientes.setVisible(true);
-         this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuClienteActionPerformed
 
     private void btnMenuSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSucursalesActionPerformed
-IConexionBD conexionBD = new ConexionBD();
+        IConexionBD conexionBD = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
-        
+
         FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
         frmAdminSucursal.setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuSucursalesActionPerformed
 
     private void btnMenuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuFuncionesActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+
+        FrmAdminEscogerFuncion escogerFuncion = new FrmAdminEscogerFuncion(sucursalBO, ciudadBO, peliculaBO);
+        escogerFuncion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuFuncionesActionPerformed
 
     private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
@@ -658,7 +666,13 @@ IConexionBD conexionBD = new ConexionBD();
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnMenuReporteSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursalesActionPerformed
-        // TODO add your handling code here:
+        IConexionBD conexionBD = new ConexionBD();
+        IReportesSucursalesDAO reportesSucursalesDAO = new ReportesSucursalesDAO(conexionBD);
+        IReportesSucursalesBO reportesSucursalesBO = new ReportesSucursalesBO(reportesSucursalesDAO);
+
+        FrmReporteSucursales reporteSucursales = new FrmReporteSucursales(sucursalBO, ciudadBO, reportesSucursalesBO);
+        reporteSucursales.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReporteSucursalesActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
@@ -672,19 +686,21 @@ IConexionBD conexionBD = new ConexionBD();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void BtnAgregarSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarSalaActionPerformed
-        FrmAgregarSala agregar = new FrmAgregarSala(this.salaBO,this.sucursal.getId());
+        FrmAgregarSala agregar = new FrmAgregarSala(this, this.salaBO, this.sucursal.getId());
         agregar.setVisible(true);
-        cargarClientesEnTabla(sucursal.getId(),pagina, LIMITE);
+        cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
         estadoPagina();
-        
+
     }//GEN-LAST:event_BtnAgregarSalaActionPerformed
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
-        // TODO add your handling code here:
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+        reportePelicula.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
 
     private void btnMenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPeliculaActionPerformed
-IConexionBD conexion = new ConexionBD();
+        IConexionBD conexion = new ConexionBD();
         ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
         ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
@@ -693,9 +709,8 @@ IConexionBD conexion = new ConexionBD();
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
         FrmAdminPeliculas frnAdminPeliculas = new FrmAdminPeliculas(sucursalBO, ciudadBO, peliculaBO);
         frnAdminPeliculas.setVisible(true);
-            this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuPeliculaActionPerformed
-   
 
     private void llenarComboBoxCiudad() {
         try {

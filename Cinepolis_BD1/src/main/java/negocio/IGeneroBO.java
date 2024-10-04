@@ -14,7 +14,11 @@ import persistencia.PersistenciaException;
  * @author NaderCroft
  */
 public interface IGeneroBO {
-    public List<GeneroDTO> listasGeneros()throws NegocioException;
-    
-    public List<GeneroDTO> listasGenerosPorPeliculas(int idPelicula)throws NegocioException;
+
+    public List<GeneroDTO> listasGeneros() throws NegocioException;
+
+    public List<GeneroDTO> listaGeneroPorPelicula(int idPelicula, boolean incluirRelacionados) throws NegocioException;
+
+    public void actualizarGenerosPelicula(int peliculaId, List<Integer> nuevosGeneros) throws NegocioException;
+
 }

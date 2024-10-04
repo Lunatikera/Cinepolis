@@ -21,14 +21,15 @@ import utilerias.Geocalizacion;
  * @author samoano y temo
  */
 public class frmGuardarClientes extends javax.swing.JFrame {
-
+    FrmAdminClientes adminClientes;
     List<CiudadDTO> listaCiudades;
     ICiudadBO ciudad;
     IClienteBO clienteNegocio;
 
   
-    public frmGuardarClientes(IClienteBO clienteNegocio,ICiudadBO ciudad) {
+    public frmGuardarClientes(FrmAdminClientes adminClientes, IClienteBO clienteNegocio,ICiudadBO ciudad) {
         initComponents();
+        this.adminClientes=adminClientes;
         this.clienteNegocio = clienteNegocio;
         this.ciudad = ciudad;
         this.setTitle("Editar Cliente");
@@ -224,6 +225,7 @@ public class frmGuardarClientes extends javax.swing.JFrame {
         }
         try {
             clienteNegocio.agregaCliente(registro);
+            this.adminClientes.cargarMetodosIniciales();
             dispose();
 
         } catch (NegocioException ex) {
