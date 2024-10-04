@@ -192,6 +192,27 @@ VALUES
     ('Valiente', 'Valiente, dirigida por Mark Andrews y Brenda Chapman, es una encantadora película de animación de Disney y Pixar que cuenta la historia de Mérida, una joven princesa escocesa con un fuerte deseo de forjar su propio destino. En un reino donde las tradiciones son sagradas, Mérida desafía las expectativas y se embarca en una aventura para cambiar su suerte. A medida que busca la ayuda de una anciana, Mérida debe enfrentar una poderosa maldición que afecta a su familia y a su reino. La película trata temas de valentía, autonomía y la conexión entre madre e hija, mientras presenta impresionantes animaciones y una emotiva banda sonora. Valiente no solo es un relato inspirador sobre la búsqueda de identidad, sino también una reflexión sobre la importancia de la familia y el respeto a las tradiciones, todo envuelto en una historia cautivadora que resuena en todas las edades.', 'Estados Unidos', 'https://www.youtube.com/watch?v=TEHWDA_6e3M', 93, 'carteles/Valiente.jpg', 'A'),
     ('Cars 3', 'Cars 3, dirigida por Brian Fee, es la tercera entrega de la popular franquicia de Pixar que sigue las aventuras de Rayo McQueen, un auto de carreras que se enfrenta a nuevos desafíos en un mundo donde la tecnología y los nuevos competidores amenazan su legado. Tras un accidente que pone en peligro su carrera, Rayo debe encontrar una manera de demostrar que aún tiene lo necesario para competir al más alto nivel. A lo largo de su viaje, recibe ayuda de una joven y talentosa mecánica llamada Cruz Ramirez, quien lo inspira a superar sus miedos y a redescubrir su amor por las carreras. La película aborda temas de perseverancia, amistad y la importancia de adaptarse a los cambios en la vida. Con animación vibrante y un mensaje inspirador, Cars 3 celebra el espíritu del deporte y la relevancia de seguir adelante, sin importar las adversidades que se presenten en el camino.', 'Estados Unidos', 'https://www.youtube.com/watch?v=2LeOH9AGJQM', 102, 'carteles/Cars3.jpg', 'A'); 
 
+-- Inserts de Generos 
+INSERT INTO Generos (nombreGenero) VALUES ('Terror');
+INSERT INTO Generos (nombreGenero) VALUES ('Drama');
+INSERT INTO Generos (nombreGenero) VALUES ('Comedia');
+INSERT INTO Generos (nombreGenero) VALUES ('Ciencia Ficción');
+INSERT INTO Generos (nombreGenero) VALUES ('Musical');
+INSERT INTO Generos (nombreGenero) VALUES
+('Acción'),
+('Aventura'),
+('Fantasía'),
+('Romance'),
+('Suspenso'),
+('Historia'),
+('Animacion');
+	
+
+-- Inserts de Generos a Peliculas
+INSERT INTO Pelicula_Genero (pelicula_id, genero_id) VALUES
+(1,8),(1,7),(1,6),(2,5),(2,2),(2,9),(3,10),(3,2),(4,2),(4,11),(5,2),(6,6),(6,10),(7,8),(7,9),(7,2),(7,4),
+(8,3),(8,7),(8,2),(9,4),(9,6),(9,10),(10,2),(10,11),(11,2),(11,5),(11,10),(12,4),(12,2),(12,10),(13,2),(13,8),(13,3),(14,2),(14,7),(14,10),(15,7),(15,10),(16,2),(16,3),(16,6),(16,10),(17,4),(17,7),(17,2),(17,10),(18,4),(18,7),(18,6),(19,12),(19,7),(19,8),(19,3),(20,12),(20,7),(20,3);
+
 
 -- Inserts de Peliculas a Sucursales
 INSERT INTO Pelicula_Sucursal (sucursal_id, pelicula_id) VALUES
@@ -416,7 +437,6 @@ BEGIN
 END $$
 
 
-
 CREATE EVENT reiniciar_asientos_evento
 ON SCHEDULE EVERY 1 minute
 STARTS CURRENT_TIMESTAMP 
@@ -476,48 +496,39 @@ FOR EACH ROW
 BEGIN
     DECLARE adjusted_hora_inicio TIME;
     DECLARE adjusted_hora_final_total TIME;
-    
-    -- Ajustar hora_inicio
-    IF NEW.hora_inicio < '06:00:00' THEN
-        SET adjusted_hora_inicio = ADDTIME(NEW.hora_inicio, '24:00:00');
-    ELSE
-        SET adjusted_hora_inicio = NEW.hora_inicio;
-    END IF;
+    DECLARE adjusted_hora_inicio_existente TIME;
+    DECLARE adjusted_hora_final_existente TIME;
 
-    -- Ajustar hora_final_total
-    IF NEW.hora_final_total < '06:00:00' THEN
-        SET adjusted_hora_final_total = ADDTIME(NEW.hora_final_total, '24:00:00');
-    ELSE
-        SET adjusted_hora_final_total = NEW.hora_final_total;
-    END IF;
+    -- Ajustar la hora_inicio para que cualquier hora antes de las 06:00 AM se considere como si fuera al día siguiente
+    SET adjusted_hora_inicio = IF(NEW.hora_inicio < '06:00:00', ADDTIME(NEW.hora_inicio, '24:00:00'), NEW.hora_inicio);
 
-    -- Verificar si hay solapamiento con otras funciones
+    -- Ajustar la hora_final_total de la nueva función para que cualquier hora antes de las 06:00 AM se considere como si fuera al día siguiente
+    SET adjusted_hora_final_total = IF(NEW.hora_final_total < '06:00:00', ADDTIME(NEW.hora_final_total, '24:00:00'), NEW.hora_final_total);
+
+    -- Verificar solapamiento con funciones existentes
     IF EXISTS (
         SELECT 1
         FROM Funciones
         WHERE sala_id = NEW.sala_id
-		AND dia = NEW.dia
-		AND estaEliminado = 0 -- Solo considerar funciones no eliminadas
-
-          AND (
-              (adjusted_hora_inicio < hora_final_total AND adjusted_hora_final_total > hora_inicio)
-          )
+        AND dia = NEW.dia
+        AND estaEliminado = 0  -- Solo considerar funciones no eliminadas
+        AND (
+            -- Ajustar las horas de funciones existentes para hacer la comparación
+            (adjusted_hora_inicio < IF(hora_final_total < '06:00:00', ADDTIME(hora_final_total, '24:00:00'), hora_final_total)
+            AND adjusted_hora_final_total > IF(hora_inicio < '06:00:00', ADDTIME(hora_inicio, '24:00:00'), hora_inicio))
+        )
     ) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: Solapamiento de funciones en la misma sala y dia.';
+        SET MESSAGE_TEXT = 'Error: Solapamiento de funciones en la misma sala y día.';
     END IF;
+END $$
 
-END$$
 
-DELIMITER ;
+select* from funciones;
 
 INSERT INTO Funciones (precio, dia, hora_inicio, sala_id, pelicula_id)
 VALUES
-(100.00, 'Lunes', '00:00:00', 1, 1),
-(120.00, 'Martes', '13:00:00', 2, 2),
-(150.00, 'Miércoles', '16:00:00', 3, 3),
-(180.00, 'Jueves', '19:00:00',  4, 4),
-(200.00, 'Viernes', '20:00:00', 5, 5),
+(200.00, 'Viernes', '18:00:00', 5, 5),
 (220.00, 'Sábado', '21:00:00', 6, 6),
 (220.00, 'Sábado', '00:00:00', 6, 6),
 (250.00, 'Domingo', '01:00:00', 7, 7);
@@ -526,8 +537,8 @@ insert into Ventas(cantidad_Boletos, metodoPago, cliente_id, funcion_id) Values(
 select* from clientes;
 select*from ventas;
 select*from funciones;
-select*from peliculas
-
+select*from peliculas;
+select*from funciones;
  -- SELECT f.funcion_id, p.titulo, p.duracion, f.hora_inicio, f.hora_final_total, f.precio 
 			-- FROM Funciones f 
                -- INNER JOIN Peliculas p ON f.pelicula_id = p.pelicula_id 
@@ -535,4 +546,61 @@ select*from peliculas
                -- WHERE f.estaEliminado = 0
                -- AND f.dia = 'Lunes'
                 -- AND s.sala_id = 1
-               -- ORDER BY s.sala_id 
+               -- ORDER BY s.sala_id
+               
+               select*from sucursales
+               
+               
+SELECT f.funcion_id, f.precio, f.dia, f.hora_inicio, f.hora_final, f.asientos_Disponibles, f.sala_id, f.pelicula_id 
+                 FROM Funciones f 
+              JOIN Salas s ON f.sala_id = s.sala_id 
+               JOIN Peliculas p ON f.pelicula_id = p.pelicula_id 
+                WHERE f.dia = 'Lunes'
+                AND s.sucursal_id = 1 
+                AND f.pelicula_id = 1
+                 AND f.estaEliminado = 0 
+                LIMIT 1 OFFSET 9;
+                
+                
+                SELECT 
+    Clientes.nombres,
+    Clientes.apellidoPA,
+    Clientes.apellidoMA,
+    Peliculas.titulo AS nombre_pelicula,
+    Peliculas.cartel,
+    Sucursales.nombre AS nombre_sucursal,
+    Salas.nombre AS nombre_sala,
+    Funciones.hora_inicio,
+    Funciones.hora_final,
+    Funciones.dia,
+    Ventas.precioUnitario,
+    Ventas.cantidad_Boletos,
+    Ventas.totalCompra,
+    Ventas.metodoPago,
+    Ventas.fecha_compra
+FROM 
+    Ventas
+INNER JOIN 
+    Clientes ON Ventas.cliente_id = Clientes.cliente_id
+INNER JOIN 
+    Funciones ON Ventas.funcion_id = Funciones.funcion_id
+INNER JOIN 
+    Peliculas ON Funciones.pelicula_id = Peliculas.pelicula_id
+INNER JOIN 
+    Salas ON Funciones.sala_id = Salas.sala_id
+INNER JOIN 
+    Sucursales ON Salas.sucursal_id = Sucursales.sucursal_id
+ORDER BY 
+    Clientes.nombres, Clientes.apellidoPA, Clientes.apellidoMA, Ventas.fecha_compra;
+    
+    
+    
+    select*from peliculas
+    
+    SELECT g.genero_id, g.nombreGenero 
+FROM generos g
+WHERE g.genero_id NOT IN (
+    SELECT pg.genero_id 
+    FROM pelicula_genero pg 
+    WHERE pg.pelicula_id = 1
+);
