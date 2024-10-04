@@ -81,7 +81,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
         this.setResizable(false);
         this.setSize(1280, 780);
         this.setLocationRelativeTo(null);
-        this.cargarClientesEnTabla(pagina, LIMITE);
+        this.cargarPeliculasEnTabla(pagina, LIMITE);
         this.estadoPagina();
     }
 
@@ -131,7 +131,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
         }
     }
 
-    private void cargarClientesEnTabla(int pagina, int limite) {
+    private void cargarPeliculasEnTabla(int pagina, int limite) {
         try {
             // Borrar registros previos antes de cargar los nuevos
             BorrarRegistrosTablaClientes();
@@ -195,7 +195,7 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
             try {
                 this.peliculaBO.eliminarPelicula(id);
                 // Recargar la tabla después de eliminar
-                cargarClientesEnTabla(pagina, LIMITE);
+                cargarPeliculasEnTabla(pagina, LIMITE);
             } catch (NegocioException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -580,11 +580,13 @@ public class FrmAdminPeliculas extends javax.swing.JFrame {
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         pagina--;
+        this.cargarPeliculasEnTabla(pagina, LIMITE);
         this.estadoPagina();
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         pagina++;
+        this.cargarPeliculasEnTabla(pagina, LIMITE);
         this.estadoPagina();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 

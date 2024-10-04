@@ -60,6 +60,7 @@ public class FrmAgregarPelicula extends javax.swing.JFrame {
         initComponents();
         this.peliculaBO = peliculaBO;
         this.generoBO = generoBO;
+        this.pelicula = new PeliculaDTO();
         locales = Locale.getAvailableLocales();
         this.llenarComboPaises();
         this.llenarComboClasificaciones();
@@ -176,7 +177,7 @@ public class FrmAgregarPelicula extends javax.swing.JFrame {
 
         LblPaterno2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         LblPaterno2.setForeground(new java.awt.Color(255, 255, 255));
-        LblPaterno2.setText("Editar Pelicula");
+        LblPaterno2.setText("Agregar Pelicula");
 
         LblPaterno3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         LblPaterno3.setForeground(new java.awt.Color(255, 255, 255));
@@ -477,8 +478,10 @@ public class FrmAgregarPelicula extends javax.swing.JFrame {
         pelicula.setDuracion(duracion);
 
         try {
-            generoBO.actualizarGenerosPelicula(pelicula.getId(), listaGeneros);
-            peliculaBO.actualizarPelicula(pelicula);
+            peliculaBO.agregaPelicula(pelicula);
+            PeliculaDTO nuevaPelicula = peliculaBO.buscarPorTitulo(pelicula.getTitulo());
+            generoBO.actualizarGenerosPelicula(nuevaPelicula.getId(), listaGeneros);
+            
             JOptionPane.showMessageDialog(this, "Película actualizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             volverAdminPeliculas();
         } catch (NegocioException ex) {
@@ -557,7 +560,7 @@ public class FrmAgregarPelicula extends javax.swing.JFrame {
 
     private void llenarComboBoxGeneroASeleccionar() {
         try {
-            listaGeneros = generoBO.listaGeneroPorPelicula(pelicula.getId(), false);
+            listaGeneros = generoBO.listasGeneros();
 
             for (GeneroDTO genero : listaGeneros) {
                 cbGeneros.addItem(genero);

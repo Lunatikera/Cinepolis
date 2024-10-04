@@ -18,5 +18,7 @@ public interface IPeliculaDAO extends ICrud<PeliculaEntidad> {
     public void actualizarFechaRetiro(int peliculaId, int sucursalId) throws PersistenciaException;
 
     public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException;
+    
+    public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaException;
 
 }

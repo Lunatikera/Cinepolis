@@ -283,7 +283,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         btnMenuReportePelicula = new utilerias.MenuButton();
         jLabel12 = new javax.swing.JLabel();
         BtnAgregarCliente = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -304,13 +303,13 @@ public class FrmAdminClientes extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblClientes);
 
+        jLabel10.setText("Clientes");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Clientes");
 
+        lblPagina.setText("Pagina 01");
         lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblPagina.setForeground(new java.awt.Color(255, 255, 255));
-        lblPagina.setText("Pagina 01");
 
         btnAtras.setText("atras");
         btnAtras.addActionListener(new java.awt.event.ActionListener() {
@@ -456,17 +455,13 @@ public class FrmAdminClientes extends javax.swing.JFrame {
                 .addContainerGap(180, Short.MAX_VALUE))
         );
 
-        BtnAgregarCliente.setBackground(new java.awt.Color(204, 204, 204));
         BtnAgregarCliente.setText("Agregar Cliente");
+        BtnAgregarCliente.setBackground(new java.awt.Color(204, 204, 204));
         BtnAgregarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAgregarClienteActionPerformed(evt);
             }
         });
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Sucursal Bella Vista");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -478,10 +473,7 @@ public class FrmAdminClientes extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(138, 138, 138)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(BtnAgregarCliente)
-                                .addGap(188, 188, 188)
-                                .addComponent(jLabel11))
+                            .addComponent(BtnAgregarCliente)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(238, 238, 238)
@@ -501,10 +493,8 @@ public class FrmAdminClientes extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(109, 109, 109)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BtnAgregarCliente)
-                    .addComponent(jLabel11))
-                .addGap(18, 18, 18)
+                .addComponent(BtnAgregarCliente)
+                .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -640,7 +630,6 @@ public class FrmAdminClientes extends javax.swing.JFrame {
     private javax.swing.JButton btnSiguiente;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -91,6 +91,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         this.cargarConfiguracionInicialTablaPeliculas();
         this.cargarPeliculasTabla();
         this.estadoPagina();
+        lblNombreSucursal.setText(sucursal.getNombre());
         configuracionFrame();
     }
 
@@ -274,7 +275,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         btnIr = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPeliculas = new javax.swing.JTable();
-        jLabel10 = new javax.swing.JLabel();
+        lblNombreSucursal = new javax.swing.JLabel();
         lblPagina = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
@@ -332,13 +333,13 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblPeliculas);
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Sucursal Bella Vista");
+        lblNombreSucursal.setText("Sucursal Bella Vista");
+        lblNombreSucursal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblNombreSucursal.setForeground(new java.awt.Color(255, 255, 255));
 
+        lblPagina.setText("Pagina 01");
         lblPagina.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblPagina.setForeground(new java.awt.Color(255, 255, 255));
-        lblPagina.setText("Pagina 01");
 
         btnAtras.setText("atras");
         btnAtras.addActionListener(new java.awt.event.ActionListener() {
@@ -358,9 +359,9 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         cbSucursales.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbSucursales.setForeground(new java.awt.Color(255, 255, 255));
 
+        jLabel12.setText("Elegir Funcion");
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Elegir Funcion");
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
         jPanel2.setPreferredSize(new java.awt.Dimension(200, 720));
@@ -372,10 +373,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel2);
 
-        btnMenuCliente.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuCliente.setText("Clientes");
         btnMenuCliente.setBorderPainted(false);
         btnMenuCliente.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuCliente.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuClienteActionPerformed(evt);
@@ -386,10 +387,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel3);
 
-        btnMenuPelicula.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuPelicula.setText("Peliculas");
         btnMenuPelicula.setBorderPainted(false);
         btnMenuPelicula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuPelicula.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuPelicula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuPeliculaActionPerformed(evt);
@@ -400,10 +401,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel4);
 
-        btnMenuSalas.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuSalas.setText("Salas");
         btnMenuSalas.setBorderPainted(false);
         btnMenuSalas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuSalas.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuSalas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuSalasActionPerformed(evt);
@@ -414,10 +415,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel5);
 
-        btnMenuSucursales.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuSucursales.setText("Sucursales");
         btnMenuSucursales.setBorderPainted(false);
         btnMenuSucursales.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuSucursales.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuSucursales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuSucursalesActionPerformed(evt);
@@ -428,10 +429,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel6);
 
-        menuButton5.setForeground(new java.awt.Color(255, 255, 255));
         menuButton5.setText("Funciones");
         menuButton5.setBorderPainted(false);
         menuButton5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        menuButton5.setForeground(new java.awt.Color(255, 255, 255));
         menuButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuButton5ActionPerformed(evt);
@@ -442,10 +443,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel8);
 
-        btnMenuReporteSucursales.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuReporteSucursales.setText("Reporte Sucursales");
         btnMenuReporteSucursales.setBorderPainted(false);
         btnMenuReporteSucursales.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReporteSucursales.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuReporteSucursales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuReporteSucursalesActionPerformed(evt);
@@ -456,10 +457,10 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel9);
 
-        btnMenuReportePelicula.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuReportePelicula.setText("Reporte Pelicula");
         btnMenuReportePelicula.setBorderPainted(false);
         btnMenuReportePelicula.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReportePelicula.setForeground(new java.awt.Color(255, 255, 255));
         btnMenuReportePelicula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuReportePeliculaActionPerformed(evt);
@@ -504,7 +505,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(263, 263, 263)
-                                .addComponent(jLabel10))
+                                .addComponent(lblNombreSucursal))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(238, 238, 238)
@@ -544,7 +545,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
                             .addComponent(btnIr)
                             .addComponent(jLabel12))))
                 .addGap(47, 47, 47)
-                .addComponent(jLabel10)
+                .addComponent(lblNombreSucursal)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -618,6 +619,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
             this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
             this.pagina = 1;
             this.cargarPeliculasTabla();
+            lblNombreSucursal.setText(sucursal.getNombre());
             this.estadoPagina();
             return;
         }
@@ -715,7 +717,6 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
     private javax.swing.JComboBox<CiudadDTO> cbCiudades;
     private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private utilerias.ImagenPerfiles imagenPerfiles1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -731,6 +732,7 @@ public class FrmAdminEscogerFuncion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblNombreSucursal;
     private javax.swing.JLabel lblPagina;
     private utilerias.MenuButton menuButton5;
     private javax.swing.JTable tblPeliculas;

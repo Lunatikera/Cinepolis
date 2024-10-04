@@ -76,7 +76,7 @@ public class PeliculaDAO implements IPeliculaDAO {
 
     @Override
     public PeliculaEntidad leerPorID(int id) throws PersistenciaException {
-        String sentenciaSQL = "SELECT pelicula_id, titulo, sinopsis, pais, link_trailer, duracion, cartel, clasificacion, estaEliminado FROM peliculas WHERE pelicula_id = ?;";
+        String sentenciaSQL = "SELECT pelicula_id, titulo, sinopsis, pais, link_trailer, duracion, cartel, clasificacion, estaEliminado FROM peliculas WHERE pelicula_id = ? AND estaEliminado = 0;";
         ResultSet res = null;
 
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement ps = conexion.prepareStatement(sentenciaSQL)) {
@@ -254,6 +254,36 @@ public class PeliculaDAO implements IPeliculaDAO {
             callableStatement.executeUpdate();
         } catch (SQLException e) {
             throw new PersistenciaException("Error al actualizar la fecha de retiro", e);
+        }
+    }
+
+    @Override
+    public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaException {
+        String sentenciaSQL = "SELECT pelicula_id, titulo, sinopsis, pais, link_trailer, duracion, cartel, clasificacion, estaEliminado FROM peliculas WHERE titulo = ? AND estaEliminado = 0;";
+        ResultSet res = null;
+
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement ps = conexion.prepareStatement(sentenciaSQL)) {
+
+            ps.setString(1, titulo);
+
+            res = ps.executeQuery();
+
+            if (res.next()) {
+                PeliculaEntidad pelicula = new PeliculaEntidad();
+                pelicula.setId(res.getInt("pelicula_id"));
+                pelicula.setTitulo(res.getString("titulo"));
+                pelicula.setSinopsis(res.getString("sinopsis"));
+                pelicula.setPais(res.getString("pais"));
+                pelicula.setLink_trailer(res.getString("link_Trailer"));
+                pelicula.setDuracion(res.getInt("duracion"));
+                pelicula.setCartel(res.getString("cartel"));
+                pelicula.setClasificacion(Clasificaciones.valueOf(res.getString("clasificacion")));
+                return pelicula;
+            } else {
+                throw new PersistenciaException("No se encontró la pelicula con el nombre: " + titulo);
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al buscar la pelicula por ID: " + e.getMessage());
         }
     }
 

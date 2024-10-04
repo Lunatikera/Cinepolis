@@ -178,6 +178,28 @@ public class PeliculaBO implements IPeliculaBO {
             throw new NegocioException("No se pudo guardar la pelicula en la Sucursal");
         }
     }
+
+    @Override
+    public PeliculaDTO buscarPorTitulo(String titulo) throws NegocioException {
+        try{
+            PeliculaEntidad pelicula = this.peliculaDAO.buscarPorTitulo(titulo);
+            PeliculaDTO peliculaDTO = new PeliculaDTO(
+                    pelicula.getId(),
+                    pelicula.getTitulo(),
+                    pelicula.getSinopsis(),
+                    pelicula.getPais(),
+                    pelicula.getLink_trailer(),
+                    pelicula.getDuracion(),
+                    pelicula.getCartel(),
+                    pelicula.getClasificacion().name()
+            );
+            return peliculaDTO;
+            
+        }catch(PersistenciaException e){
+            Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
+            throw new NegocioException("Error en la capa de negocio al buscar la pelicula con el id especificado", e);
+        }
+    }
 }
 
   
