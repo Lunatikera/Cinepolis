@@ -6,9 +6,13 @@ package presentacion;
 
 import dtos.CiudadDTO;
 import dtos.ClienteDTO;
+import dtos.GeneroDTO;
 import dtos.PeliculaDTO;
 import dtos.SucursalDTO;
 import java.awt.Image;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
@@ -16,9 +20,11 @@ import negocio.CiudadBO;
 import negocio.FuncionBO;
 import negocio.ICiudadBO;
 import negocio.IFuncionBO;
+import negocio.IGeneroBO;
 import negocio.IPeliculaBO;
 import negocio.ISucursalBO;
 import negocio.ITicketBO;
+import negocio.NegocioException;
 import negocio.PeliculaBO;
 import negocio.SucursalBO;
 import negocio.TicketBO;
@@ -41,17 +47,20 @@ import persistencia.TicketDAO;
  */
 public class FrmDetallePelicula extends javax.swing.JFrame {
 
+    private IGeneroBO generoBO;
     private PeliculaDTO pelicula;
     private ClienteDTO cliente;
     private SucursalDTO sucursal;
     private CiudadDTO ciudad;
+    private List<GeneroDTO> listaGeneros;
 
-    public FrmDetallePelicula(PeliculaDTO pelicula, ClienteDTO cliente, SucursalDTO sucursal, CiudadDTO ciudad) {
+    public FrmDetallePelicula(IGeneroBO generoBO, PeliculaDTO pelicula, ClienteDTO cliente, SucursalDTO sucursal, CiudadDTO ciudad) {
         initComponents();
+        this.generoBO = generoBO;
         this.pelicula = pelicula;
         this.cliente = cliente;
         this.sucursal = sucursal;
-        this.ciudad=ciudad;
+        this.ciudad = ciudad;
         System.out.println(pelicula.getId());
         cargarMetodosIniciales();
     }
@@ -59,6 +68,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     private void cargarMetodosIniciales() {
         this.setTitle(pelicula.getTitulo());
         this.setLocationRelativeTo(null);
+        llenarComboBoxGenero();
         cargarDetallesPelicula();
 
     }
@@ -113,7 +123,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         btnTrailer = new utilerias.MenuButton();
         panelConFondo6 = new utilerias.PanelConFondo();
         jLabel17 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbGeneros = new javax.swing.JComboBox<>();
         panelConFondo1 = new utilerias.PanelConFondo();
         jLabel6 = new javax.swing.JLabel();
         lblDuracion = new javax.swing.JLabel();
@@ -307,7 +317,10 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
 
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/genero.png"))); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbGeneros.setBackground(new java.awt.Color(33, 36, 59));
+        cbGeneros.setEditable(true);
+        cbGeneros.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbGeneros.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout panelConFondo6Layout = new javax.swing.GroupLayout(panelConFondo6);
         panelConFondo6.setLayout(panelConFondo6Layout);
@@ -317,7 +330,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel17)
                 .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbGeneros, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelConFondo6Layout.setVerticalGroup(
@@ -329,7 +342,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
                         .addComponent(jLabel17))
                     .addGroup(panelConFondo6Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbGeneros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 17, Short.MAX_VALUE))
         );
 
@@ -557,7 +570,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         IFuncionDAO funcionDAO = new FuncionDAO(conexion);
         IFuncionBO funcionBO = new FuncionBO(funcionDAO);
 
-        FrmFuncionesPelicula funcionPelicula = new FrmFuncionesPelicula(funcionBO, pelicula, sucursal, cliente,ciudad);
+        FrmFuncionesPelicula funcionPelicula = new FrmFuncionesPelicula(funcionBO, pelicula, sucursal, cliente, ciudad);
         funcionPelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_menuButton18ActionPerformed
@@ -591,9 +604,9 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
     private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
-        IConexionBD conexionBD=new ConexionBD();
-        ITicketDAO ticketDAO=new TicketDAO(conexionBD);
-        ITicketBO ticketBO= new TicketBO(ticketDAO);
+        IConexionBD conexionBD = new ConexionBD();
+        ITicketDAO ticketDAO = new TicketDAO(conexionBD);
+        ITicketBO ticketBO = new TicketBO(ticketDAO);
         FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
         boletos.setVisible(true);
         this.dispose();
@@ -626,6 +639,19 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_btnInicioActionPerformed
+    private void llenarComboBoxGenero() {
+        try {
+            listaGeneros = generoBO.listaGeneroPorPelicula(pelicula.getId(), true);
+
+            for (GeneroDTO genero : listaGeneros) {
+                cbGeneros.addItem(genero);
+            }
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -636,7 +662,7 @@ public class FrmDetallePelicula extends javax.swing.JFrame {
     private utilerias.MenuButton btnPerfil;
     private utilerias.MenuButton btnSucursales;
     private utilerias.MenuButton btnTrailer;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<GeneroDTO> cbGeneros;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;

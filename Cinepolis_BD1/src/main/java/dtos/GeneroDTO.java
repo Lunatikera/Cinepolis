@@ -38,7 +38,7 @@ public class GeneroDTO {
 
     @Override
     public String toString() {
-        return "GeneroDTO{" + "idGenero=" + idGenero + ", nombreGenero=" + nombreGenero + '}';
+        return nombreGenero ;
     }
     
     

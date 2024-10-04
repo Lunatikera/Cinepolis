@@ -201,13 +201,11 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             if (contraseña.equals("admin") && correo.equals("admin")) {
                 JOptionPane.showMessageDialog(this, "Inicio de Administrador exitoso. ¡Bienvenido!");
                 IConexionBD conexion = new ConexionBD();
-                IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
                 ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
-                IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
                 ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
                 
-                FrmAdminSucursal sucursalAdmin = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
-                sucursalAdmin.setVisible(true);
+                 FrmAdminClientes clientes = new FrmAdminClientes(ciudadBO, clientoBO);
+                 clientes.setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión fallido. Por favor, verifica tus credenciales de Administrador.", "Error", JOptionPane.ERROR_MESSAGE);

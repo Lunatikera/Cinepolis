@@ -4,7 +4,6 @@
  */
 package presentacion;
 
-
 import dtos.SalaDTO;
 import javax.swing.JOptionPane;
 import negocio.ISalaBO;
@@ -12,17 +11,21 @@ import negocio.NegocioException;
 
 /**
  *
- * @author rramirez
+ * @author Rios
+ *
  */
 public class FrmAgregarSala extends javax.swing.JFrame {
 
+    FrmAdminSalas adminSalas;
     ISalaBO salaBO;
     int idSucursal;
+
     /**
      * Creates new form FrmAgregarCliente
      */
-    public FrmAgregarSala(ISalaBO salaBO, int idSucursal) {
+    public FrmAgregarSala(FrmAdminSalas adminSalas, ISalaBO salaBO, int idSucursal) {
         initComponents();
+        this.adminSalas = adminSalas;
         this.salaBO = salaBO;
         this.idSucursal = idSucursal;
     }
@@ -206,30 +209,31 @@ public class FrmAgregarSala extends javax.swing.JFrame {
         int numAsiento = Integer.parseInt(TxtNumAsiento.getText());
         int duracionLimpieza = Integer.parseInt(TxtDuracionLimpieza.getText());
         boolean estatus = false;
-        if (nombre.isEmpty() || numAsiento==0|| duracionLimpieza == 0) {
-             JOptionPane.showMessageDialog(this, "Ingrese todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (nombre.isEmpty() || numAsiento == 0 || duracionLimpieza == 0) {
+            JOptionPane.showMessageDialog(this, "Ingrese todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        try{
-         SalaDTO guardar = new SalaDTO(nombre,numAsiento,duracionLimpieza,idSucursal,estatus);
-         this.salaBO.guardar(guardar);
-         TxtNombre.setText("");
-         TxtNumAsiento.setText("");
-         TxtDuracionLimpieza.setText("");
-         
-         JOptionPane.showMessageDialog(this, "Registro agregado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
-        }catch(NegocioException ex){
-        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } 
-        dispose();
+
+        try {
+            SalaDTO guardar = new SalaDTO(nombre, numAsiento, duracionLimpieza, idSucursal, estatus);
+            this.salaBO.guardar(guardar);
+            TxtNombre.setText("");
+            TxtNumAsiento.setText("");
+            TxtDuracionLimpieza.setText("");
+
+            JOptionPane.showMessageDialog(this, "Registro agregado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            adminSalas.cargarMetodosIniciales();
+            dispose();
+
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnAceptarActionPerformed
 
     private void TxtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtNombreActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAceptar;

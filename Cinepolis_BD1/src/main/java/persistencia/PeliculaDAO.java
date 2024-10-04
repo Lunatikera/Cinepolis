@@ -175,7 +175,7 @@ public class PeliculaDAO implements IPeliculaDAO {
     public List<PeliculaEntidad> buscarPeliculaSucursal(int idSucursal, int limit, int offset, boolean peliculasEnSucursal) throws PersistenciaException {
         List<PeliculaEntidad> peliculas = new ArrayList<>();
         String sentenciaSQL;
-           
+
         if (peliculasEnSucursal) {
             sentenciaSQL = "SELECT p.pelicula_id, p.titulo, p.sinopsis, p.pais, p.link_Trailer, p.duracion, p.cartel, p.clasificacion "
                     + "FROM pelicula_sucursal s "
@@ -223,12 +223,11 @@ public class PeliculaDAO implements IPeliculaDAO {
 
         return peliculas;
     }
-    
+
     @Override
-     public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException {
+    public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException {
         String sql = "{CALL guardarPeliculaEnSucursal(?, ?)}"; // Llamada al procedimiento almacenado
-        try (Connection conexion = conexionBD.crearConexion();
-             CallableStatement callableStatement = conexion.prepareCall(sql)) {
+        try (Connection conexion = conexionBD.crearConexion(); CallableStatement callableStatement = conexion.prepareCall(sql)) {
 
             // Establecer parámetros
             callableStatement.setInt(1, peliculaId);
@@ -245,8 +244,7 @@ public class PeliculaDAO implements IPeliculaDAO {
     @Override
     public void actualizarFechaRetiro(int peliculaId, int sucursalId) throws PersistenciaException {
         String sql = "{CALL actualizarFechaRetiro(?, ?)}"; // Llamada al procedimiento almacenado
-        try (Connection conexion = conexionBD.crearConexion();
-             CallableStatement callableStatement = conexion.prepareCall(sql)) {
+        try (Connection conexion = conexionBD.crearConexion(); CallableStatement callableStatement = conexion.prepareCall(sql)) {
 
             // Establecer parámetros
             callableStatement.setInt(1, peliculaId);
@@ -258,5 +256,5 @@ public class PeliculaDAO implements IPeliculaDAO {
             throw new PersistenciaException("Error al actualizar la fecha de retiro", e);
         }
     }
-}
 
+}

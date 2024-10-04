@@ -12,6 +12,11 @@ import java.util.List;
  * @author NaderCroft
  */
 public interface IGeneroDAO {
-    public List<GeneroEntidad> listaGeneros()throws PersistenciaException;
-    public List<GeneroEntidad> listaGeneroPorPelicula(int idPelicula)throws PersistenciaException;
+
+    public List<GeneroEntidad> listaGeneros() throws PersistenciaException;
+
+    public List<GeneroEntidad> listaGeneroPorPelicula(int idPelicula, boolean incluirRelacionados) throws PersistenciaException;
+
+    public void actualizarGenerosPeliculaConTransaccion(int peliculaId, List<Integer> nuevosGeneros) throws PersistenciaException;
+
 }

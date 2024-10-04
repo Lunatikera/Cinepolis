@@ -19,14 +19,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import negocio.GeneroBO;
 import negocio.ICiudadBO;
+import negocio.IGeneroBO;
 import negocio.IPeliculaBO;
 import negocio.ISucursalBO;
 import negocio.ITicketBO;
 import negocio.NegocioException;
 import negocio.TicketBO;
 import persistencia.ConexionBD;
+import persistencia.GeneroDAO;
 import persistencia.IConexionBD;
+import persistencia.IGeneroDAO;
 import persistencia.ITicketDAO;
 import persistencia.TicketDAO;
 
@@ -73,7 +77,7 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         this.estadoPagina();
         this.llenarComboBoxCiudad();
         this.seleccionarCiudadYSucursal();
-        this.ciudad=(CiudadDTO) cbCiudades.getSelectedItem();
+        this.ciudad = (CiudadDTO) cbCiudades.getSelectedItem();
 
     }
 
@@ -113,32 +117,36 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private void detallesPelicula1() {
         PeliculaDTO pelicula = peliculasCargadas.get(0);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
-        detalles.setVisible(true);
-        this.dispose();
+        this.irDetallesPelicula(pelicula);
+
     }
 
     private void detallesPelicula2() {
         PeliculaDTO pelicula = peliculasCargadas.get(1);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
-        detalles.setVisible(true);
-        this.dispose();
+        this.irDetallesPelicula(pelicula);
+
     }
 
     private void detallesPelicula3() {
         PeliculaDTO pelicula = peliculasCargadas.get(2);
         System.out.println(pelicula);
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
-        detalles.setVisible(true);
-        this.dispose();
+        this.irDetallesPelicula(pelicula);
+
     }
 
     private void detallesPelicula4() {
         PeliculaDTO pelicula = peliculasCargadas.get(3);
         System.out.println(pelicula);
 
-        FrmDetallePelicula detalles = new FrmDetallePelicula(pelicula, cliente, sucursal, ciudad);
+        this.irDetallesPelicula(pelicula);
+    }
+
+    private void irDetallesPelicula(PeliculaDTO pelicula) {
+        IConexionBD conexion = new ConexionBD();
+        IGeneroDAO generoDAO = new GeneroDAO(conexion);
+        IGeneroBO generoBO = new GeneroBO(generoDAO);
+        FrmDetallePelicula detalles = new FrmDetallePelicula(generoBO, pelicula, cliente, sucursal, ciudad);
         detalles.setVisible(true);
         this.dispose();
     }
@@ -159,7 +167,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         btnInicio = new utilerias.MenuButton();
         btnSucursales = new utilerias.MenuButton();
         btnBoletos = new utilerias.MenuButton();
-        btnInbox = new utilerias.MenuButton();
         btnPerfil = new utilerias.MenuButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -253,17 +260,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnBoletos);
-
-        btnInbox.setBorderPainted(false);
-        btnInbox.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
-        btnInbox.setIconoSimple(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inbox.png"))); // NOI18N
-        btnInbox.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inboxSelected.png"))); // NOI18N
-        btnInbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInboxActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnInbox);
 
         btnPerfil.setBorderPainted(false);
         btnPerfil.setIconoSeleccionado(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perfilSelected.png"))); // NOI18N
@@ -671,12 +667,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
         this.detallesPelicula1();
     }//GEN-LAST:event_btnPelicula1ActionPerformed
 
-    private void btnInboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInboxActionPerformed
-        FrmInbox inbox = new FrmInbox();
-        inbox.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnInboxActionPerformed
-
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         FrmConfiguracionPerfil perfil = new FrmConfiguracionPerfil();
         perfil.setVisible(true);
@@ -705,9 +695,9 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCartel3ActionPerformed
 
     private void btnBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBoletosActionPerformed
-        IConexionBD conexionBD=new ConexionBD();
-        ITicketDAO ticketDAO=new TicketDAO(conexionBD);
-        ITicketBO ticketBO= new TicketBO(ticketDAO);
+        IConexionBD conexionBD = new ConexionBD();
+        ITicketDAO ticketDAO = new TicketDAO(conexionBD);
+        ITicketBO ticketBO = new TicketBO(ticketDAO);
         FrmBoletos boletos = new FrmBoletos(ticketBO, cliente, sucursal);
         boletos.setVisible(true);
         this.dispose();
@@ -861,7 +851,6 @@ public class FrmCatalogoSucursal extends javax.swing.JFrame {
     private javax.swing.JButton btnCartel2;
     private javax.swing.JButton btnCartel3;
     private javax.swing.JButton btnCartel4;
-    private utilerias.MenuButton btnInbox;
     private utilerias.MenuButton btnInicio;
     private javax.swing.JButton btnIr;
     private utilerias.MenuButton btnPelicula1;

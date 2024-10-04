@@ -22,21 +22,24 @@ import negocio.IClienteBO;
  * @author Rios 233537
  */
 public class frmEliminarClientes extends javax.swing.JFrame {
+
+    FrmAdminClientes adminClientes;
     ClienteTablaFiltroDTO filtro;
     IClienteBO clienteNegocio;
     List<CiudadDTO> listaCiudades;
-    ICiudadBO ciudad;;
+    ICiudadBO ciudad;
+    ;
     int id;
 
- 
-    public frmEliminarClientes(int id,IClienteBO clienteNegocio,ICiudadBO ciudad) throws NegocioException {
-    initComponents(); // Inicializa los componentes del formulario
-    this.clienteNegocio = clienteNegocio; // Asigna el negocio de clientes
-    this.ciudad = ciudad;
-    this.id = id;
-    this.setTitle("Eliminar Cliente"); // Cambia el título del formulario
-    metodosInciales();
-}
+    public frmEliminarClientes(FrmAdminClientes adminClientes, int id, IClienteBO clienteNegocio, ICiudadBO ciudad) throws NegocioException {
+        initComponents(); // Inicializa los componentes del formulario
+        this.adminClientes=adminClientes;
+        this.clienteNegocio = clienteNegocio; // Asigna el negocio de clientes
+        this.ciudad = ciudad;
+        this.id = id;
+        this.setTitle("Eliminar Cliente"); // Cambia el título del formulario
+        metodosInciales();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -173,19 +176,21 @@ public class frmEliminarClientes extends javax.swing.JFrame {
         llenarComboBoxCiudades();
         metodoMostrarDatos();;
     }
-    
-    public void metodoMostrarDatos() throws NegocioException{
-        try{
-        ClienteDTO c = this.clienteNegocio.buscarClientePorId(this.id);
-        NombresTxt.setText(c.getNombre());
-        apellidoPATxt.setText(c.getApellidoPA());
-        apellidoMAtxt.setText(c.getApellidoMA());
-        Correotxt1.setText(c.getCorreo());
-        Nacimientotxt.setText(c.getFechaNacimiento().toString());
-        }catch(NegocioException ex){
+
+    public void metodoMostrarDatos() throws NegocioException {
+        try {
+            ClienteDTO c = this.clienteNegocio.buscarClientePorId(this.id);
+            NombresTxt.setText(c.getNombre());
+            apellidoPATxt.setText(c.getApellidoPA());
+            apellidoMAtxt.setText(c.getApellidoMA());
+            Correotxt1.setText(c.getCorreo());
+            Nacimientotxt.setText(c.getFechaNacimiento().toString());
+        } catch (NegocioException ex) {
             System.out.println(ex.getMessage());
-        } 
-    };
+        }
+    }
+
+    ;
     
     private void llenarComboBoxCiudades() {
         try {
@@ -202,69 +207,22 @@ public class frmEliminarClientes extends javax.swing.JFrame {
             Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-       try{
-        this.clienteNegocio.eliminarCliente(id);
-        dispose();
-       }catch(NegocioException ex){
-        Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
-       }
-       
+        try {
+            this.clienteNegocio.eliminarCliente(id);
+            this.adminClientes.cargarMetodosIniciales();
+            dispose();
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmEliminarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmEliminarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmEliminarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmEliminarClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Correotxt1;

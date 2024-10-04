@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,24 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public FuncionEntidad guardar(FuncionEntidad entidad) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public FuncionEntidad guardar(FuncionEntidad funcion) throws PersistenciaException {
+        String sql = "INSERT INTO Funciones (precio, dia, hora_inicio, sala_id, pelicula_id) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = conexionBD.crearConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // Establecer los valores del PreparedStatement
+            pstmt.setBigDecimal(1, funcion.getPrecio());
+            pstmt.setString(2, funcion.getDia());
+            pstmt.setTime(3, Time.valueOf(funcion.getHora()));
+            pstmt.setInt(4, funcion.getIdSala());
+            pstmt.setInt(5, funcion.getIdPelicula());
+
+            // Ejecutar la inserción
+            pstmt.executeUpdate();
+            return funcion;
+        } catch (SQLException e) {
+            throw new PersistenciaException("No se pudo guardar la funcion en la base de datos");
+        }
     }
 
     @Override
@@ -40,7 +57,25 @@ public class FuncionDAO implements IFuncionDAO {
 
     @Override
     public void eliminarPorID(int id) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "UPDATE Funciones SET estaEliminado = 1 WHERE funcion_id = ?";
+
+        try (Connection connection = conexionBD.crearConexion(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Seteamos el parámetro de la consulta (el id de la función que se desea eliminar)
+            preparedStatement.setInt(1, id);
+
+            // Ejecutamos la consulta
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Verificamos si se actualizó alguna fila
+            if (rowsAffected == 0) {
+                throw new PersistenciaException("No se encontró ninguna función con el ID especificado.");
+            }
+
+        } catch (SQLException e) {
+            // Manejamos cualquier error relacionado con la base de datos
+            throw new PersistenciaException("Error al realizar el soft delete en la función con ID: " + id, e);
+        }
     }
 
     @Override
@@ -90,7 +125,7 @@ public class FuncionDAO implements IFuncionDAO {
     @Override
     public List<FuncionTablaDTO> listaFuncionporDiaSala(FiltroFuncionesDTO filtro) throws PersistenciaException {
         List<FuncionTablaDTO> listaFunciones = new ArrayList<>();
-        String sql = "SELECT f.funcion_id, p.titulo, p.duracion, f.hora, f.hora_final_total, f.precio "
+        String sql = "SELECT f.funcion_id, p.titulo, p.duracion, hora_inicio, f.hora_final_total, f.precio "
                 + "FROM Funciones f "
                 + "INNER JOIN Peliculas p ON f.pelicula_id = p.pelicula_id "
                 + "INNER JOIN Salas s ON f.sala_id = s.sala_id "
@@ -111,7 +146,7 @@ public class FuncionDAO implements IFuncionDAO {
                 funcion.setId(rs.getInt("funcion_id"));
                 funcion.setPeliculaTitulo(rs.getString("titulo"));
                 funcion.setDuracion(rs.getInt("duracion"));
-                funcion.setHora(rs.getObject("hora", LocalTime.class));
+                funcion.setHora(rs.getObject("hora_inicio", LocalTime.class));
                 funcion.setHoraFinal(rs.getObject("hora_final_total", LocalTime.class));
                 funcion.setPrecio(rs.getBigDecimal("precio"));
 
