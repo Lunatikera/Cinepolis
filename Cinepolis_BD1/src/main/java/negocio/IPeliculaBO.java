@@ -4,10 +4,8 @@
  */
 package negocio;
 
-
 import dtos.PeliculaDTO;
 import java.util.List;
-
 
 /**
  *
@@ -32,4 +30,7 @@ public interface IPeliculaBO {
     public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws NegocioException;
 
     public PeliculaDTO buscarPorTitulo(String titulo) throws NegocioException;
+
+    public List<PeliculaDTO> listaPeliculas() throws NegocioException;
+
 }

@@ -28,11 +28,13 @@ import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
+import negocio.IReportePeliculaBO;
 import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportePeliculaBO;
 import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
@@ -43,10 +45,12 @@ import persistencia.ICiudadDAO;
 import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportePeliculaDAO;
 import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportePeliculaDAO;
 import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
@@ -184,7 +188,13 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
         int id = this.getIdSeleccionadoTablaClientes();
         if (id == 0) {
             JOptionPane.showMessageDialog(this, "Por favor selecciona una pelicula", "Información", JOptionPane.ERROR_MESSAGE);
-            return;
+            try {
+                funcionBO.eliminarPorID(id);
+                JOptionPane.showMessageDialog(this, "Funcion eliminada correctamente");
+
+            } catch (NegocioException ex) {
+                Logger.getLogger(FrmAdminFuncion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 //            PeliculaDTO pelicula = peliculaBO.buscarPeliculaPorId(id);
     }
@@ -642,11 +652,13 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
         IConexionBD conexion = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        IReportePeliculaDAO reportePeliculaDAO = new ReportePeliculaDAO(conexion);
+        IReportePeliculaBO reportePeliculaBO = new ReportePeliculaBO(reportePeliculaDAO);
         ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
         ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
-        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(reportePeliculaBO, ciudadBO, peliculaBO);
         reportePelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed

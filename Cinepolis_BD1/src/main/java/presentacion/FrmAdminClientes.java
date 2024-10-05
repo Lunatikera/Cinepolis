@@ -20,11 +20,13 @@ import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IPeliculaBO;
+import negocio.IReportePeliculaBO;
 import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReportePeliculaBO;
 import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
@@ -33,10 +35,12 @@ import persistencia.ConexionBD;
 import persistencia.ICiudadDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReportePeliculaDAO;
 import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReportePeliculaDAO;
 import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
@@ -597,10 +601,11 @@ public class FrmAdminClientes extends javax.swing.JFrame {
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
         IConexionBD conexionBD = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
-
-        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        IReportePeliculaDAO reportePeliculaDAO = new ReportePeliculaDAO(conexionBD);
+        IReportePeliculaBO reportePeliculaBO = new ReportePeliculaBO(reportePeliculaDAO);
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(reportePeliculaBO, ciudadBO, peliculaBO);
         reportePelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed

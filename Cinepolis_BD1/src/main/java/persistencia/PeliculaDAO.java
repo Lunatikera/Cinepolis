@@ -223,6 +223,7 @@ public class PeliculaDAO implements IPeliculaDAO {
 
         return peliculas;
     }
+    
 
     @Override
     public void guardarPeliculaEnSucursal(int peliculaId, int sucursalId) throws PersistenciaException {
@@ -287,4 +288,33 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
     }
 
+    @Override
+    public List<PeliculaEntidad> listaPeliculas() throws PersistenciaException {
+       List<PeliculaEntidad> peliculas = new ArrayList<>();
+
+        String sql = "SELECT pelicula_id, titulo, sinopsis, pais, link_trailer, duracion, cartel, clasificacion, estaEliminado FROM peliculas";
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+      
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PeliculaEntidad pelicula = new PeliculaEntidad();
+                    pelicula.setId(rs.getInt("pelicula_id"));
+                    pelicula.setTitulo(rs.getString("titulo"));
+                    pelicula.setSinopsis(rs.getString("sinopsis"));
+                    pelicula.setPais(rs.getString("pais"));
+                    pelicula.setLink_trailer(rs.getString("link_Trailer"));
+                    pelicula.setDuracion(rs.getInt("duracion"));
+                    pelicula.setCartel(rs.getString("cartel"));
+                    pelicula.setClasificacion(Clasificaciones.valueOf(rs.getString("clasificacion")));
+                    pelicula.setEstaEliminada(rs.getBoolean("estaEliminado"));
+                    peliculas.add(pelicula);
+                }
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al buscar las peliculas: " + e.getMessage());
+        }
+        return peliculas;
+    }
 }

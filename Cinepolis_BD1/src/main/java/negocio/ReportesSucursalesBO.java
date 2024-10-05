@@ -4,7 +4,7 @@
  */
 package negocio;
 
-import dtos.DatosReporteDTO;
+import dtos.DatosReporteSucursalDTO;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,16 +30,16 @@ public class ReportesSucursalesBO implements IReportesSucursalesBO{
     
     
     @Override
-    public List<DatosReporteDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws NegocioException {
+    public List<DatosReporteSucursalDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws NegocioException {
         try{
             if (sucursalIds.isEmpty() || fechaInicio.isEmpty() || fechaFin.isEmpty()){
                 throw new NegocioException("Existen campos vacios");
             }
-            List<DatosReporteDTO> reporte = this.datos.obtenerGananciasPorSucursales(sucursalIds, fechaInicio, fechaFin);
-            List<DatosReporteDTO> mandar = new ArrayList<>();
+            List<DatosReporteSucursalDTO> reporte = this.datos.obtenerGananciasPorSucursales(sucursalIds, fechaInicio, fechaFin);
+            List<DatosReporteSucursalDTO> mandar = new ArrayList<>();
             
-            for (DatosReporteDTO repo : reporte) {
-                DatosReporteDTO m = new DatosReporteDTO(repo.getCiudad(), repo.getSucursal(), repo.getCantidadFunciones(), repo.getFecha(),repo.getTotal());
+            for (DatosReporteSucursalDTO repo : reporte) {
+                DatosReporteSucursalDTO m = new DatosReporteSucursalDTO(repo.getCiudad(), repo.getSucursal(), repo.getCantidadFunciones(), repo.getFecha(),repo.getTotal());
                 mandar.add(m);
             }
             return mandar;
