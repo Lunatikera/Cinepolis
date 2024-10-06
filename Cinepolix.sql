@@ -53,7 +53,7 @@ CREATE TABLE Generos (
     genero_id INT AUTO_INCREMENT PRIMARY KEY,
     nombreGenero VARCHAR(255) NOT NULL
 );
-
+select*from peliculas;
 CREATE TABLE Peliculas (
     pelicula_id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
@@ -65,16 +65,15 @@ CREATE TABLE Peliculas (
     clasificacion enum ('A','B','B15','C','R') NOT NULL,
 	estaEliminado bit(1) default 0
 );
-
 CREATE TABLE Funciones (
     funcion_id INT AUTO_INCREMENT PRIMARY KEY,
     precio DECIMAL(10, 2) NOT NULL,
     dia ENUM('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo') NOT NULL,
     hora_inicio TIME NOT NULL,
-    hora_final TIME NOT NULL, -- Nueva columna para la hora final
-    asientos_Disponibles INT NOT NULL,
-    hora_final_total TIME NOT NULL,
-    duracionTotal INT NOT NULL,
+    hora_final TIME NOT NULL , -- Nueva columna para la hora final
+    asientos_Disponibles INT NOT NULL ,
+    hora_final_total TIME NOT NULL ,
+    duracionTotal INT NOT NULL ,
 	estaEliminado bit(1) default 0,
     sala_id INT,
     pelicula_id INT,
@@ -528,7 +527,7 @@ select* from funciones;
 
 INSERT INTO Funciones (precio, dia, hora_inicio, sala_id, pelicula_id)
 VALUES
-(200.00, 'Viernes', '18:00:00', 5, 5),
+(200.00, 'Sabado', '18:00', 10,5),
 (220.00, 'Sábado', '21:00:00', 6, 6),
 (220.00, 'Sábado', '00:00:00', 6, 6),
 (250.00, 'Domingo', '01:00:00', 7, 7);
@@ -595,7 +594,7 @@ ORDER BY
     
     
     
-    select*from peliculas
+    select*from funciones
     
     SELECT g.genero_id, g.nombreGenero 
 FROM generos g
@@ -604,3 +603,30 @@ WHERE g.genero_id NOT IN (
     FROM pelicula_genero pg 
     WHERE pg.pelicula_id = 1
 );
+show triggers
+select*from ventas
+
+SELECT 
+    c.nombre AS Ciudad, 
+    p.titulo AS Película, 
+    DATE(v.fecha_compra) AS Fecha,
+    SUM(v.totalCompra) AS GananciaPorFecha
+FROM 
+    Ventas v
+JOIN 
+    Funciones f ON v.funcion_id = f.funcion_id
+JOIN 
+    Peliculas p ON f.pelicula_id = p.pelicula_id
+JOIN 
+    Sucursales s ON f.sala_id = s.sucursal_id
+JOIN 
+    Ciudades c ON s.ciudad_id = c.ciudad_id
+WHERE 
+    c.ciudad_id IN (1,2,3) 
+    AND p.pelicula_id IN (1,2,3,4,5)
+    AND v.fecha_compra BETWEEN '2024-01-01' AND '2024-12-12'
+GROUP BY 
+    c.nombre, p.titulo, DATE(v.fecha_compra)
+ORDER BY 
+    c.nombre, p.titulo, Fecha; 
+
