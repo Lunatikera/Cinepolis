@@ -61,7 +61,7 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
         initComponents();
         this.funcionBO = funcionBO;
         this.sala = sala;
-        this.sucursal = sucursal;
+        this.sucursal = sucursalDTO;
         this.pelicula = pelicula;
         locales = Locale.getAvailableLocales();
         this.llenarComboDias();
