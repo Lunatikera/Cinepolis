@@ -757,7 +757,7 @@ public class FrmReportePelicula extends javax.swing.JFrame {
             doc.add(new Paragraph("Filtros Aplicados:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
             doc.add(new Paragraph("Fechas: " + fechaInicioDP.getText() + " a " + fechaFinDP.getText()));
             doc.add(new Paragraph("Ciudades: " + obtenerValoresSeparadosPorComaCiudad(cbCiudadQuitar))); // Asegúrate de convertir la lista a cadena
-            doc.add(new Paragraph("Ciudades: " + obtenerValoresSeparadosPorComaPelicula(cbPeliculaQuitar))); // Asegúrate de convertir la lista a cadena
+            doc.add(new Paragraph("Peliculas: " + obtenerValoresSeparadosPorComaPelicula(cbPeliculaQuitar))); // Asegúrate de convertir la lista a cadena
             doc.add(new Paragraph("\n")); // Espacio en blanco
 
             // Tabla
