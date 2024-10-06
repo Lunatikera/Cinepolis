@@ -4,7 +4,7 @@
  */
 package persistencia;
 
-import dtos.DatosReporteDTO;
+import dtos.DatosReporteSucursalDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +24,7 @@ public class ReportesSucursalesDAO implements IReportesSucursalesDAO{
         this.conexionBD = conexionBD;
     }
     
-    public List<DatosReporteDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws PersistenciaException{
+    public List<DatosReporteSucursalDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws PersistenciaException{
     StringBuilder query = new StringBuilder();
     query.append("SELECT ci.nombre AS Ciudad, su.nombre AS Sucursal, COUNT(DISTINCT f.funcion_id) AS CantidadFunciones, ");
     query.append("DATE(v.fecha_compra) AS Fecha, SUM(v.totalCompra) AS TotalGanancia ");
@@ -64,10 +64,10 @@ public class ReportesSucursalesDAO implements IReportesSucursalesDAO{
     ResultSet rs = ps.executeQuery();
         System.out.println(rs);
     // Lista para almacenar los resultados
-    List<DatosReporteDTO> datosReporte = new ArrayList<>();
+    List<DatosReporteSucursalDTO> datosReporte = new ArrayList<>();
     
     while (rs.next()) {
-        DatosReporteDTO datos = new DatosReporteDTO(
+        DatosReporteSucursalDTO datos = new DatosReporteSucursalDTO(
             rs.getString("Ciudad"),
             rs.getString("Sucursal"),
             rs.getInt("CantidadFunciones"),

@@ -13,5 +13,5 @@ import utilerias.*;
 public enum MetodosDePago {
     Tarjeta,
     Efectivo,
-    Puntoa
+    Puntos
 }

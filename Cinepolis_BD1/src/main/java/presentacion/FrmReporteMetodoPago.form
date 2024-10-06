@@ -58,48 +58,42 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace type="separate" pref="19" max="32767" attributes="0"/>
+                                      <EmptySpace type="separate" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="cbCiudadAñadir" alignment="1" max="32767" attributes="0"/>
-                                          <Component id="cbCiudadQuitar" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="cbMetodoPagoAñadir" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="cbMetodoPagoQuitar" alignment="0" max="32767" attributes="0"/>
                                           <Component id="jLabel13" alignment="0" max="32767" attributes="0"/>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="cbSucursalQuitar" min="-2" pref="225" max="-2" attributes="0"/>
+                                                  <Component id="cbSucursalAñadir" min="-2" pref="225" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="cbPeliculaQuitar" min="-2" pref="225" max="-2" attributes="0"/>
-                                                          <Component id="cbPeliculaAñadir" min="-2" pref="225" max="-2" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
+                                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="fechaInicioDP" min="-2" pref="217" max="-2" attributes="0"/>
+                                                  <Component id="fechaFinDP" min="-2" pref="217" max="-2" attributes="0"/>
                                               </Group>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="1" attributes="0">
-                                                          <Component id="fechaInicioDP" min="-2" pref="217" max="-2" attributes="0"/>
-                                                          <Component id="fechaFinDP" min="-2" pref="217" max="-2" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
-                                                      <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
+                                              <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                                      <Component id="btnAnadirCiudad" min="-2" pref="134" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
-                                      <Component id="btnAnadirPelicula" min="-2" pref="134" max="-2" attributes="0"/>
+                                      <Component id="btnAnadirMetodoPago" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
+                                      <Component id="btnAnadirSucursal" min="-2" pref="134" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
@@ -107,7 +101,14 @@
                               </Group>
                               <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnImprimir1" min="-2" pref="174" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="btnGenerarReporte" min="-2" pref="174" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="340" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
@@ -115,19 +116,16 @@
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
-                                      <Component id="btnQuitarCiudad" min="-2" pref="134" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="158" max="-2" attributes="0"/>
-                                      <Component id="btnQuitarPelicula" min="-2" pref="134" max="-2" attributes="0"/>
+                                      <Component id="btnQuitarMetodoPago" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
+                                      <Component id="btnQuitarSucursal" min="-2" pref="134" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="197" max="-2" attributes="0"/>
+                                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="btnImprimir1" min="-2" pref="174" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                              <Component id="btnGenerarReporte" min="-2" pref="174" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="340" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -151,23 +149,23 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cbCiudadAñadir" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                                          <Component id="cbPeliculaAñadir" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <Component id="cbMetodoPagoAñadir" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <Component id="cbSucursalAñadir" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="btnAnadirCiudad" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="btnAnadirPelicula" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="btnAnadirSucursal" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnAnadirMetodoPago" min="-2" pref="25" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cbCiudadQuitar" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                                          <Component id="cbPeliculaQuitar" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <Component id="cbMetodoPagoQuitar" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <Component id="cbSucursalQuitar" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="btnQuitarCiudad" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="btnQuitarPelicula" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnQuitarMetodoPago" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnQuitarSucursal" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                   </Group>
@@ -210,10 +208,11 @@
                 <Component class="javax.swing.JTable" name="tblReporteSucursal">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="4" rowCount="0">
-                        <Column editable="true" title="Ciudad" type="java.lang.Object"/>
-                        <Column editable="true" title="Pelicula" type="java.lang.Object"/>
+                      <Table columnCount="5" rowCount="0">
                         <Column editable="true" title="Fecha" type="java.lang.Object"/>
+                        <Column editable="true" title="Ciudad" type="java.lang.Object"/>
+                        <Column editable="true" title="Sucursal" type="java.lang.Object"/>
+                        <Column editable="true" title="Tipo de Pago" type="java.lang.Object"/>
                         <Column editable="true" title="Ganancia" type="java.lang.Object"/>
                       </Table>
                     </Property>
@@ -250,7 +249,7 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel10">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Reporte de ganacias por pelicula"/>
+                <Property name="text" type="java.lang.String" value="Reporte de ganacias por Metodo de Pago"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="24" style="1"/>
                 </Property>
@@ -269,7 +268,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Pelicula para a&#xf1;adir"/>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir Sucursal"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="24" style="1"/>
                 </Property>
@@ -308,8 +307,8 @@
                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="imagenPerfiles1" min="-2" pref="100" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jPanel4" min="-2" pref="461" max="-2" attributes="0"/>
-                          <EmptySpace pref="140" max="32767" attributes="0"/>
+                          <Component id="jPanel4" min="-2" pref="447" max="-2" attributes="0"/>
+                          <EmptySpace pref="154" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -526,7 +525,7 @@
             </Component>
             <Component class="com.github.lgooddatepicker.components.DatePicker" name="fechaInicioDP">
             </Component>
-            <Component class="javax.swing.JComboBox" name="cbCiudadA&#xf1;adir">
+            <Component class="javax.swing.JComboBox" name="cbMetodoPagoA&#xf1;adir">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
@@ -542,29 +541,29 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbCiudadA&#xf1;adirActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbMetodoPagoA&#xf1;adirActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;CiudadDTO&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JButton" name="btnQuitarCiudad">
+            <Component class="javax.swing.JButton" name="btnQuitarMetodoPago">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Quitar Ciudad"/>
+                <Property name="text" type="java.lang.String" value="Quitar Metodo Pago"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarCiudadActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarMetodoPagoActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnAnadirCiudad">
+            <Component class="javax.swing.JButton" name="btnAnadirMetodoPago">
               <Properties>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir Ciudad"/>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir Metodo Pago"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnadirCiudadActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnadirMetodoPagoActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cbCiudadQuitar">
+            <Component class="javax.swing.JComboBox" name="cbMetodoPagoQuitar">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
@@ -580,15 +579,15 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbCiudadQuitarActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbMetodoPagoQuitarActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;CiudadDTO&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Ciudad para a&#xf1;adir"/>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir metodo pago"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="24" style="1"/>
                 </Property>
@@ -597,7 +596,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cbPeliculaA&#xf1;adir">
+            <Component class="javax.swing.JComboBox" name="cbSucursalA&#xf1;adir">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
@@ -613,13 +612,13 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbPeliculaA&#xf1;adirActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSucursalA&#xf1;adirActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PeliculaDTO&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;SucursalDTO&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cbPeliculaQuitar">
+            <Component class="javax.swing.JComboBox" name="cbSucursalQuitar">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
@@ -635,26 +634,26 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbPeliculaQuitarActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSucursalQuitarActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PeliculaDTO&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;SucursalDTO&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JButton" name="btnAnadirPelicula">
+            <Component class="javax.swing.JButton" name="btnAnadirSucursal">
               <Properties>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir Pelicula"/>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir Sucursal"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnadirPeliculaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnadirSucursalActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnQuitarPelicula">
+            <Component class="javax.swing.JButton" name="btnQuitarSucursal">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Quitar Pelicula"/>
+                <Property name="text" type="java.lang.String" value="Quitar Sucursal"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarPeliculaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarSucursalActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel14">

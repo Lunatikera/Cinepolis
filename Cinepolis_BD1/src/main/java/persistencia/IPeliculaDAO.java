@@ -21,4 +21,5 @@ public interface IPeliculaDAO extends ICrud<PeliculaEntidad> {
     
     public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaException;
 
+    public  List<PeliculaEntidad> listaPeliculas()throws PersistenciaException;
 }

@@ -28,8 +28,8 @@ public class PeliculaBO implements IPeliculaBO {
 
     @Override
     public void agregaPelicula(PeliculaDTO peliculaDTO) throws NegocioException {
-        try{
-            
+        try {
+
             PeliculaEntidad pelicula = new PeliculaEntidad(
                     peliculaDTO.getId(),
                     peliculaDTO.getTitulo(),
@@ -41,8 +41,8 @@ public class PeliculaBO implements IPeliculaBO {
                     Clasificaciones.valueOf(peliculaDTO.getClasificacion())
             );
             this.peliculaDAO.guardar(pelicula);
-            
-        }catch(PersistenciaException e){
+
+        } catch (PersistenciaException e) {
             Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error en la capa de negocio al agregar la pelicula", e);
         }
@@ -50,7 +50,7 @@ public class PeliculaBO implements IPeliculaBO {
 
     @Override
     public void actualizarPelicula(PeliculaDTO peliculaDTO) throws NegocioException {
-        try{
+        try {
             PeliculaEntidad pelicula = new PeliculaEntidad(
                     peliculaDTO.getId(),
                     peliculaDTO.getTitulo(),
@@ -62,8 +62,8 @@ public class PeliculaBO implements IPeliculaBO {
                     Clasificaciones.valueOf(peliculaDTO.getClasificacion())
             );
             this.peliculaDAO.editar(pelicula);
-            
-        }catch(PersistenciaException e){
+
+        } catch (PersistenciaException e) {
             Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error en la capa de negocio al actualizar la pelicula", e);
         }
@@ -71,9 +71,9 @@ public class PeliculaBO implements IPeliculaBO {
 
     @Override
     public void eliminarPelicula(int idPelicula) throws NegocioException {
-        try{
+        try {
             this.peliculaDAO.eliminarPorID(idPelicula);
-        }catch(PersistenciaException e){
+        } catch (PersistenciaException e) {
             Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error en la capa de negocio al eliminar la pelicula", e);
         }
@@ -81,7 +81,7 @@ public class PeliculaBO implements IPeliculaBO {
 
     @Override
     public PeliculaDTO buscarPeliculaPorId(int idCliente) throws NegocioException {
-        try{
+        try {
             PeliculaEntidad pelicula = this.peliculaDAO.leerPorID(idCliente);
             PeliculaDTO peliculaDTO = new PeliculaDTO(
                     pelicula.getId(),
@@ -94,8 +94,8 @@ public class PeliculaBO implements IPeliculaBO {
                     pelicula.getClasificacion().name()
             );
             return peliculaDTO;
-            
-        }catch(PersistenciaException e){
+
+        } catch (PersistenciaException e) {
             Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error en la capa de negocio al buscar la pelicula con el id especificado", e);
         }
@@ -103,18 +103,18 @@ public class PeliculaBO implements IPeliculaBO {
 
     @Override
     public List<PeliculaDTO> buscarPaginadoPeliculas(int limite, int pagina) throws NegocioException {
-        try{
-        int offset = utilerias.Herramientas.RegresarOFFSETMySQL(limite, pagina);
-        List<PeliculaEntidad> peliculas = peliculaDAO.leerPaginado(limite, offset);
-        List<PeliculaDTO> peliculasDTO = new ArrayList<>();
-        
+        try {
+            int offset = utilerias.Herramientas.RegresarOFFSETMySQL(limite, pagina);
+            List<PeliculaEntidad> peliculas = peliculaDAO.leerPaginado(limite, offset);
+            List<PeliculaDTO> peliculasDTO = new ArrayList<>();
+
             for (PeliculaEntidad pelicula : peliculas) {
                 PeliculaDTO peliculaDTO = convertirADTO(pelicula);
                 peliculasDTO.add(peliculaDTO);
             }
-        return peliculasDTO;
-        
-        }catch(PersistenciaException e){
+            return peliculasDTO;
+
+        } catch (PersistenciaException e) {
             Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
 
             throw new NegocioException("Error en la capa de negocio mostras las peliculas en las tablas", e);
@@ -181,7 +181,7 @@ public class PeliculaBO implements IPeliculaBO {
 
     @Override
     public PeliculaDTO buscarPorTitulo(String titulo) throws NegocioException {
-        try{
+        try {
             PeliculaEntidad pelicula = this.peliculaDAO.buscarPorTitulo(titulo);
             PeliculaDTO peliculaDTO = new PeliculaDTO(
                     pelicula.getId(),
@@ -194,13 +194,30 @@ public class PeliculaBO implements IPeliculaBO {
                     pelicula.getClasificacion().name()
             );
             return peliculaDTO;
-            
-        }catch(PersistenciaException e){
+
+        } catch (PersistenciaException e) {
             Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
             throw new NegocioException("Error en la capa de negocio al buscar la pelicula con el id especificado", e);
         }
     }
+
+    @Override
+    public List<PeliculaDTO> listaPeliculas() throws NegocioException {
+        try {
+            List<PeliculaEntidad> peliculas = peliculaDAO.listaPeliculas();
+            List<PeliculaDTO> peliculasDTO = new ArrayList<>();
+
+            for (PeliculaEntidad pelicula : peliculas) {
+                PeliculaDTO peliculaDTO = convertirADTO(pelicula);
+                peliculasDTO.add(peliculaDTO);
+            }
+            return peliculasDTO;
+
+        } catch (PersistenciaException e) {
+            Logger.getLogger(PeliculaBO.class.getName()).log(Level.SEVERE, null, e);
+
+            throw new NegocioException("Error en la capa de negocio mostras las peliculas en las tablas", e);
+        }
+    }
+
 }
-
-  
-

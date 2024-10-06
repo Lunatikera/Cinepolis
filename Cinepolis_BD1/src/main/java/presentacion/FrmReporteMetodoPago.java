@@ -11,9 +11,11 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import dtos.CiudadDTO;
+import dtos.DatosReporteMetodoPagoDTO;
 import dtos.DatosReportePeliculasDTO;
 import dtos.PeliculaDTO;
 import dtos.SucursalDTO;
+import enumeradores.MetodosDePago;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
@@ -21,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -74,33 +77,32 @@ import utilerias.JButtonRenderer;
  *
  * @author carli
  */
-public class FrmReportePelicula extends javax.swing.JFrame {
+public class FrmReporteMetodoPago extends javax.swing.JFrame {
 
-    private IReportePeliculaBO reportePeliculaBO;
-    private ICiudadBO ciudadBO;
-    private IPeliculaBO peliculaBO;
-    private List<CiudadDTO> listaCiudades;
-    private List<PeliculaDTO> listaPeliculas;
+    private IReporteMetodoPagoBO reporteMetodoPagoBO;
+    private ISucursalBO sucursalBO;
+    private List<SucursalDTO> listaSucursales;
     private Set<Integer> lista;
-    private List<Integer> listaCiudadesID;
-    private List<Integer> listaPeliculasID;
+    private Set<String> listaMetodo;
+    private List<Integer> listaSucursalesID;
+    private List<String> listaMetodosPago;
 
     /**
      * Creates new form FrmAdminFuncion
      */
-    public FrmReportePelicula(IReportePeliculaBO reportePeliculaBO, ICiudadBO ciudadBO, IPeliculaBO peliculaBO) {
+    public FrmReporteMetodoPago(IReporteMetodoPagoBO reporteMetodoPagoBO, ISucursalBO sucursalBO) {
         initComponents();
-        this.reportePeliculaBO = reportePeliculaBO;
-        this.ciudadBO = ciudadBO;
-        this.peliculaBO = peliculaBO;
+        this.reporteMetodoPagoBO = reporteMetodoPagoBO;
+        this.sucursalBO = sucursalBO;
         lista = new HashSet<>();
+        listaMetodo = new HashSet<>();
 
         cargarMetodosIniciales();
     }
 
     public void cargarMetodosIniciales() {
-        this.llenarComboBoxCiudades();
-        this.llenarComboBoxPeliculas();
+        this.llenarComboBoxSucursales();
+        this.llenarComboMetodosPago();
         this.setTitle("Reporte de Peliculas");
         this.setResizable(false);
         this.setSize(1280, 775);
@@ -108,11 +110,11 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     }
 
-    private void cargarDatosEnTabla(List<Integer> listaCiudadesIDs, List<Integer> listaPeliculasIDs, String fechaInicio, String fechaFin) {
+    private void cargarDatosEnTabla(List<String> listaMetodosPago, List<Integer> listaSucursalesID, String fechaInicio, String fechaFin) {
         try {
 
             // Obtén solo los clientes necesarios para la página actual
-            List<DatosReportePeliculasDTO> reporteLista = this.reportePeliculaBO.obtenerGananciasPorPeliculas(listaCiudadesIDs, listaPeliculasIDs, fechaInicio, fechaFin);
+            List<DatosReporteMetodoPagoDTO> reporteLista = this.reporteMetodoPagoBO.calcularGanancias(listaMetodosPago, listaSucursalesID, fechaInicio, fechaFin);
 
             // Agrega los registros paginados a la tabla
             this.llenarTablaPeliculas(reporteLista);
@@ -123,7 +125,7 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     }
 
-    private void llenarTablaPeliculas(List<DatosReportePeliculasDTO> peliculaLista) {
+    private void llenarTablaPeliculas(List<DatosReporteMetodoPagoDTO> peliculaLista) {
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblReporteSucursal.getModel();
 
         if (modeloTabla.getRowCount() > 0) {
@@ -135,11 +137,12 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         if (peliculaLista != null) {
             peliculaLista.forEach(row
                     -> {
-                Object[] fila = new Object[4];
-                fila[0] = row.getNombreCiudad();
-                fila[1] = row.getNombrePelicula();
-                fila[2] = row.getFechaCompra();
-                fila[3] = row.getTotalCompra();
+                Object[] fila = new Object[5];
+                fila[0] = convertLocalDateTimeToString(row.getFechaCompra());
+                fila[1] = row.getNombreCiudad();
+                fila[2] = row.getNombreSucursal();
+                fila[3] = row.getMetodoPago();
+                fila[4] = row.getTotalCompra();
 
                 modeloTabla.addRow(fila);
             });
@@ -184,15 +187,15 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         fechaFinDP = new com.github.lgooddatepicker.components.DatePicker();
         fechaInicioDP = new com.github.lgooddatepicker.components.DatePicker();
-        cbCiudadAñadir = new javax.swing.JComboBox<>();
-        btnQuitarCiudad = new javax.swing.JButton();
-        btnAnadirCiudad = new javax.swing.JButton();
-        cbCiudadQuitar = new javax.swing.JComboBox<>();
+        cbMetodoPagoAñadir = new javax.swing.JComboBox<>();
+        btnQuitarMetodoPago = new javax.swing.JButton();
+        btnAnadirMetodoPago = new javax.swing.JButton();
+        cbMetodoPagoQuitar = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
-        cbPeliculaAñadir = new javax.swing.JComboBox<>();
-        cbPeliculaQuitar = new javax.swing.JComboBox<>();
-        btnAnadirPelicula = new javax.swing.JButton();
-        btnQuitarPelicula = new javax.swing.JButton();
+        cbSucursalAñadir = new javax.swing.JComboBox<>();
+        cbSucursalQuitar = new javax.swing.JComboBox<>();
+        btnAnadirSucursal = new javax.swing.JButton();
+        btnQuitarSucursal = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         btnImprimir1 = new javax.swing.JButton();
@@ -208,12 +211,12 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Ciudad", "Pelicula", "Fecha", "Ganancia"
+                "Fecha", "Ciudad", "Sucursal", "Tipo de Pago", "Ganancia"
             }
         ));
         jScrollPane1.setViewportView(tblReporteSucursal);
 
-        jLabel10.setText("Reporte de ganacias por pelicula");
+        jLabel10.setText("Reporte de ganacias por Metodo de Pago");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -224,7 +227,7 @@ public class FrmReportePelicula extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setText("Pelicula para añadir");
+        jLabel12.setText("Añadir Sucursal");
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -368,75 +371,75 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(154, Short.MAX_VALUE))
         );
 
-        cbCiudadAñadir.setBackground(new java.awt.Color(33, 36, 59));
-        cbCiudadAñadir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbCiudadAñadir.setForeground(new java.awt.Color(255, 255, 255));
-        cbCiudadAñadir.addActionListener(new java.awt.event.ActionListener() {
+        cbMetodoPagoAñadir.setBackground(new java.awt.Color(33, 36, 59));
+        cbMetodoPagoAñadir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbMetodoPagoAñadir.setForeground(new java.awt.Color(255, 255, 255));
+        cbMetodoPagoAñadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbCiudadAñadirActionPerformed(evt);
+                cbMetodoPagoAñadirActionPerformed(evt);
             }
         });
 
-        btnQuitarCiudad.setText("Quitar Ciudad");
-        btnQuitarCiudad.addActionListener(new java.awt.event.ActionListener() {
+        btnQuitarMetodoPago.setText("Quitar Metodo Pago");
+        btnQuitarMetodoPago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarCiudadActionPerformed(evt);
+                btnQuitarMetodoPagoActionPerformed(evt);
             }
         });
 
-        btnAnadirCiudad.setText("Añadir Ciudad");
-        btnAnadirCiudad.addActionListener(new java.awt.event.ActionListener() {
+        btnAnadirMetodoPago.setText("Añadir Metodo Pago");
+        btnAnadirMetodoPago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnadirCiudadActionPerformed(evt);
+                btnAnadirMetodoPagoActionPerformed(evt);
             }
         });
 
-        cbCiudadQuitar.setBackground(new java.awt.Color(33, 36, 59));
-        cbCiudadQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbCiudadQuitar.setForeground(new java.awt.Color(255, 255, 255));
-        cbCiudadQuitar.addActionListener(new java.awt.event.ActionListener() {
+        cbMetodoPagoQuitar.setBackground(new java.awt.Color(33, 36, 59));
+        cbMetodoPagoQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbMetodoPagoQuitar.setForeground(new java.awt.Color(255, 255, 255));
+        cbMetodoPagoQuitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbCiudadQuitarActionPerformed(evt);
+                cbMetodoPagoQuitarActionPerformed(evt);
             }
         });
 
-        jLabel13.setText("Ciudad para añadir");
+        jLabel13.setText("Añadir metodo pago");
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
 
-        cbPeliculaAñadir.setBackground(new java.awt.Color(33, 36, 59));
-        cbPeliculaAñadir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbPeliculaAñadir.setForeground(new java.awt.Color(255, 255, 255));
-        cbPeliculaAñadir.addActionListener(new java.awt.event.ActionListener() {
+        cbSucursalAñadir.setBackground(new java.awt.Color(33, 36, 59));
+        cbSucursalAñadir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbSucursalAñadir.setForeground(new java.awt.Color(255, 255, 255));
+        cbSucursalAñadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPeliculaAñadirActionPerformed(evt);
+                cbSucursalAñadirActionPerformed(evt);
             }
         });
 
-        cbPeliculaQuitar.setBackground(new java.awt.Color(33, 36, 59));
-        cbPeliculaQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbPeliculaQuitar.setForeground(new java.awt.Color(255, 255, 255));
-        cbPeliculaQuitar.addActionListener(new java.awt.event.ActionListener() {
+        cbSucursalQuitar.setBackground(new java.awt.Color(33, 36, 59));
+        cbSucursalQuitar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbSucursalQuitar.setForeground(new java.awt.Color(255, 255, 255));
+        cbSucursalQuitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPeliculaQuitarActionPerformed(evt);
+                cbSucursalQuitarActionPerformed(evt);
             }
         });
 
-        btnAnadirPelicula.setText("Añadir Pelicula");
-        btnAnadirPelicula.addActionListener(new java.awt.event.ActionListener() {
+        btnAnadirSucursal.setText("Añadir Sucursal");
+        btnAnadirSucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnadirPeliculaActionPerformed(evt);
+                btnAnadirSucursalActionPerformed(evt);
             }
         });
 
-        btnQuitarPelicula.setText("Quitar Pelicula");
-        btnQuitarPelicula.addActionListener(new java.awt.event.ActionListener() {
+        btnQuitarSucursal.setText("Quitar Sucursal");
+        btnQuitarSucursal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarPeliculaActionPerformed(evt);
+                btnQuitarSucursalActionPerformed(evt);
             }
         });
 
@@ -465,41 +468,43 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(18, 19, Short.MAX_VALUE)
+                                .addGap(18, 18, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(cbCiudadAñadir, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbMetodoPagoAñadir, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbMetodoPagoQuitar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(55, 55, 55)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel12)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(49, 49, 49)
+                                        .addGap(6, 6, 6)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel12)
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addGap(6, 6, 6)
-                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(cbPeliculaQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(cbPeliculaAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addGap(57, 57, 57)
-                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addGap(89, 89, 89)
-                                                .addComponent(jLabel14))))))
+                                            .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cbSucursalAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(57, 57, 57)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(fechaInicioDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(fechaFinDP, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(89, 89, 89)
+                                        .addComponent(jLabel14))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(52, 52, 52)
-                                .addComponent(btnAnadirCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(154, 154, 154)
-                                .addComponent(btnAnadirPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAnadirMetodoPago)
+                                .addGap(148, 148, 148)
+                                .addComponent(btnAnadirSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel15)
                                 .addGap(59, 59, 59)))
                         .addGap(191, 191, 191))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnImprimir1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(340, 340, 340))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -507,16 +512,13 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(53, 53, 53)
-                                .addComponent(btnQuitarCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(158, 158, 158)
-                                .addComponent(btnQuitarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnImprimir1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(340, 340, 340))))
+                                .addComponent(btnQuitarMetodoPago)
+                                .addGap(154, 154, 154)
+                                .addComponent(btnQuitarSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(197, 197, 197)
+                                .addComponent(jLabel10)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -534,20 +536,20 @@ public class FrmReportePelicula extends javax.swing.JFrame {
                                     .addComponent(jLabel12))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbCiudadAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbPeliculaAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cbMetodoPagoAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbSucursalAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAnadirSucursal)
+                                    .addComponent(btnAnadirMetodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnAnadirCiudad)
-                                    .addComponent(btnAnadirPelicula))
-                                .addGap(14, 14, 14)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cbCiudadQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbPeliculaQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cbMetodoPagoQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbSucursalQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnQuitarCiudad)
-                                    .addComponent(btnQuitarPelicula))
+                                    .addComponent(btnQuitarMetodoPago)
+                                    .addComponent(btnQuitarSucursal))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
@@ -588,8 +590,8 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     private void btnMenuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSalasActionPerformed
         IConexionBD conexionBD = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
         ISalaDAO salaDAO = new SalaDAO(conexionBD);
         ISalaBO salaBO = new SalaBO(salaDAO);
 
@@ -600,9 +602,9 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     private void btnMenuSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuSucursalesActionPerformed
         IConexionBD conexionBD = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
         IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
 
         FrmAdminSucursal frmAdminSucursal = new FrmAdminSucursal(sucursalBO, ciudadBO, peliculaBO);
@@ -612,8 +614,10 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     private void btnMenuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuFuncionesActionPerformed
         IConexionBD conexionBD = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexionBD);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
         FrmAdminEscogerFuncion escogerFuncion = new FrmAdminEscogerFuncion(sucursalBO, ciudadBO, peliculaBO);
         escogerFuncion.setVisible(true);
         this.dispose();
@@ -624,32 +628,32 @@ public class FrmReportePelicula extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se selecciono ninguna fecha.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        lista.clear();
-        for (int i = 0; i < cbCiudadQuitar.getItemCount(); i++) {
-            CiudadDTO ciudad = cbCiudadQuitar.getItemAt(i);
-            this.lista.add(ciudad.getId());
+        listaMetodo.clear();
+        for (int i = 0; i < cbMetodoPagoQuitar.getItemCount(); i++) {
+            MetodosDePago metodoPago = (MetodosDePago) cbMetodoPagoQuitar.getItemAt(i);
+            this.listaMetodo.add(metodoPago.toString());
         }
-        listaCiudadesID = new ArrayList(lista);
+        listaMetodosPago = new ArrayList(listaMetodo);
 
         lista.clear();
-        for (int i = 0; i < cbPeliculaQuitar.getItemCount(); i++) {
-            PeliculaDTO pelicula = cbPeliculaQuitar.getItemAt(i);
-            this.lista.add(pelicula.getId());
+        for (int i = 0; i < cbSucursalQuitar.getItemCount(); i++) {
+            SucursalDTO sucursalDTO = cbSucursalQuitar.getItemAt(i);
+            this.lista.add(sucursalDTO.getId());
         }
-        listaPeliculasID = new ArrayList(lista);
+        listaSucursalesID = new ArrayList(lista);
         LocalDate fechaInicio = fechaInicioDP.getDate();
         LocalDate fechaFin = fechaFinDP.getDate();
         String fInicio = convertLocalDateToString(fechaInicio);
         String fFin = convertLocalDateToString(fechaFin);
 
-        cargarDatosEnTabla(listaCiudadesID, listaPeliculasID, fInicio, fFin);
+        cargarDatosEnTabla(listaMetodosPago, listaSucursalesID, fInicio, fFin);
 
     }//GEN-LAST:event_btnGenerarReporteActionPerformed
 
     private void btnMenuReporteSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReporteSucursalesActionPerformed
         IConexionBD conexionBD = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
         IReportesSucursalesDAO reportesSucursalesDAO = new ReportesSucursalesDAO(conexionBD);
         IReportesSucursalesBO reportesSucursalesBO = new ReportesSucursalesBO(reportesSucursalesDAO);
 
@@ -661,65 +665,67 @@ public class FrmReportePelicula extends javax.swing.JFrame {
     private void btnMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuClienteActionPerformed
         IConexionBD conexionBD = new ConexionBD();
         IClienteDAO clienteDAO = new ClienteDAO(conexionBD);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexionBD);
+
         IClienteBO clienteBO = new ClienteBO(clienteDAO);
+        ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
+
         FrmAdminClientes frmAdminClientes = new FrmAdminClientes(ciudadBO, clienteBO);
         frmAdminClientes.setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuClienteActionPerformed
 
-    private void cbCiudadAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCiudadAñadirActionPerformed
+    private void cbMetodoPagoAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMetodoPagoAñadirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbCiudadAñadirActionPerformed
+    }//GEN-LAST:event_cbMetodoPagoAñadirActionPerformed
 
-    private void btnQuitarCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarCiudadActionPerformed
-        CiudadDTO ciudad = (CiudadDTO) cbCiudadQuitar.getSelectedItem();
-        if (ciudad != null) {
-            cbCiudadQuitar.removeItem(ciudad);
-            cbCiudadAñadir.addItem(ciudad);
+    private void btnQuitarMetodoPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarMetodoPagoActionPerformed
+        MetodosDePago metodoPago = (MetodosDePago) cbMetodoPagoQuitar.getSelectedItem();
+        if (metodoPago != null) {
+            cbMetodoPagoQuitar.removeItem(metodoPago);
+            cbMetodoPagoAñadir.addItem(metodoPago);
         }
-    }//GEN-LAST:event_btnQuitarCiudadActionPerformed
+    }//GEN-LAST:event_btnQuitarMetodoPagoActionPerformed
 
-    private void btnAnadirCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirCiudadActionPerformed
-        CiudadDTO ciudad = (CiudadDTO) cbCiudadAñadir.getSelectedItem();
-        if (ciudad != null) {
-            cbCiudadAñadir.removeItem(ciudad);
-            cbCiudadQuitar.addItem(ciudad);
+    private void btnAnadirMetodoPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirMetodoPagoActionPerformed
+        MetodosDePago metodoPago = (MetodosDePago) cbMetodoPagoAñadir.getSelectedItem();
+        if (metodoPago != null) {
+            cbMetodoPagoAñadir.removeItem(metodoPago);
+            cbMetodoPagoQuitar.addItem(metodoPago);
         }
-    }//GEN-LAST:event_btnAnadirCiudadActionPerformed
+    }//GEN-LAST:event_btnAnadirMetodoPagoActionPerformed
 
-    private void cbCiudadQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCiudadQuitarActionPerformed
+    private void cbMetodoPagoQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMetodoPagoQuitarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbCiudadQuitarActionPerformed
+    }//GEN-LAST:event_cbMetodoPagoQuitarActionPerformed
 
-    private void cbPeliculaAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPeliculaAñadirActionPerformed
+    private void cbSucursalAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursalAñadirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbPeliculaAñadirActionPerformed
+    }//GEN-LAST:event_cbSucursalAñadirActionPerformed
 
-    private void cbPeliculaQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPeliculaQuitarActionPerformed
+    private void cbSucursalQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSucursalQuitarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbPeliculaQuitarActionPerformed
+    }//GEN-LAST:event_cbSucursalQuitarActionPerformed
 
-    private void btnAnadirPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirPeliculaActionPerformed
-        PeliculaDTO pelicula = (PeliculaDTO) cbPeliculaAñadir.getSelectedItem();
-        if (pelicula != null) {
-            cbPeliculaAñadir.removeItem(pelicula);
-            cbPeliculaQuitar.addItem(pelicula);
+    private void btnAnadirSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirSucursalActionPerformed
+        SucursalDTO sucursal = (SucursalDTO) cbSucursalAñadir.getSelectedItem();
+        if (sucursal != null) {
+            cbSucursalAñadir.removeItem(sucursal);
+            cbSucursalQuitar.addItem(sucursal);
         }
 
-    }//GEN-LAST:event_btnAnadirPeliculaActionPerformed
+    }//GEN-LAST:event_btnAnadirSucursalActionPerformed
 
-    private void btnQuitarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarPeliculaActionPerformed
-        PeliculaDTO pelicula = (PeliculaDTO) cbPeliculaQuitar.getSelectedItem();
-        if (pelicula != null) {
-            cbPeliculaQuitar.removeItem(pelicula);
-            cbPeliculaAñadir.addItem(pelicula);
+    private void btnQuitarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarSucursalActionPerformed
+        SucursalDTO sucursal = (SucursalDTO) cbSucursalQuitar.getSelectedItem();
+        if (sucursal != null) {
+            cbSucursalQuitar.removeItem(sucursal);
+            cbSucursalAñadir.addItem(sucursal);
         }
-     }//GEN-LAST:event_btnQuitarPeliculaActionPerformed
+     }//GEN-LAST:event_btnQuitarSucursalActionPerformed
 
     private void btnMenuPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPeliculaActionPerformed
         IConexionBD conexion = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexion);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
         ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
         ICiudadBO ciudadBO = new CiudadBO(ciudadDAO);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
@@ -749,34 +755,38 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
         Document doc = new Document();
         try {
-            PdfWriter.getInstance(doc, new FileOutputStream(String.format("%s/ReportePeliculas.pdf", path)));
+            PdfWriter.getInstance(doc, new FileOutputStream(String.format("%s/ReporteMetodosPago.pdf", path)));
             doc.open();
 
             // Descripción de los filtros
             doc.add(new Paragraph("Reporte de Ganancias por Peliculas y Ciudades", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
             doc.add(new Paragraph("Filtros Aplicados:", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
             doc.add(new Paragraph("Fechas: " + fechaInicioDP.getText() + " a " + fechaFinDP.getText()));
-            doc.add(new Paragraph("Ciudades: " + obtenerValoresSeparadosPorComaCiudad(cbCiudadQuitar))); // Asegúrate de convertir la lista a cadena
-            doc.add(new Paragraph("Ciudades: " + obtenerValoresSeparadosPorComaPelicula(cbPeliculaQuitar))); // Asegúrate de convertir la lista a cadena
+            doc.add(new Paragraph("Sucursales: " + obtenerValoresSeparadosPorComaSucursales(cbSucursalQuitar))); // Asegúrate de convertir la lista a cadena
+            doc.add(new Paragraph("Metodos Pago: " + obtenerValoresSeparadosPorComaMetodosPago(cbMetodoPagoQuitar))); // Asegúrate de convertir la lista a cadena
             doc.add(new Paragraph("\n")); // Espacio en blanco
 
             // Tabla
-            PdfPTable tbl = new PdfPTable(4);
-            tbl.addCell("Ciudad");
-            tbl.addCell("Pelicula");
+            PdfPTable tbl = new PdfPTable(5);
             tbl.addCell("Fecha");
+            tbl.addCell("Ciudad");
+            tbl.addCell("Sucursal");
+            tbl.addCell("Metodo Pago");
             tbl.addCell("Ganancia");
             BigDecimal suma = BigDecimal.ZERO;
             for (int i = 0; i < tblReporteSucursal.getRowCount(); i++) {
-                String ciudad = tblReporteSucursal.getValueAt(i, 0).toString();
-                String pelicula = tblReporteSucursal.getValueAt(i, 1).toString();
-                String fecha = tblReporteSucursal.getValueAt(i, 2).toString();
-                String ganancia = tblReporteSucursal.getValueAt(i, 3).toString();
-                suma = suma.add(convertToBigDecimal(tblReporteSucursal.getValueAt(i, 3)));
-                tbl.addCell(ciudad);
-                tbl.addCell(pelicula);
+                String fecha = tblReporteSucursal.getValueAt(i, 0).toString();
+                String ciudad = tblReporteSucursal.getValueAt(i, 1).toString();
+                String sucursal = tblReporteSucursal.getValueAt(i, 2).toString();
+                String metodoPago = tblReporteSucursal.getValueAt(i, 3).toString();
+                String ganancia = tblReporteSucursal.getValueAt(i, 4).toString();
+                suma = suma.add(convertToBigDecimal(tblReporteSucursal.getValueAt(i, 4)));
                 tbl.addCell(fecha);
+                tbl.addCell(ciudad);
+                tbl.addCell(sucursal);
+                tbl.addCell(metodoPago);
                 tbl.addCell(ganancia);
+
             }
 
             doc.add(tbl);
@@ -793,21 +803,17 @@ public class FrmReportePelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnImprimir1ActionPerformed
 
     private void btnMenuReportePagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePagosActionPerformed
-        IConexionBD conexionBD = new ConexionBD();
-        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
-        IReporteMetodoPagoDAO reporteMetodoPagoDAO = new ReporteMetodoPagoDAO(conexionBD);
-        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
-        IReporteMetodoPagoBO reporteMetodoPagoBO = new ReporteMetodoPago(reporteMetodoPagoDAO);
+
         FrmReporteMetodoPago reporteMetodoPago = new FrmReporteMetodoPago(reporteMetodoPagoBO, sucursalBO);
         reporteMetodoPago.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMenuReportePagosActionPerformed
-    private void llenarComboBoxCiudades() {
+    private void llenarComboBoxSucursales() {
         try {
-            listaCiudades = ciudadBO.listaCiudades();
+            listaSucursales = sucursalBO.obtenerSucursales();
 
-            for (CiudadDTO ciudad : listaCiudades) {
-                cbCiudadAñadir.addItem(ciudad);
+            for (SucursalDTO sucursal : listaSucursales) {
+                cbSucursalAñadir.addItem(sucursal);
             }
         } catch (NegocioException ex) {
             Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
@@ -815,17 +821,10 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
     }
 
-    private void llenarComboBoxPeliculas() {
-        try {
-            listaPeliculas = peliculaBO.listaPeliculas();
-
-            for (PeliculaDTO pelicula : listaPeliculas) {
-                cbPeliculaAñadir.addItem(pelicula);
-            }
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmCatalogoSucursal.class.getName()).log(Level.SEVERE, null, ex);
+    private void llenarComboMetodosPago() {
+        for (MetodosDePago metodosDePago : MetodosDePago.values()) {
+            cbMetodoPagoAñadir.addItem(metodosDePago);
         }
-
     }
 
     private String convertLocalDateToString(LocalDate date) {
@@ -837,12 +836,21 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         return date.format(formatter);
     }
 
-    private String obtenerValoresSeparadosPorComaCiudad(JComboBox<CiudadDTO> comboBox) {
+    private String convertLocalDateTimeToString(LocalDateTime date) {
+        if (date == null) {
+            throw new IllegalArgumentException("The date cannot be null.");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return date.format(formatter);
+    }
+
+    private String obtenerValoresSeparadosPorComaSucursales(JComboBox<SucursalDTO> comboBox) {
         StringBuilder valores = new StringBuilder();
 
         // Iterar sobre todos los elementos del comboBox
         for (int i = 0; i < comboBox.getItemCount(); i++) {
-            CiudadDTO item = comboBox.getItemAt(i);
+            SucursalDTO item = comboBox.getItemAt(i);
             valores.append(item.getNombre());
 
             // Añadir una coma si no es el último elemento
@@ -853,14 +861,14 @@ public class FrmReportePelicula extends javax.swing.JFrame {
 
         return valores.toString();
     }
-    
-       private String obtenerValoresSeparadosPorComaPelicula(JComboBox<PeliculaDTO> comboBox) {
+
+    private String obtenerValoresSeparadosPorComaMetodosPago(JComboBox<Object> comboBox) {
         StringBuilder valores = new StringBuilder();
 
         // Iterar sobre todos los elementos del comboBox
         for (int i = 0; i < comboBox.getItemCount(); i++) {
-            PeliculaDTO item = comboBox.getItemAt(i);
-            valores.append(item.getTitulo());
+            MetodosDePago item = (MetodosDePago) comboBox.getItemAt(i);
+            valores.append(item.toString());
 
             // Añadir una coma si no es el último elemento
             if (i < comboBox.getItemCount() - 1) {
@@ -871,10 +879,9 @@ public class FrmReportePelicula extends javax.swing.JFrame {
         return valores.toString();
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnadirCiudad;
-    private javax.swing.JButton btnAnadirPelicula;
+    private javax.swing.JButton btnAnadirMetodoPago;
+    private javax.swing.JButton btnAnadirSucursal;
     private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnImprimir1;
     private utilerias.MenuButton btnMenuCliente;
@@ -885,12 +892,12 @@ public class FrmReportePelicula extends javax.swing.JFrame {
     private utilerias.MenuButton btnMenuReporteSucursales1;
     private utilerias.MenuButton btnMenuSalas;
     private utilerias.MenuButton btnMenuSucursales;
-    private javax.swing.JButton btnQuitarCiudad;
-    private javax.swing.JButton btnQuitarPelicula;
-    private javax.swing.JComboBox<CiudadDTO> cbCiudadAñadir;
-    private javax.swing.JComboBox<CiudadDTO> cbCiudadQuitar;
-    private javax.swing.JComboBox<PeliculaDTO> cbPeliculaAñadir;
-    private javax.swing.JComboBox<PeliculaDTO> cbPeliculaQuitar;
+    private javax.swing.JButton btnQuitarMetodoPago;
+    private javax.swing.JButton btnQuitarSucursal;
+    private javax.swing.JComboBox<Object> cbMetodoPagoAñadir;
+    private javax.swing.JComboBox<Object> cbMetodoPagoQuitar;
+    private javax.swing.JComboBox<SucursalDTO> cbSucursalAñadir;
+    private javax.swing.JComboBox<SucursalDTO> cbSucursalQuitar;
     private com.github.lgooddatepicker.components.DatePicker fechaFinDP;
     private com.github.lgooddatepicker.components.DatePicker fechaInicioDP;
     private utilerias.ImagenPerfiles imagenPerfiles1;

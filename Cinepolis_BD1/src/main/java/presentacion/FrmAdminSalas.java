@@ -20,11 +20,15 @@ import negocio.ClienteBO;
 import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IPeliculaBO;
+import negocio.IReporteMetodoPagoBO;
+import negocio.IReportePeliculaBO;
 import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReporteMetodoPago;
+import negocio.ReportePeliculaBO;
 import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
@@ -35,9 +39,13 @@ import persistencia.ICiudadDAO;
 import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReporteMetodoPagoDAO;
+import persistencia.IReportePeliculaDAO;
 import persistencia.IReportesSucursalesDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReporteMetodoPagoDAO;
+import persistencia.ReportePeliculaDAO;
 import persistencia.ReportesSucursalesDAO;
 import persistencia.SucursalDAO;
 import utilerias.JButtonCellEditor;
@@ -87,7 +95,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
         System.out.println(sucursal);
         this.seleccionarCiudadYSucursal();
-
+        lblSucursal.setText(sucursal.getNombre());
         this.cargarConfiguracionInicialTablaPeliculas();
         this.cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
         this.estadoPagina();
@@ -328,8 +336,10 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         btnMenuReportePelicula = new utilerias.MenuButton();
         jLabel12 = new javax.swing.JLabel();
+        btnMenuReportePagos = new utilerias.MenuButton();
+        jLabel13 = new javax.swing.JLabel();
         BtnAgregarSala = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
+        lblSucursal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -498,6 +508,20 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel12);
 
+        btnMenuReportePagos.setForeground(new java.awt.Color(255, 255, 255));
+        btnMenuReportePagos.setText("Reporte Pagos");
+        btnMenuReportePagos.setBorderPainted(false);
+        btnMenuReportePagos.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReportePagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuReportePagosActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnMenuReportePagos);
+
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
+        jPanel4.add(jLabel13);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -516,8 +540,8 @@ public class FrmAdminSalas extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         BtnAgregarSala.setBackground(new java.awt.Color(204, 204, 204));
@@ -528,9 +552,9 @@ public class FrmAdminSalas extends javax.swing.JFrame {
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Sucursal Bella Vista");
+        lblSucursal.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblSucursal.setForeground(new java.awt.Color(255, 255, 255));
+        lblSucursal.setText("Sucursal Bella Vista");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -545,7 +569,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(BtnAgregarSala)
                                 .addGap(188, 188, 188)
-                                .addComponent(jLabel11))
+                                .addComponent(lblSucursal))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(238, 238, 238)
@@ -589,7 +613,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
                 .addGap(57, 57, 57)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BtnAgregarSala)
-                    .addComponent(jLabel11))
+                    .addComponent(lblSucursal))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -658,6 +682,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         if (cbCiudades.getSelectedItem() != null) {
             this.sucursal = (SucursalDTO) cbSucursales.getSelectedItem();
             this.pagina = 1;
+            lblSucursal.setText(sucursal.getNombre());
             this.cargarClientesEnTabla(sucursal.getId(), pagina, LIMITE);
             this.estadoPagina();
             return;
@@ -694,7 +719,12 @@ public class FrmAdminSalas extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnAgregarSalaActionPerformed
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
-        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+         IConexionBD conexion = new ConexionBD();
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        IReportePeliculaDAO reportePeliculaDAO = new ReportePeliculaDAO(conexion);
+        IReportePeliculaBO reportePeliculaBO = new ReportePeliculaBO(reportePeliculaDAO);
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(reportePeliculaBO, ciudadBO, peliculaBO);
         reportePelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
@@ -711,6 +741,15 @@ public class FrmAdminSalas extends javax.swing.JFrame {
         frnAdminPeliculas.setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuPeliculaActionPerformed
+
+    private void btnMenuReportePagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePagosActionPerformed
+        IConexionBD conexionBD = new ConexionBD();
+        IReporteMetodoPagoDAO reporteMetodoPagoDAO = new ReporteMetodoPagoDAO(conexionBD);
+        IReporteMetodoPagoBO reporteMetodoPagoBO = new ReporteMetodoPago(reporteMetodoPagoDAO);
+        FrmReporteMetodoPago reporteMetodoPago = new FrmReporteMetodoPago(reporteMetodoPagoBO, sucursalBO);
+        reporteMetodoPago.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMenuReportePagosActionPerformed
 
     private void llenarComboBoxCiudad() {
         try {
@@ -756,6 +795,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
     private utilerias.MenuButton btnMenuCliente;
     private utilerias.MenuButton btnMenuFunciones;
     private utilerias.MenuButton btnMenuPelicula;
+    private utilerias.MenuButton btnMenuReportePagos;
     private utilerias.MenuButton btnMenuReportePelicula;
     private utilerias.MenuButton btnMenuReporteSucursales;
     private utilerias.MenuButton btnMenuSucursales;
@@ -764,8 +804,8 @@ public class FrmAdminSalas extends javax.swing.JFrame {
     private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -780,6 +820,7 @@ public class FrmAdminSalas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPagina;
+    private javax.swing.JLabel lblSucursal;
     private utilerias.MenuButton menuButton1;
     private javax.swing.JTable tblPeliculas;
     // End of variables declaration//GEN-END:variables

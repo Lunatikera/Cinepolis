@@ -22,11 +22,15 @@ import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
+import negocio.IReporteMetodoPagoBO;
+import negocio.IReportePeliculaBO;
 import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReporteMetodoPago;
+import negocio.ReportePeliculaBO;
 import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
 import negocio.SucursalBO;
@@ -39,10 +43,14 @@ import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IFuncionDAO;
 import persistencia.IPeliculaDAO;
+import persistencia.IReporteMetodoPagoDAO;
+import persistencia.IReportePeliculaDAO;
 import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReporteMetodoPagoDAO;
+import persistencia.ReportePeliculaDAO;
 import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
 import persistencia.SucursalDAO;
@@ -332,6 +340,8 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         btnMenuReportePelicula = new utilerias.MenuButton();
         jLabel10 = new javax.swing.JLabel();
+        btnMenuReportePagos = new utilerias.MenuButton();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -520,6 +530,20 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel10);
 
+        btnMenuReportePagos.setForeground(new java.awt.Color(255, 255, 255));
+        btnMenuReportePagos.setText("Reporte Pagos");
+        btnMenuReportePagos.setBorderPainted(false);
+        btnMenuReportePagos.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReportePagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuReportePagosActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnMenuReportePagos);
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
+        jPanel4.add(jLabel11);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -538,8 +562,8 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -746,10 +770,24 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuPeliculasActionPerformed
 
     private void btnMenuReportePeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePeliculaActionPerformed
-        FrmReportePelicula reportePelicula = new FrmReportePelicula(sucursalBO, ciudadBO);
+         IConexionBD conexion = new ConexionBD();
+        IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        IPeliculaBO peliculaBO = new PeliculaBO(peliculaDAO);
+        IReportePeliculaDAO reportePeliculaDAO = new ReportePeliculaDAO(conexion);
+        IReportePeliculaBO reportePeliculaBO = new ReportePeliculaBO(reportePeliculaDAO);
+        FrmReportePelicula reportePelicula = new FrmReportePelicula(reportePeliculaBO, ciudadBO, peliculaBO);
         reportePelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
+
+    private void btnMenuReportePagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePagosActionPerformed
+        IConexionBD conexionBD = new ConexionBD();
+        IReporteMetodoPagoDAO reporteMetodoPagoDAO = new ReporteMetodoPagoDAO(conexionBD);
+        IReporteMetodoPagoBO reporteMetodoPagoBO = new ReporteMetodoPago(reporteMetodoPagoDAO);
+        FrmReporteMetodoPago reporteMetodoPago = new FrmReporteMetodoPago(reporteMetodoPagoBO, sucursalBO);
+        reporteMetodoPago.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMenuReportePagosActionPerformed
     private void llenarComboBoxPeliculasPorAnadir() {
         try {
             cbPeliculas.removeAllItems();
@@ -806,6 +844,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     private utilerias.MenuButton btnMenuCliente;
     private utilerias.MenuButton btnMenuFunciones;
     private utilerias.MenuButton btnMenuPeliculas;
+    private utilerias.MenuButton btnMenuReportePagos;
     private utilerias.MenuButton btnMenuReportePelicula;
     private utilerias.MenuButton btnMenuReporteSucursal;
     private utilerias.MenuButton btnMenuSalas;
@@ -816,6 +855,7 @@ public class FrmAdminSucursal extends javax.swing.JFrame {
     private javax.swing.JComboBox<SucursalDTO> cbSucursales;
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

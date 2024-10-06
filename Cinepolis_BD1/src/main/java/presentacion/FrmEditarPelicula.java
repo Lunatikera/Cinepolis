@@ -80,7 +80,7 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
         cbClasificaciones.setSelectedItem(pelicula.getClasificacion());
         cbPaises.setSelectedItem(pelicula.getPais());
         ImageIcon icon = new ImageIcon(pelicula.getCartel());
-        Image scaledImage = icon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+        Image scaledImage = icon.getImage().getScaledInstance(210, 268, Image.SCALE_SMOOTH);
         lblImagenCartel.setIcon(new ImageIcon(scaledImage));
         llenarComboBoxGeneroASeleccionar();
         llenarComboBoxGeneroSeleccionados();
@@ -520,7 +520,7 @@ public class FrmEditarPelicula extends javax.swing.JFrame {
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             ruta = fileChooser.getSelectedFile().getAbsolutePath();
             ImageIcon icon = new ImageIcon(ruta);
-            Image scaledImage = icon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+            Image scaledImage = icon.getImage().getScaledInstance(210, 268, Image.SCALE_SMOOTH);
             lblImagenCartel.setIcon(new ImageIcon(scaledImage));
             pelicula.setCartel(ruta);
         }

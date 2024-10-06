@@ -4,7 +4,7 @@
  */
 package persistencia;
 
-import dtos.DatosReporteDTO;
+import dtos.DatosReporteSucursalDTO;
 import java.util.List;
 
 /**
@@ -12,5 +12,5 @@ import java.util.List;
  * @author NaderCroft
  */
 public interface IReportesSucursalesDAO {
-    public List<DatosReporteDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws PersistenciaException;
+    public List<DatosReporteSucursalDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws PersistenciaException;
 }

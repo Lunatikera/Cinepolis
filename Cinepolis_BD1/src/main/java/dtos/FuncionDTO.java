@@ -125,6 +125,11 @@ public class FuncionDTO {
     public void setIdPelicula(int idPelicula) {
         this.idPelicula = idPelicula;
     }
+
+    @Override
+    public String toString() {
+        return "FuncionDTO{" + "id=" + id + ", dia=" + dia + ", precio=" + precio + ", asientosDisponibles=" + asientosDisponibles + ", duracionTotal=" + duracionTotal + ", hora=" + hora + ", horaFinal=" + horaFinal + ", idSala=" + idSala + ", idPelicula=" + idPelicula + '}';
+    }
     
     
 }

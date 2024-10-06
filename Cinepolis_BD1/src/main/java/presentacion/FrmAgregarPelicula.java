@@ -512,7 +512,7 @@ public class FrmAgregarPelicula extends javax.swing.JFrame {
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             ruta = fileChooser.getSelectedFile().getAbsolutePath();
             ImageIcon icon = new ImageIcon(ruta);
-            Image scaledImage = icon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+            Image scaledImage = icon.getImage().getScaledInstance(210, 268, Image.SCALE_SMOOTH);
             lblImagenCartel.setIcon(new ImageIcon(scaledImage));
             pelicula.setCartel(ruta);
         }

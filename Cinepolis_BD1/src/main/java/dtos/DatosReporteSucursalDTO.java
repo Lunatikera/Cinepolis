@@ -11,17 +11,18 @@ import java.time.LocalDate;
  *
  * @author NaderCroft
  */
-public class DatosReporteDTO {
-    String ciudad;
-    String sucursal;
-    int cantidadFunciones;
-    LocalDate fecha;
-    BigDecimal total;
+public class DatosReporteSucursalDTO {
 
-    public DatosReporteDTO() {
+    private String ciudad;
+    private String sucursal;
+    private int cantidadFunciones;
+    private LocalDate fecha;
+    private BigDecimal total;
+
+    public DatosReporteSucursalDTO() {
     }
 
-    public DatosReporteDTO(String ciudad, String sucursal, int cantidadFunciones, LocalDate fecha, BigDecimal total) {
+    public DatosReporteSucursalDTO(String ciudad, String sucursal, int cantidadFunciones, LocalDate fecha, BigDecimal total) {
         this.ciudad = ciudad;
         this.sucursal = sucursal;
         this.cantidadFunciones = cantidadFunciones;
@@ -73,6 +74,5 @@ public class DatosReporteDTO {
     public String toString() {
         return "DatosReporteDTO{" + "ciudad=" + ciudad + ", sucursal=" + sucursal + ", cantidadFunciones=" + cantidadFunciones + ", fecha=" + fecha + ", total=" + total + '}';
     }
-    
-    
+
 }

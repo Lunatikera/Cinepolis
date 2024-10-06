@@ -4,7 +4,7 @@
  */
 package negocio;
 
-import dtos.DatosReporteDTO;
+import dtos.DatosReporteSucursalDTO;
 import java.util.List;
 import java.util.Set;
 
@@ -13,5 +13,5 @@ import java.util.Set;
  * @author NaderCroft
  */
 public interface IReportesSucursalesBO {
-    public List<DatosReporteDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws NegocioException;
+    public List<DatosReporteSucursalDTO> obtenerGananciasPorSucursales(List<Integer> sucursalIds, String fechaInicio, String fechaFin) throws NegocioException;
 }

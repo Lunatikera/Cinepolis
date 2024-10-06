@@ -32,16 +32,24 @@ import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
 import negocio.ISalaBO;
 import negocio.NegocioException;
+import negocio.SalaBO;
+import persistencia.ConexionBD;
+import persistencia.IConexionBD;
+import persistencia.ISalaDAO;
+import persistencia.SalaDAO;
 import utilerias.Herramientas;
 import static utilerias.Herramientas.getComboBoxItems;
 
 /**
  *
- * @author rramirez
+ * @author Rios
  */
 public class FrmAgregarFuncion extends javax.swing.JFrame {
+
     private IFuncionBO funcionBO;
     private PeliculaDTO pelicula;
+    private SalaDTO sala;
+    private SucursalDTO sucursal;
     private boolean modoEstreno;
     private Locale[] locales;
     private String ruta = "";
@@ -49,9 +57,11 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
     /**
      * Creates new form FrmAgregarCliente
      */
-    public FrmAgregarFuncion(IFuncionBO funcionBO,  PeliculaDTO pelicula) {
+    public FrmAgregarFuncion(IFuncionBO funcionBO, PeliculaDTO pelicula, SalaDTO sala, SucursalDTO sucursalDTO) {
         initComponents();
         this.funcionBO = funcionBO;
+        this.sala = sala;
+        this.sucursal = sucursal;
         this.pelicula = pelicula;
         locales = Locale.getAvailableLocales();
         this.llenarComboDias();
@@ -63,9 +73,12 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
 
     public void metodoMostrarDatos() {
         lblTitulo.setText(Herramientas.textoConSaltosLinea(pelicula.getTitulo(), 5));
-
+        this.setTitle("Agregar Funcion ");
+        this.setResizable(false);
+        this.setSize(1200, 780);
+        this.setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon(pelicula.getCartel());
-        Image scaledImage = icon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+        Image scaledImage = icon.getImage().getScaledInstance(279, 382, Image.SCALE_SMOOTH);
         lblImagenCartel.setIcon(new ImageIcon(scaledImage));
 
     }
@@ -123,9 +136,9 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(36, 44, 99));
         jPanel1.setToolTipText("");
 
+        LblMaterno.setText("Hora");
         LblMaterno.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         LblMaterno.setForeground(new java.awt.Color(255, 255, 255));
-        LblMaterno.setText("Hora");
 
         BtnAceptar.setText("Aceptar");
         BtnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -141,9 +154,9 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
             }
         });
 
+        LblPaterno2.setText("Agregar Funcion");
         LblPaterno2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         LblPaterno2.setForeground(new java.awt.Color(255, 255, 255));
-        LblPaterno2.setText("Agregar Funcion");
 
         jPanel2.setBackground(new java.awt.Color(33, 36, 59));
 
@@ -164,23 +177,25 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
         cbDias.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbDias.setForeground(new java.awt.Color(255, 255, 255));
 
+        LblPaterno5.setText("Dia");
         LblPaterno5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         LblPaterno5.setForeground(new java.awt.Color(255, 255, 255));
-        LblPaterno5.setText("Dia");
 
+        LblPaterno7.setText("Precio");
         LblPaterno7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         LblPaterno7.setForeground(new java.awt.Color(255, 255, 255));
-        LblPaterno7.setText("Precio");
 
+        lblTitulo.setText("Top Gun Maverick");
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitulo.setText("Top Gun Maverick");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Line 7.png"))); // NOI18N
 
         timePicker1.setBackground(new java.awt.Color(33, 36, 59));
 
         rbtnEstreno.setText("Modo Estreno");
+        rbtnEstreno.setContentAreaFilled(false);
+        rbtnEstreno.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         rbtnEstreno.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         rbtnEstreno.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -192,7 +207,7 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addComponent(LblPaterno2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 313, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -200,27 +215,22 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(144, 144, 144)
                 .addComponent(lblImagenCartel, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(210, 210, 210)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(LblPaterno5)
-                                        .addGap(219, 219, 219))
-                                    .addComponent(cbDias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(1, 1, 1))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(LblPaterno7)
-                                .addComponent(jSpinPrecio)
-                                .addComponent(LblMaterno)
-                                .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(270, 270, 270))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(250, 250, 250)
+                            .addComponent(LblPaterno5)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cbDias, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(LblPaterno7)
+                                    .addComponent(jSpinPrecio)
+                                    .addComponent(LblMaterno)
+                                    .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(220, 220, 220))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(rbtnEstreno)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(271, 271, 271))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,14 +263,14 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
                         .addComponent(LblMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
+                        .addGap(30, 30, 30)
                         .addComponent(rbtnEstreno)
-                        .addGap(43, 43, 43)
+                        .addGap(44, 44, 44)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(lblImagenCartel, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -280,7 +290,7 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelarActionPerformed
-        dispose();
+        volverAdminFunciones();
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
     private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
@@ -294,15 +304,28 @@ public class FrmAgregarFuncion extends javax.swing.JFrame {
         }
         BigDecimal precio = BigDecimal.valueOf(((Number) jSpinPrecio.getValue()).doubleValue());
         funcion.setPrecio(precio);
+        funcion.setIdPelicula(pelicula.getId());
+        funcion.setIdSala(sala.getId());
 
         try {
             funcionBO.guardar(funcion);
+            JOptionPane.showMessageDialog(this, "Funcion Agregada con exito!");
+            volverAdminFunciones();
         } catch (NegocioException ex) {
-            Logger.getLogger(FrmAgregarFuncion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "La funcion no pudo ser agregada por favor verifica los horarios", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 
     }//GEN-LAST:event_BtnAceptarActionPerformed
+
+    private void volverAdminFunciones() {
+        IConexionBD conexion = new ConexionBD();
+        ISalaDAO salaDAO = new SalaDAO(conexion);
+        ISalaBO salaBO = new SalaBO(salaDAO);
+        FrmAdminFuncion adminFuncion = new FrmAdminFuncion(funcionBO, salaBO, sucursal, pelicula);
+        adminFuncion.setVisible(true);
+        this.dispose();
+    }
 
     private void llenarComboDias() {
 
