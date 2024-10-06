@@ -28,12 +28,14 @@ import negocio.ICiudadBO;
 import negocio.IClienteBO;
 import negocio.IFuncionBO;
 import negocio.IPeliculaBO;
+import negocio.IReporteMetodoPagoBO;
 import negocio.IReportePeliculaBO;
 import negocio.IReportesSucursalesBO;
 import negocio.ISalaBO;
 import negocio.ISucursalBO;
 import negocio.NegocioException;
 import negocio.PeliculaBO;
+import negocio.ReporteMetodoPago;
 import negocio.ReportePeliculaBO;
 import negocio.ReportesSucursalesBO;
 import negocio.SalaBO;
@@ -45,11 +47,13 @@ import persistencia.ICiudadDAO;
 import persistencia.IClienteDAO;
 import persistencia.IConexionBD;
 import persistencia.IPeliculaDAO;
+import persistencia.IReporteMetodoPagoDAO;
 import persistencia.IReportePeliculaDAO;
 import persistencia.IReportesSucursalesDAO;
 import persistencia.ISalaDAO;
 import persistencia.ISucursalDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReporteMetodoPagoDAO;
 import persistencia.ReportePeliculaDAO;
 import persistencia.ReportesSucursalesDAO;
 import persistencia.SalaDAO;
@@ -247,6 +251,8 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         btnMenuReportePelicula = new utilerias.MenuButton();
         jLabel10 = new javax.swing.JLabel();
+        btnMenuReportePagos = new utilerias.MenuButton();
+        jLabel12 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lblPelicula = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -413,6 +419,20 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
         jPanel4.add(jLabel10);
 
+        btnMenuReportePagos.setForeground(new java.awt.Color(255, 255, 255));
+        btnMenuReportePagos.setText("Reporte Pagos");
+        btnMenuReportePagos.setBorderPainted(false);
+        btnMenuReportePagos.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnMenuReportePagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuReportePagosActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnMenuReportePagos);
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lineaBlanca.png"))); // NOI18N
+        jPanel4.add(jLabel12);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -431,8 +451,8 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(imagenPerfiles1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(142, Short.MAX_VALUE))
         );
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -662,6 +682,17 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
         reportePelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMenuReportePeliculaActionPerformed
+
+    private void btnMenuReportePagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuReportePagosActionPerformed
+        IConexionBD conexionBD = new ConexionBD();
+        ISucursalDAO sucursalDAO = new SucursalDAO(conexionBD);
+        IReporteMetodoPagoDAO reporteMetodoPagoDAO = new ReporteMetodoPagoDAO(conexionBD);
+        ISucursalBO sucursalBO = new SucursalBO(sucursalDAO);
+        IReporteMetodoPagoBO reporteMetodoPagoBO = new ReporteMetodoPago(reporteMetodoPagoDAO);
+        FrmReporteMetodoPago reporteMetodoPago = new FrmReporteMetodoPago(reporteMetodoPagoBO, sucursalBO);
+        reporteMetodoPago.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnMenuReportePagosActionPerformed
     private String obtenerDiaActual() {
         LocalDate hoy = LocalDate.now();
         DayOfWeek dia = hoy.getDayOfWeek();
@@ -676,6 +707,7 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
     private javax.swing.JButton btnIr;
     private utilerias.MenuButton btnMenuCliente;
     private utilerias.MenuButton btnMenuFunciones;
+    private utilerias.MenuButton btnMenuReportePagos;
     private utilerias.MenuButton btnMenuReportePelicula;
     private utilerias.MenuButton btnMenuReporteSucursal;
     private utilerias.MenuButton btnMenuSalas;
@@ -686,6 +718,7 @@ public class FrmAdminFuncion extends javax.swing.JFrame {
     private utilerias.ImagenPerfiles imagenPerfiles1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

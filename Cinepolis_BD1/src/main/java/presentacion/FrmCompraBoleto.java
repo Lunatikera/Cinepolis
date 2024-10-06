@@ -94,7 +94,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
     }
 
     private void metodosIniciales() {
-        llenarComboClasificaciones();
+        llenarComboMetodosPago();
         cargarDetallesPelicula();
     }
 
@@ -796,7 +796,7 @@ public class FrmCompraBoleto extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnComprarActionPerformed
 
-    private void llenarComboClasificaciones() {
+    private void llenarComboMetodosPago() {
         for (MetodosDePago clasi : MetodosDePago.values()) {
             cbMetodosPago.addItem(clasi);
         }
